@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{6a531318-570a-4e76-af17-a83e568574bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Fonts">
+      <UniqueIdentifier>{00117784-c384-4887-8d83-e82d91841cee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Images">
+      <UniqueIdentifier>{3a778387-f3a7-4e82-a810-ee0218b087ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Sounds">
+      <UniqueIdentifier>{c7e2a9b9-90e6-4c2e-afef-2aecb54291a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Tilemaps">
+      <UniqueIdentifier>{9a3320f1-1706-498f-8a66-5e814f8b16af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Src\Examples">
+      <UniqueIdentifier>{78c4717d-b50b-4d87-801a-07fc2a2d5428}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Core">
+      <UniqueIdentifier>{107af749-b1aa-4132-bded-46d07f46860d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\System">
+      <UniqueIdentifier>{3d758f30-8896-4ce6-9fb9-f9824796e25b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Math">
+      <UniqueIdentifier>{3dc4c0e9-7cd9-49fc-9e95-7f9fa12a6374}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLSimpleWindow.cpp">
+      <Filter>Src\Examples</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaYoutubeVideo.cpp">
+      <Filter>Src\Examples</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
