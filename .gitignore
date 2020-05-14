@@ -1,0 +1,9 @@
+Temp/*
+obj/*
+Debug/*
+Release/*
+
+.bin*
+.temp*
+.exe*
+.vs/*
