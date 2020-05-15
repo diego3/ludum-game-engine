@@ -20,4 +20,13 @@ public:
 	void Render();
 	void Destroy();
 	bool IsActive() const;
+
+	template<typename T, typename... TArgs>
+	T& AddComponent(TArgs... args) {
+		T* newComponent = new T(std::forward<Targs>(args)...);
+		newComponent->owner = this;
+		components.push_back(newComponent);
+		newComponent->Initialize();
+		return *newComponent;
+	}
 };
