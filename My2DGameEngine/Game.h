@@ -6,13 +6,13 @@ class Game {
 protected:
 	bool isRunning;
 	SDL_Window* window;
-	SDL_Renderer* renderer;
 
 	float tickLastFrame;
 public:
 	Game();
 	~Game();
 
+	static SDL_Renderer* renderer;
 
 	bool Initialize(const char *title, int windowWidth, int windowHeight);
 	bool IsRunning() const;
@@ -20,4 +20,6 @@ public:
 	void Update();
 	void Render();
 	void Destroy();
+
+	void LoadLevel(int levelNumber);
 };

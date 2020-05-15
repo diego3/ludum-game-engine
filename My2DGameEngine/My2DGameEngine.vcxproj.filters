@@ -46,6 +46,12 @@
     <ClCompile Include="Game.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -58,6 +64,18 @@
       <Filter>Src\Core</Filter>
     </ClInclude>
     <ClInclude Include="Constants.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
       <Filter>Src\Core</Filter>
     </ClInclude>
   </ItemGroup>
