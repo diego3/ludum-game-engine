@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 
+#include "EntityManager.h"
+
 class Entity;
 
 class EntityManager

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include "Libs/glm/glm/vec2.hpp"
+
 #include "Game.h"
 #include "Constants.h"
 #include "EntityManager.h"

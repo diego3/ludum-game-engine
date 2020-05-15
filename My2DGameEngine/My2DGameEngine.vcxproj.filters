@@ -52,6 +52,9 @@
     <ClCompile Include="EntityManager.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -76,6 +79,9 @@
       <Filter>Src\Core</Filter>
     </ClInclude>
     <ClInclude Include="EntityManager.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
       <Filter>Src\Core</Filter>
     </ClInclude>
   </ItemGroup>

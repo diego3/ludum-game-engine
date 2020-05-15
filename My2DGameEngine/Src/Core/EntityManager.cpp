@@ -1,8 +1,9 @@
 #pragma once
-#include "Entity.h"
-#include "EntityManager.h"
 #include <string>
 #include <vector>
+
+#include "Entity.h"
+#include "EntityManager.h"
 
 Entity& EntityManager::AddEntity(std::string name)
 {
