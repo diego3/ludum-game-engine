@@ -13,6 +13,13 @@ Entity& EntityManager::AddEntity(std::string name)
 	return *e;
 }
 
+void EntityManager::AddEntity(Entity* entity)
+{
+	entities.push_back(entity);
+
+	entity->PrintAllComponents();
+}
+
 void EntityManager::Render()
 {
 	for (Entity* entity : entities)

@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "Component.h"
 #include <SDL.h>
 #include "Libs/glm/glm/ext/vector_float2.hpp";
@@ -24,7 +25,7 @@ public:
 
 	void Initialize() 
 	{
-	
+		name = "TransformComponent";
 	}
 
 	void Render()

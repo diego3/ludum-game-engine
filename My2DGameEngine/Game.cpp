@@ -14,10 +14,6 @@ using namespace glm;
 EntityManager* entityManager;
 SDL_Renderer* Game::renderer;
 
-// TODO REMOVE THIS
-TransformComponent* transform;
-
-
 Game::Game()
 {
 	this->isRunning = false;
@@ -56,17 +52,35 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 		std::cout << "SDL Renderer error: " << SDL_GetError() << std::endl;
 		return false;
 	}
+	
 
-	// PROBABLY IT IS NOT HERE
 	entityManager = new EntityManager();
-	transform = new TransformComponent(
-		0, 0, 10, 10, 50, 50, 1
-	);
-
+	// 
+	LoadLevel(1);
 
 	this->isRunning = true;
 
 	return true;
+}
+
+void Game::LoadLevel(int levelNumber)
+{
+	Entity* theFirstEntity = new Entity(entityManager, "gameObject1");
+	theFirstEntity->AddComponent<TransformComponent>(0, 0, 10, 10, 50, 50, 1);
+	entityManager->AddEntity(theFirstEntity);
+
+	Entity* second = new Entity(entityManager, "gameObject2");
+	second->AddComponent<TransformComponent>(30, 30, 20, 20, 80, 80, 1);
+	entityManager->AddEntity(second);
+
+	Entity* third = new Entity(entityManager, "gameObject3");
+	third->AddComponent<TransformComponent>(0, 50, 15, 15, 40, 40, 1);
+	entityManager->AddEntity(third);
+
+	Entity* four = new Entity(entityManager, "gameObject3");
+	four->AddComponent<TransformComponent>(400, 0, 0, 20, 50, 50, 1);
+	entityManager->AddEntity(four);
+
 }
 
 void Game::ProcessInput()
@@ -98,15 +112,7 @@ void Game::Render()
 	SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
 	SDL_RenderClear(renderer);
 
-	// TODO transform.render
-	/*SDL_Rect rect {
-		(int)pos.x, (int)pos.y, 20, 20
-	};
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_RenderFillRect(renderer, &rect);
-	*/
-	transform->Render();
-
+	entityManager->Render();
 
 	SDL_RenderPresent(renderer);
 }
@@ -123,18 +129,8 @@ void Game::Update()
 
 	tickLastFrame = SDL_GetTicks();
 
-	// TODO transform component
-	//pos += velocity * deltaTime;
-	transform->Update(deltaTime);
+	entityManager->Update(deltaTime);
 }
-
-
-void Game::LoadLevel(int levelNumber)
-{
-
-}
-
-
 
 void Game::Destroy()
 {

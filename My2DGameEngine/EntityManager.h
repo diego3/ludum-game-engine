@@ -13,7 +13,7 @@ public:
 	void Render();
 	bool HasNoEntities();
 	Entity& AddEntity(std::string name);
+	void AddEntity(Entity* entity);
 	std::vector<Entity*> GetEntities() const;
 	unsigned int GetEntityCount();
-
 };

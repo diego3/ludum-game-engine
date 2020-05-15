@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "Entity.h"
 #include "Component.h"
 
@@ -34,6 +35,16 @@ void Entity::Render()
 	for (Component* component : components)
 	{
 		component->Render();
+	}
+}
+
+
+void Entity::PrintAllComponents()
+{
+	std::cout << "entity: " << name << std::endl;
+	for (Component* component : components)
+	{
+		std::cout << "\tcomponent: " << component->name << std::endl;
 	}
 }
 

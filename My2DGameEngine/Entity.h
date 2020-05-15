@@ -23,10 +23,12 @@ public:
 
 	template<typename T, typename... TArgs>
 	T& AddComponent(TArgs... args) {
-		T* newComponent = new T(std::forward<Targs>(args)...);
+		T* newComponent = new T(std::forward<TArgs>(args)...);
 		newComponent->owner = this;
 		components.push_back(newComponent);
 		newComponent->Initialize();
 		return *newComponent;
 	}
+
+	void PrintAllComponents();
 };
