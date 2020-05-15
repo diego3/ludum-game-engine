@@ -79,8 +79,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2-2.0.12\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2_image-2.0.5\include;C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2_image-2.0.5\lib\x86;C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2-2.0.12\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -126,7 +126,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
