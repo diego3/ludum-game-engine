@@ -17,72 +17,66 @@
       <UniqueIdentifier>{9a3320f1-1706-498f-8a66-5e814f8b16af}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Src\Examples">
-      <UniqueIdentifier>{78c4717d-b50b-4d87-801a-07fc2a2d5428}</UniqueIdentifier>
+      <UniqueIdentifier>{a62536c5-9913-4e5f-9e5d-529ac14eb46a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Core">
-      <UniqueIdentifier>{107af749-b1aa-4132-bded-46d07f46860d}</UniqueIdentifier>
+      <UniqueIdentifier>{c5b45732-0100-4e6f-8199-656913338e92}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\System">
-      <UniqueIdentifier>{3d758f30-8896-4ce6-9fb9-f9824796e25b}</UniqueIdentifier>
+    <Filter Include="Src\Components">
+      <UniqueIdentifier>{fdb0abaa-7f2f-4aa3-b3d6-219443ce92dd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Math">
-      <UniqueIdentifier>{3dc4c0e9-7cd9-49fc-9e95-7f9fa12a6374}</UniqueIdentifier>
+    <Filter Include="Src\Examples">
+      <UniqueIdentifier>{9fb568ee-29ca-4854-92dc-4349257dcc61}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Src</Filter>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Src\Core\AssetManager.cpp">
+      <Filter>Src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="SDLSimpleWindow.cpp">
+    <ClCompile Include="Src\Core\Entity.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\EntityManager.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\Game.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Examples\LuaYoutubeVideo.cpp">
       <Filter>Src\Examples</Filter>
     </ClCompile>
-    <ClCompile Include="LuaYoutubeVideo.cpp">
+    <ClCompile Include="Src\Examples\SDLSimpleWindow.cpp">
       <Filter>Src\Examples</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Src\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Src\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
-      <Filter>Src\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="AssetManager.cpp">
-      <Filter>Src\Core</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
+    <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\Core\Game.h">
       <Filter>Src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Constants.h">
+    <ClInclude Include="Src\Core\AssetManager.h">
       <Filter>Src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
+    <ClInclude Include="Src\Core\Component.h">
       <Filter>Src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
+    <ClInclude Include="Src\Core\Constants.h">
       <Filter>Src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="TransformComponent.h">
+    <ClInclude Include="Src\Core\Entity.h">
       <Filter>Src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="EntityManager.h">
+    <ClInclude Include="Src\Core\EntityManager.h">
       <Filter>Src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="AssetManager.h">
-      <Filter>Src\Core</Filter>
+    <ClInclude Include="Src\Components\TransformComponent.h">
+      <Filter>Src\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

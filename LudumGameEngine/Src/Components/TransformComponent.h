@@ -1,10 +1,10 @@
 #pragma once
 #include <iostream>
 #include <SDL.h>
-#include "Libs/glm/glm/ext/vector_float2.hpp"
+#include "../../Libs/glm/glm/ext/vector_float2.hpp"
 
-#include "Component.h"
-#include "Game.h"
+#include "../Core/Component.h"
+#include "../Core/Game.h"
 
 class TransformComponent : public Component
 {

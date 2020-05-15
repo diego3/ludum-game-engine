@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{72EBD24B-1808-4211-B915-7E78B05EB69B}</ProjectGuid>
-    <RootNamespace>My2DGameEngine</RootNamespace>
+    <RootNamespace>LudumGameEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>LudumGameEngine</ProjectName>
   </PropertyGroup>
@@ -72,16 +72,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2-2.0.12\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2-2.0.12\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2_image-2.0.5\include;C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2_image-2.0.5\lib\x86;C:\Users\Diego\Documents\My2DGameEngine\2DGameEngine\My2DGameEngine\Libs\SDL2-2.0.12\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2_image-2.0.5\include;C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2_image-2.0.5\lib\x86;C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2-2.0.12\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -147,13 +147,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AssetManager.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="EntityManager.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="LuaYoutubeVideo.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="SDLSimpleWindow.cpp" />
+    <ClCompile Include="Src\Core\AssetManager.cpp" />
+    <ClCompile Include="Src\Core\Entity.cpp" />
+    <ClCompile Include="Src\Core\EntityManager.cpp" />
+    <ClCompile Include="Src\Core\Game.cpp" />
+    <ClCompile Include="Src\Examples\LuaYoutubeVideo.cpp" />
+    <ClCompile Include="Src\Examples\SDLSimpleWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -162,13 +162,13 @@
     <Image Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AssetManager.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="Constants.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="EntityManager.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="Src\Components\TransformComponent.h" />
+    <ClInclude Include="Src\Core\AssetManager.h" />
+    <ClInclude Include="Src\Core\Component.h" />
+    <ClInclude Include="Src\Core\Constants.h" />
+    <ClInclude Include="Src\Core\Entity.h" />
+    <ClInclude Include="Src\Core\EntityManager.h" />
+    <ClInclude Include="Src\Core\Game.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

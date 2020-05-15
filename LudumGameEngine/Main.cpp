@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "Game.h"
-#include "Constants.h"
+#include "Src/Core/Game.h"
+#include "Src/Core/Constants.h"
 
 using namespace std;
 
