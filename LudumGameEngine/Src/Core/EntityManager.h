@@ -18,4 +18,5 @@ public:
 	void AddEntity(Entity* entity);
 	std::vector<Entity*> GetEntities() const;
 	unsigned int GetEntityCount();
+	void PrintAllEntities();
 };

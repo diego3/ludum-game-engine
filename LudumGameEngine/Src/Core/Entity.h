@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include "EntityManager.h"
 
 class EntityManager;
 class Component;
@@ -43,6 +44,11 @@ public:
 		return static_cast<T*>(componentsTypeMap[&typeid(T)]);
 	}
 
+	template<typename T>
+	bool HasComponent() const {
+		//componentsTypeMap.find(&typeid(T));
+		return componentsTypeMap.count(&typeid(T)) > 0;
+	}
 
 	void PrintAllComponents();
 };

@@ -7,7 +7,6 @@ class Entity;
 class Component
 {
 public:
-	std::string name;
 	Entity* owner;
 	virtual ~Component() {}
 	

@@ -113,6 +113,8 @@ void Game::LoadLevel(int levelNumber)
 	first->AddComponent<SpriteComponent>("tank-left");
 	entityManager->AddEntity(first);
 
+	entityManager->PrintAllEntities();
+
 	/*
 	Entity* second = new Entity(entityManager, "gameObject2");
 	second->AddComponent<TransformComponent>(30, 30, 20, 20, 80, 80, 1);

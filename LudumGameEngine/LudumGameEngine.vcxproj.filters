@@ -70,7 +70,7 @@
       <Filter>Src\Core</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\SpriteComponent.h">
-      <Filter>Src\Core</Filter>
+      <Filter>Src\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -24,9 +24,9 @@ public:
 		scale = s;
 	}
 
-	void Initialize() 
+	void Initialize() override
 	{
-		name = "TransformComponent";
+
 	}
 
 	void Render() override {

@@ -42,10 +42,9 @@ void Entity::Render()
 
 void Entity::PrintAllComponents()
 {
-	std::cout << "entity: " << name << std::endl;
-	for (Component* component : components)
+	for (auto& component : components)
 	{
-		std::cout << "\tcomponent: " << component->name << std::endl;
+		std::cout << "\tcomponent: " << typeid(*component).name() << std::endl;
 	}
 }
 

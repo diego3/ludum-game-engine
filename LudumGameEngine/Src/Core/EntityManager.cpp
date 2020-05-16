@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -17,8 +18,6 @@ Entity& EntityManager::AddEntity(std::string name)
 void EntityManager::AddEntity(Entity* entity)
 {
 	entities.push_back(entity);
-
-	entity->PrintAllComponents();
 }
 
 void EntityManager::Render()
@@ -50,6 +49,16 @@ std::vector<Entity*> EntityManager::GetEntities() const
 unsigned int EntityManager::GetEntityCount()
 {
 	return entities.size();
+}
+
+void EntityManager::PrintAllEntities()
+{
+	int count = 1;
+	for (Entity* entity : entities) {
+		std::cout << "entity[" << count << "]: " << entity->name << std::endl;
+		entity->PrintAllComponents();
+		count++;
+	}
 }
 
 
