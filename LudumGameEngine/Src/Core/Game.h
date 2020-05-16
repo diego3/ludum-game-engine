@@ -1,6 +1,9 @@
 #pragma once
 
 #include <SDL.h>
+#include "AssetManager.h"
+
+class AssetManager;
 
 class Game {
 protected:
@@ -13,6 +16,7 @@ public:
 	~Game();
 
 	static SDL_Renderer* renderer;
+	static AssetManager* assetManager;
 
 	bool Initialize(const char *title, int windowWidth, int windowHeight);
 	bool IsRunning() const;

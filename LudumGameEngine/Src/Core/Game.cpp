@@ -9,7 +9,9 @@
 #include "Game.h"
 #include "Constants.h"
 #include "EntityManager.h"
+#include "AssetManager.h"
 #include "../Components/TransformComponent.h"
+#include "../Components/SpriteComponent.h"
 
 #ifdef _WIN32
 #pragma comment(lib, "Libs/SDL2_net-2.0.1/lib/x86/SDL2_net.lib")
@@ -25,6 +27,7 @@ using namespace glm;
 // GLOBALS
 EntityManager* entityManager;
 SDL_Renderer* Game::renderer;
+AssetManager* Game::assetManager; // new AssetManager(&entityManager)
 
 Game::Game()
 {
@@ -90,7 +93,9 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 	}
 
 	entityManager = new EntityManager();
-	// 
+	Game::assetManager = new AssetManager(entityManager);
+	//TODO load assets from lua script :)
+
 	LoadLevel(1);
 
 	this->isRunning = true;
@@ -100,10 +105,15 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 
 void Game::LoadLevel(int levelNumber)
 {
-	Entity* theFirstEntity = new Entity(entityManager, "gameObject1");
-	theFirstEntity->AddComponent<TransformComponent>(0, 0, 10, 10, 50, 50, 1);
-	entityManager->AddEntity(theFirstEntity);
+	// load images to the memory
+	assetManager->AddTexture("tank-left", "Assets/images/tank-small-left.png");
 
+	Entity* first = new Entity(entityManager, "gameObject1-tankLeft");
+	first->AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+	first->AddComponent<SpriteComponent>("tank-left");
+	entityManager->AddEntity(first);
+
+	/*
 	Entity* second = new Entity(entityManager, "gameObject2");
 	second->AddComponent<TransformComponent>(30, 30, 20, 20, 80, 80, 1);
 	entityManager->AddEntity(second);
@@ -114,7 +124,7 @@ void Game::LoadLevel(int levelNumber)
 
 	Entity* four = new Entity(entityManager, "gameObject3");
 	four->AddComponent<TransformComponent>(400, 0, 0, 20, 50, 50, 1);
-	entityManager->AddEntity(four);
+	entityManager->AddEntity(four);*/
 
 }
 

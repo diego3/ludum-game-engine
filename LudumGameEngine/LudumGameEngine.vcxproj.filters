@@ -1,21 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Assets">
-      <UniqueIdentifier>{6a531318-570a-4e76-af17-a83e568574bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Fonts">
-      <UniqueIdentifier>{00117784-c384-4887-8d83-e82d91841cee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Images">
-      <UniqueIdentifier>{3a778387-f3a7-4e82-a810-ee0218b087ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Sounds">
-      <UniqueIdentifier>{c7e2a9b9-90e6-4c2e-afef-2aecb54291a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Tilemaps">
-      <UniqueIdentifier>{9a3320f1-1706-498f-8a66-5e814f8b16af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src">
       <UniqueIdentifier>{a62536c5-9913-4e5f-9e5d-529ac14eb46a}</UniqueIdentifier>
     </Filter>
@@ -49,6 +34,9 @@
     <ClCompile Include="Src\Examples\SDLSimpleWindow.cpp">
       <Filter>Src\Examples</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Core\TextureManager.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />
@@ -77,6 +65,12 @@
     </ClInclude>
     <ClInclude Include="Src\Components\TransformComponent.h">
       <Filter>Src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\TextureManager.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\SpriteComponent.h">
+      <Filter>Src\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

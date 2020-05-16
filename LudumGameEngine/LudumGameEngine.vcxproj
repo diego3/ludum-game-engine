@@ -152,6 +152,7 @@
     <ClCompile Include="Src\Core\Entity.cpp" />
     <ClCompile Include="Src\Core\EntityManager.cpp" />
     <ClCompile Include="Src\Core\Game.cpp" />
+    <ClCompile Include="Src\Core\TextureManager.cpp" />
     <ClCompile Include="Src\Examples\LuaYoutubeVideo.cpp" />
     <ClCompile Include="Src\Examples\SDLSimpleWindow.cpp" />
   </ItemGroup>
@@ -162,6 +163,7 @@
     <Image Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Components\SpriteComponent.h" />
     <ClInclude Include="Src\Components\TransformComponent.h" />
     <ClInclude Include="Src\Core\AssetManager.h" />
     <ClInclude Include="Src\Core\Component.h" />
@@ -169,6 +171,7 @@
     <ClInclude Include="Src\Core\Entity.h" />
     <ClInclude Include="Src\Core\EntityManager.h" />
     <ClInclude Include="Src\Core\Game.h" />
+    <ClInclude Include="Src\Core\TextureManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
