@@ -1,9 +1,22 @@
 #pragma once
 
-#include "../../Libs/SDL2_image-2.0.5/include/SDL_image.h"
+#include <SDL.h>
+#include <map>
+#include <string>
+#include "EntityManager.h"
 
 class AssetManager
 {
+public:
+	EntityManager* manager;
+	std::map<std::string, SDL_Texture*> textures;
+
+	AssetManager(EntityManager* manager);
+	~AssetManager();
+	
+	void ClearData();
+	void AddTexture(std::string textureId, std::string filePath);
+	SDL_Texture* GetTexture(std::string textureId);
 
 };
 
