@@ -37,6 +37,9 @@
     <ClCompile Include="Src\Core\TextureManager.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Core\Animation.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />
@@ -71,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="Src\Components\SpriteComponent.h">
       <Filter>Src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Animation.h">
+      <Filter>Src\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

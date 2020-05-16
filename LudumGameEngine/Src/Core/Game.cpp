@@ -107,27 +107,25 @@ void Game::LoadLevel(int levelNumber)
 {
 	// load images to the memory
 	assetManager->AddTexture("tank-left", "Assets/images/tank-small-left.png");
+	assetManager->AddTexture("chopper-image", "Assets/images/chopper-spritesheet.png");
+	assetManager->AddTexture("radar-image", "Assets/images/radar.png");
 
-	Entity* first = new Entity(entityManager, "gameObject1-tankLeft");
-	first->AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
-	first->AddComponent<SpriteComponent>("tank-left");
-	entityManager->AddEntity(first);
+	Entity* tank = new Entity(entityManager, "tankLeft");
+	tank->AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+	tank->AddComponent<SpriteComponent>("tank-left");
+	entityManager->AddEntity(tank);
+
+	Entity* chopper = new Entity(entityManager, "chopper");
+	chopper->AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 1);
+	chopper->AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
+	entityManager->AddEntity(chopper);
+
+	Entity* radar = new Entity(entityManager, "radar");
+	radar->AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
+	radar->AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
+	entityManager->AddEntity(radar);
 
 	entityManager->PrintAllEntities();
-
-	/*
-	Entity* second = new Entity(entityManager, "gameObject2");
-	second->AddComponent<TransformComponent>(30, 30, 20, 20, 80, 80, 1);
-	entityManager->AddEntity(second);
-
-	Entity* third = new Entity(entityManager, "gameObject3");
-	third->AddComponent<TransformComponent>(0, 50, 15, 15, 40, 40, 1);
-	entityManager->AddEntity(third);
-
-	Entity* four = new Entity(entityManager, "gameObject3");
-	four->AddComponent<TransformComponent>(400, 0, 0, 20, 50, 50, 1);
-	entityManager->AddEntity(four);*/
-
 }
 
 void Game::ProcessInput()
