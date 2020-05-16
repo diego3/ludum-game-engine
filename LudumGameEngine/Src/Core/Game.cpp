@@ -1,11 +1,22 @@
 #include <iostream>
 #include <SDL.h>
+#include "../../Libs/SDL2_net-2.0.1/include/SDL_net.h"
+#include "../../Libs/SDL2_image-2.0.5/include/SDL_image.h"
+#include "../../Libs/SDL2_ttf-2.0.15/include/SDL_ttf.h"
+#include "../../Libs/SDL2_mixer-2.0.4/include/SDL_mixer.h"
 #include "../../Libs/glm/glm/vec2.hpp"
 
 #include "Game.h"
 #include "Constants.h"
 #include "EntityManager.h"
 #include "../Components/TransformComponent.h"
+
+#ifdef _WIN32
+#pragma comment(lib, "Libs/SDL2_net-2.0.1/lib/x86/SDL2_net.lib")
+#pragma comment(lib, "Libs/SDL2_image-2.0.5/lib/x86/SDL2_image.lib")
+#pragma comment(lib, "Libs/SDL2_ttf-2.0.15/lib/x86/SDL2_ttf.lib")
+#pragma comment(lib, "Libs/SDL2_mixer-2.0.4/lib/x86/SDL2_mixer.lib")
+#endif // WIN
 
 using namespace std;
 using namespace glm;
@@ -54,6 +65,30 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 		return false;
 	}
 	
+	int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+	int initted = IMG_Init(flags);
+	if ((initted & flags) != flags) {
+		printf("IMG_Init: Failed to init required jpg and png support!\n");
+		printf("IMG_Init: %s\n", IMG_GetError());
+	}
+
+	if (TTF_Init() == -1) {
+		printf("TTF_Init: %s\n", TTF_GetError());
+	}
+
+
+	// load support for the OGG and MOD sample/music formats
+	int sound_flags = MIX_INIT_OGG | MIX_INIT_MOD | MIX_INIT_MP3;
+	int sound_initted = Mix_Init(sound_flags);
+	if (sound_initted & sound_flags != sound_flags) {
+		printf("Mix_Init: Failed to init required ogg, mod and mp3 support!\n");
+		printf("Mix_Init: %s\n", Mix_GetError());
+	}
+
+	if (SDLNet_Init() == -1) {
+		std::cout << "SDLNet_Init: " << SDLNet_GetError() << std::endl;
+		return false;
+	}
 
 	entityManager = new EntityManager();
 	// 
