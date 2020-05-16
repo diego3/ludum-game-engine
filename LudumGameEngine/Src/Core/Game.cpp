@@ -76,11 +76,10 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 		printf("TTF_Init: %s\n", TTF_GetError());
 	}
 
-
 	// load support for the OGG and MOD sample/music formats
 	int sound_flags = MIX_INIT_OGG | MIX_INIT_MOD | MIX_INIT_MP3;
 	int sound_initted = Mix_Init(sound_flags);
-	if (sound_initted & sound_flags != sound_flags) {
+	if ((sound_initted & sound_flags) != sound_flags) {
 		printf("Mix_Init: Failed to init required ogg, mod and mp3 support!\n");
 		printf("Mix_Init: %s\n", Mix_GetError());
 	}
