@@ -9,7 +9,7 @@ using namespace std;
 
 int main(int argc, char* args[])
 {
-	std::cout << "[C++] Main" << std::endl;
+	std::cout << "[C++] Initializing..." << std::endl;
 	
 	Game* game = new Game();
 	bool initialized = game->Initialize("Game Engine", WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -28,6 +28,7 @@ int main(int argc, char* args[])
 	}
 
 	game->Destroy();
+	delete game;
 
 	return 0;
 }

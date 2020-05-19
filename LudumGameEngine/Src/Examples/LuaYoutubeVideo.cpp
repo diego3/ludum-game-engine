@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include <string>
 
@@ -22,7 +23,7 @@ void step1() {
 		std::cout << "r = " << lua_tointeger(L, -1) << std::endl;
 	}
 
-
 	system("pause");
 	lua_close(L);
 }
+*/

@@ -153,17 +153,20 @@
     <ClCompile Include="Src\Core\Entity.cpp" />
     <ClCompile Include="Src\Core\EntityManager.cpp" />
     <ClCompile Include="Src\Core\Game.cpp" />
+    <ClCompile Include="Src\Core\LuaManager.cpp" />
     <ClCompile Include="Src\Core\TextureManager.cpp" />
     <ClCompile Include="Src\Examples\LuaYoutubeVideo.cpp" />
     <ClCompile Include="Src\Examples\SDLSimpleWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="Scripts\playerControl.lua" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Components\BoxColliderComponent.h" />
     <ClInclude Include="Src\Components\KeyboardControlComponent.h" />
     <ClInclude Include="Src\Components\LuaScriptComponent.h" />
     <ClInclude Include="Src\Components\MouseControlComponent.h" />
@@ -176,6 +179,7 @@
     <ClInclude Include="Src\Core\Entity.h" />
     <ClInclude Include="Src\Core\EntityManager.h" />
     <ClInclude Include="Src\Core\Game.h" />
+    <ClInclude Include="Src\Core\LuaManager.h" />
     <ClInclude Include="Src\Core\TextureManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

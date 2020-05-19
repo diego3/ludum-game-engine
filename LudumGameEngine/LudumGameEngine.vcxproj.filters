@@ -13,6 +13,9 @@
     <Filter Include="Src\Examples">
       <UniqueIdentifier>{9fb568ee-29ca-4854-92dc-4349257dcc61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{8e0b06e8-d26f-4e83-a871-bdd19f9da909}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -40,12 +43,18 @@
     <ClCompile Include="Src\Core\Animation.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Core\LuaManager.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="Scripts\playerControl.lua">
+      <Filter>Scripts</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Game.h">
@@ -85,6 +94,12 @@
       <Filter>Src\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\MouseControlComponent.h">
+      <Filter>Src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\LuaManager.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\BoxColliderComponent.h">
       <Filter>Src\Components</Filter>
     </ClInclude>
   </ItemGroup>

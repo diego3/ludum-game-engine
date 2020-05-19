@@ -2,7 +2,7 @@
 
 #include "../Core/Game.h"
 #include "../Core/Component.h"
-
+#include <SDL.h>
 
 class MouseControlComponent : public Component {
 

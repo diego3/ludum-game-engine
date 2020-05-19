@@ -7,6 +7,7 @@
 #include "../Core/Component.h"
 #include "TransformComponent.h"
 #include "SpriteComponent.h"
+#include "LuaScriptComponent.h"
 #include "../../Libs/glm/glm/ext/vector_float2.hpp";
 
 class KeyboardControlComponent : public Component {
@@ -18,6 +19,7 @@ public:
 	std::string shootKey;
 	TransformComponent* transform;
 	SpriteComponent* sprite;
+	LuaScriptComponent* luaScript;
 
 	int speed = 150;
 
@@ -31,6 +33,7 @@ public:
 		keycodes.emplace("down", "1073741905");
 		keycodes.emplace("left", "1073741904");
 		keycodes.emplace("right", "1073741903");
+		keycodes.emplace("p", "112");
 		keycodes.emplace("space", "32");
 
 		this->upKey = GetSDLKeyStringCode(up);
@@ -41,9 +44,9 @@ public:
 	}
 
 	void Initialize() override {
-
 		transform = owner->GetComponent<TransformComponent>();
 		sprite = owner->GetComponent <SpriteComponent>();
+		luaScript = owner->GetComponent<LuaScriptComponent>();
 	}
 
 	void Update(float deltaTime) override {
@@ -68,6 +71,9 @@ public:
 			}
 			if (keyCode.compare(this->shootKey) == 0) {
 				std::cout << "shoot event (space)" << std::endl;
+				luaScript->lua->dumpStack();
+				int top = lua_gettop(luaScript->lua->L);
+				std::cout << "top = " << top << std::endl;
 			}
 		}
 		if (Game::event.type == SDL_KEYUP) {

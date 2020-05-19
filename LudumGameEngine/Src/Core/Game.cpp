@@ -6,19 +6,28 @@
 #include "../../Libs/SDL2_mixer-2.0.4/include/SDL_mixer.h"
 #include "../../Libs/glm/glm/vec2.hpp"
 
+extern "C" {
+#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lua.h"
+#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lauxlib.h"
+#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lualib.h"
+}
+
 #include "Game.h"
 #include "Constants.h"
 #include "EntityManager.h"
 #include "AssetManager.h"
+#include "LuaManager.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/KeyboardControlComponent.h"
+#include "../Components/LuaScriptComponent.h"
 
 #ifdef _WIN32
 #pragma comment(lib, "Libs/SDL2_net-2.0.1/lib/x86/SDL2_net.lib")
 #pragma comment(lib, "Libs/SDL2_image-2.0.5/lib/x86/SDL2_image.lib")
 #pragma comment(lib, "Libs/SDL2_ttf-2.0.15/lib/x86/SDL2_ttf.lib")
 #pragma comment(lib, "Libs/SDL2_mixer-2.0.4/lib/x86/SDL2_mixer.lib")
+#pragma comment(lib, "Libs/lua-5.3.5_Win32_dllw6_lib/liblua53.a")
 #endif // WIN
 
 using namespace std;
@@ -30,6 +39,7 @@ EntityManager* entityManager;
 SDL_Renderer* Game::renderer;
 AssetManager* Game::assetManager; // new AssetManager(&entityManager)
 SDL_Event Game::event;
+LuaManager* luaManager;
 
 
 Game::Game()
@@ -47,6 +57,11 @@ bool Game::IsRunning() const
 bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 {
 	tickLastFrame = SDL_GetTicks();
+
+	luaManager = new LuaManager();
+
+	// TODO load initial config files (lua scripts)
+
 
 	int sdlInit = SDL_Init(SDL_INIT_EVERYTHING);
 	if (sdlInit != 0) {
@@ -97,8 +112,7 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 
 	entityManager = new EntityManager();
 	Game::assetManager = new AssetManager(entityManager);
-	//TODO load assets from lua script :)
-
+	
 	LoadLevel(1);
 
 	this->isRunning = true;
@@ -108,6 +122,8 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 
 void Game::LoadLevel(int levelNumber)
 {
+	// Load entities script files and parse
+
 	// load images to the memory
 	assetManager->AddTexture("tank-left", "Assets/images/tank-small-left.png");
 	assetManager->AddTexture("chopper-image", "Assets/images/chopper-spritesheet.png");
@@ -120,9 +136,9 @@ void Game::LoadLevel(int levelNumber)
 	Entity& chopper = entityManager->AddEntity("chopper");
 	chopper.AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 2);
 	chopper.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
+	chopper.AddComponent<LuaScriptComponent>(luaManager, "Scripts/playerControl.lua");
 	chopper.AddComponent<KeyboardControlComponent>("up", "down", "left", "right", "space");
-
-
+	
 	Entity& radar = entityManager->AddEntity("radar");
 	radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
 	radar.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
@@ -193,6 +209,7 @@ void Game::Destroy()
 
 	delete assetManager;
 	delete entityManager;
+	delete luaManager;
 	SDL_Quit();
 }
 

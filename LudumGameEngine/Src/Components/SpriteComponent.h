@@ -12,11 +12,13 @@
 class SpriteComponent: public Component
 {
 public:
-	TransformComponent* transform;
 	SDL_Texture* texture;
 	SDL_Rect source;
 	SDL_Rect destination;
 	SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+
+	TransformComponent* transform;
 
 	//animation stuffs
 	bool isAnimated;
