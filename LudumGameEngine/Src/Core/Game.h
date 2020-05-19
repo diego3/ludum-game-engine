@@ -17,6 +17,7 @@ public:
 
 	static SDL_Renderer* renderer;
 	static AssetManager* assetManager;
+	static SDL_Event event;
 
 	bool Initialize(const char *title, int windowWidth, int windowHeight);
 	bool IsRunning() const;

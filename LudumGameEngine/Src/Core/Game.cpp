@@ -12,6 +12,7 @@
 #include "AssetManager.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
+#include "../Components/KeyboardControlComponent.h"
 
 #ifdef _WIN32
 #pragma comment(lib, "Libs/SDL2_net-2.0.1/lib/x86/SDL2_net.lib")
@@ -28,6 +29,8 @@ using namespace glm;
 EntityManager* entityManager;
 SDL_Renderer* Game::renderer;
 AssetManager* Game::assetManager; // new AssetManager(&entityManager)
+SDL_Event Game::event;
+
 
 Game::Game()
 {
@@ -110,27 +113,25 @@ void Game::LoadLevel(int levelNumber)
 	assetManager->AddTexture("chopper-image", "Assets/images/chopper-spritesheet.png");
 	assetManager->AddTexture("radar-image", "Assets/images/radar.png");
 
-	Entity* tank = new Entity(entityManager, "tankLeft");
-	tank->AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
-	tank->AddComponent<SpriteComponent>("tank-left");
-	entityManager->AddEntity(tank);
+	Entity& tank = entityManager->AddEntity("tankLeft");
+	tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 2);
+	tank.AddComponent<SpriteComponent>("tank-left");
 
-	Entity* chopper = new Entity(entityManager, "chopper");
-	chopper->AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 1);
-	chopper->AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
-	entityManager->AddEntity(chopper);
+	Entity& chopper = entityManager->AddEntity("chopper");
+	chopper.AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 2);
+	chopper.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
+	chopper.AddComponent<KeyboardControlComponent>("up", "down", "left", "right", "space");
 
-	Entity* radar = new Entity(entityManager, "radar");
-	radar->AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
-	radar->AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
-	entityManager->AddEntity(radar);
 
+	Entity& radar = entityManager->AddEntity("radar");
+	radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
+	radar.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
+	
 	entityManager->PrintAllEntities();
 }
 
 void Game::ProcessInput()
 {
-	SDL_Event event;
 	SDL_PollEvent(&event);
 	switch (event.type)
 	{
@@ -146,6 +147,7 @@ void Game::ProcessInput()
 				break;
 			}
 		}
+		
 		default: {
 			break;
 		}
@@ -188,6 +190,9 @@ void Game::Destroy()
 	{
 		SDL_DestroyWindow(this->window);
 	}
+
+	delete assetManager;
+	delete entityManager;
 	SDL_Quit();
 }
 

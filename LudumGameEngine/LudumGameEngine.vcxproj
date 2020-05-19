@@ -164,6 +164,9 @@
     <Image Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Components\KeyboardControlComponent.h" />
+    <ClInclude Include="Src\Components\LuaScriptComponent.h" />
+    <ClInclude Include="Src\Components\MouseControlComponent.h" />
     <ClInclude Include="Src\Components\SpriteComponent.h" />
     <ClInclude Include="Src\Components\TransformComponent.h" />
     <ClInclude Include="Src\Core\Animation.h" />

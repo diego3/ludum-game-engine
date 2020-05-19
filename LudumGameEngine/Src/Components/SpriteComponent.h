@@ -86,7 +86,7 @@ public:
 	void Update(float deltaTime) override {
 		if (isAnimated) {
 			int ax = source.w * (static_cast<int>(SDL_GetTicks() / animationSpeed) % numFrames);
-			std::cout << "ax = " << ax << std::endl;
+			//std::cout << "ax = " << ax << std::endl;
 			source.x = ax;
 		}
 		source.y = animationIndex * transform->height;
@@ -99,15 +99,5 @@ public:
 
 	void Render() override {
 		TextureManager::Draw(texture, source, destination, flip);
-
-		/* pasted from transform component, just in case
-		SDL_Rect rectangle = {
-			(int)position.x,
-			(int)position.y,
-			width, height
-		};
-
-		SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 255);
-		SDL_RenderFillRect(Game::renderer, &rectangle);*/
 	}
 };
