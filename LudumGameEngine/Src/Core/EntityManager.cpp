@@ -39,12 +39,6 @@ void EntityManager::Render()
 			entity->Render();
 		}
 	}
-
-	/**
-	for (Entity* entity : entities)
-	{
-		entity->Render();
-	}*/
 }
 
 void EntityManager::Update(float deltaTime)

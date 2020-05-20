@@ -37,12 +37,15 @@ using namespace glm;
 
 
 // GLOBALS
-EntityManager* Game::entityManager;
+EntityManager* Game::entityManager = new EntityManager();;
 SDL_Renderer* Game::renderer;
 AssetManager* Game::assetManager; // new AssetManager(&entityManager)
 SDL_Event Game::event;
 LuaManager* luaManager;
+SDL_Rect Game::camera = {0,0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
+
+Entity& player = Game::entityManager->AddEntity("chopper", PLAYER_LAYER);
 
 Game::Game()
 {
@@ -112,7 +115,6 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 		return false;
 	}
 
-	entityManager = new EntityManager();
 	Game::assetManager = new AssetManager(entityManager);
 	
 	LoadLevel(1);
@@ -121,6 +123,7 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 
 	return true;
 }
+
 
 void Game::LoadLevel(int levelNumber)
 {
@@ -144,11 +147,10 @@ void Game::LoadLevel(int levelNumber)
 	tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 2);
 	tank.AddComponent<SpriteComponent>("tank-left");
 
-	Entity& chopper = entityManager->AddEntity("chopper", PLAYER_LAYER);
-	chopper.AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 2);
-	chopper.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
+	player.AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 2);
+	player.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
 	//chopper.AddComponent<LuaScriptComponent>(luaManager, "Scripts/playerControl.lua");
-	chopper.AddComponent<KeyboardControlComponent>("up", "down", "left", "right", "space");
+	player.AddComponent<KeyboardControlComponent>("up", "down", "left", "right", "space");
 	
 	Entity& radar = entityManager->AddEntity("radar", UI_LAYER);
 	radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
@@ -204,6 +206,30 @@ void Game::Update()
 	tickLastFrame = SDL_GetTicks();
 
 	entityManager->Update(deltaTime);
+
+	HandleCameraMovement();
+}
+
+void Game::HandleCameraMovement() {
+	TransformComponent* transform = player.GetComponent<TransformComponent>();
+	
+	camera.x = transform->position.x - (WINDOW_WIDTH / 2);
+	camera.y = transform->position.y - (WINDOW_HEIGHT / 2);
+
+	// Campling 
+	camera.x = camera.x < 0 ? 0 : camera.x;
+	camera.y = camera.y < 0 ? 0 : camera.y;
+	camera.x = camera.x > camera.w ? camera.w : camera.x;
+	camera.y = camera.y > camera.h ? camera.h : camera.y;
+
+	std::cout << transform->position.x << "," << transform->position.y << std::endl;
+
+	// Campling player
+	transform->position.x = transform->position.x < 0 ? 0 : transform->position.x;
+	transform->position.y = transform->position.y < 0 ? 0 : transform->position.y;
+	transform->position.x = transform->position.x > (WINDOW_WIDTH * 2 - transform->width*2) ? static_cast<float>(WINDOW_WIDTH * 2 - transform->width*2) : transform->position.x;
+	transform->position.y = transform->position.y > (WINDOW_HEIGHT* 2 - transform->height * 2) ? static_cast<float>(WINDOW_HEIGHT * 2 - transform->height * 2) : transform->position.y;
+
 }
 
 void Game::Destroy()

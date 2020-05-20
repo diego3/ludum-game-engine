@@ -93,8 +93,12 @@ public:
 		}
 		source.y = animationIndex * transform->height;
 
-		destination.x = static_cast<int>(transform->position.x);
-		destination.y = static_cast<int>(transform->position.y);
+		
+		int camerax = isFixed ? 0 : Game::camera.x;
+		int cameray = isFixed ? 0 : Game::camera.y;
+		destination.x = static_cast<int>(transform->position.x) - camerax;
+		destination.y = static_cast<int>(transform->position.y) - cameray;
+		
 		destination.w = transform->width * transform->scale;
 		destination.h = transform->height * transform->scale;
 	}

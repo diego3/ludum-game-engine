@@ -19,6 +19,7 @@ public:
 	static AssetManager* assetManager;
 	static SDL_Event event;
 	static EntityManager* entityManager;
+	static SDL_Rect camera;
 
 	bool Initialize(const char *title, int windowWidth, int windowHeight);
 	bool IsRunning() const;
@@ -26,6 +27,8 @@ public:
 	void Update();
 	void Render();
 	void Destroy();
+
+	void HandleCameraMovement();
 
 	void LoadLevel(int levelNumber);
 };

@@ -49,7 +49,8 @@ public:
 	}
 
 	void Update(float deltaTime) override {
-
+		destination.x = position.x - Game::camera.x;
+		destination.y = position.y - Game::camera.y;
 	}
 
 	void Render() override {
