@@ -19,7 +19,7 @@ public:
 	std::string shootKey;
 	TransformComponent* transform;
 	SpriteComponent* sprite;
-	LuaScriptComponent* luaScript;
+	//LuaScriptComponent* luaScript;
 
 	int speed = 150;
 
@@ -46,7 +46,7 @@ public:
 	void Initialize() override {
 		transform = owner->GetComponent<TransformComponent>();
 		sprite = owner->GetComponent <SpriteComponent>();
-		luaScript = owner->GetComponent<LuaScriptComponent>();
+		//luaScript = owner->GetComponent<LuaScriptComponent>();
 	}
 
 	void Update(float deltaTime) override {
@@ -71,9 +71,9 @@ public:
 			}
 			if (keyCode.compare(this->shootKey) == 0) {
 				std::cout << "shoot event (space)" << std::endl;
-				luaScript->lua->dumpStack();
-				int top = lua_gettop(luaScript->lua->L);
-				std::cout << "top = " << top << std::endl;
+				//luaScript->lua->dumpStack();
+				//int top = lua_gettop(luaScript->lua->L);
+				//std::cout << "top = " << top << std::endl;
 			}
 		}
 		if (Game::event.type == SDL_KEYUP) {

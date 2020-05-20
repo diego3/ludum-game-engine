@@ -17,10 +17,12 @@ extern "C" {
 #include "EntityManager.h"
 #include "AssetManager.h"
 #include "LuaManager.h"
+#include "Map.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/KeyboardControlComponent.h"
 #include "../Components/LuaScriptComponent.h"
+#include "../Components/TileMapComponent.h"
 
 #ifdef _WIN32
 #pragma comment(lib, "Libs/SDL2_net-2.0.1/lib/x86/SDL2_net.lib")
@@ -35,7 +37,7 @@ using namespace glm;
 
 
 // GLOBALS
-EntityManager* entityManager;
+EntityManager* Game::entityManager;
 SDL_Renderer* Game::renderer;
 AssetManager* Game::assetManager; // new AssetManager(&entityManager)
 SDL_Event Game::event;
@@ -128,15 +130,24 @@ void Game::LoadLevel(int levelNumber)
 	assetManager->AddTexture("tank-left", "Assets/images/tank-small-left.png");
 	assetManager->AddTexture("chopper-image", "Assets/images/chopper-spritesheet.png");
 	assetManager->AddTexture("radar-image", "Assets/images/radar.png");
+	assetManager->AddTexture("tile-map", "Assets/images/jungle.png");//Assets/tilemaps/jungle.png
+
+	Map* tileMap = new Map("tile-map", 2, 32);
+	tileMap->LoadMap("Assets/tilemaps/jungle.map", 25, 20);
+
+	// 21 = 64, 32
+	//Entity& mapa = Game::entityManager->AddEntity("Tile");
+	//mapa.AddComponent<TransformComponent>(100, 250, 0, 0, 320, 96, 2);
+	//mapa.AddComponent<SpriteComponent>("tile-map");
 
 	Entity& tank = entityManager->AddEntity("tankLeft");
 	tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 2);
 	tank.AddComponent<SpriteComponent>("tank-left");
 
 	Entity& chopper = entityManager->AddEntity("chopper");
-	chopper.AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 2);
+	chopper.AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 1);
 	chopper.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
-	chopper.AddComponent<LuaScriptComponent>(luaManager, "Scripts/playerControl.lua");
+	//chopper.AddComponent<LuaScriptComponent>(luaManager, "Scripts/playerControl.lua");
 	chopper.AddComponent<KeyboardControlComponent>("up", "down", "left", "right", "space");
 	
 	Entity& radar = entityManager->AddEntity("radar");

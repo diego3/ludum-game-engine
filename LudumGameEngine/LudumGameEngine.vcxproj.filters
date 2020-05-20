@@ -46,6 +46,9 @@
     <ClCompile Include="Src\Core\LuaManager.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Core\Map.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />
@@ -101,6 +104,12 @@
     </ClInclude>
     <ClInclude Include="Src\Components\BoxColliderComponent.h">
       <Filter>Src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\TileMapComponent.h">
+      <Filter>Src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Map.h">
+      <Filter>Src\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
