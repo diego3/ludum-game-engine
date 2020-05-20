@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include "EntityManager.h"
+#include "Constants.h"
 
 class EntityManager;
 class Component;
@@ -15,12 +16,13 @@ public:
 	std::vector<Component*> components;
 	//http://www.cplusplus.com/reference/typeinfo/type_info/
 	std::map<const type_info*, Component*> componentsTypeMap;
+	LayerType layer;
 
 	bool isActive;
 	EntityManager* manager;
 
 	Entity(EntityManager* manager);
-	Entity(EntityManager* manager, std::string name);
+	Entity(EntityManager* manager, std::string name, LayerType layer);
 	void Update(float deltaTime);
 	void Render();
 	void Destroy();
@@ -46,7 +48,6 @@ public:
 
 	template<typename T>
 	bool HasComponent() const {
-		//componentsTypeMap.find(&typeid(T));
 		return componentsTypeMap.count(&typeid(T)) > 0;
 	}
 

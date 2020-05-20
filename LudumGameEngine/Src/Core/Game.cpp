@@ -135,22 +135,22 @@ void Game::LoadLevel(int levelNumber)
 	Map* tileMap = new Map("tile-map", 2, 32);
 	tileMap->LoadMap("Assets/tilemaps/jungle.map", 25, 20);
 
-	// 21 = 64, 32
+	// Challenge: Draw a grid to wrap the image
 	//Entity& mapa = Game::entityManager->AddEntity("Tile");
 	//mapa.AddComponent<TransformComponent>(100, 250, 0, 0, 320, 96, 2);
 	//mapa.AddComponent<SpriteComponent>("tile-map");
 
-	Entity& tank = entityManager->AddEntity("tankLeft");
+	Entity& tank = entityManager->AddEntity("tankLeft", ENEMY_LAYER);
 	tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 2);
 	tank.AddComponent<SpriteComponent>("tank-left");
 
-	Entity& chopper = entityManager->AddEntity("chopper");
-	chopper.AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 1);
+	Entity& chopper = entityManager->AddEntity("chopper", PLAYER_LAYER);
+	chopper.AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 2);
 	chopper.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
 	//chopper.AddComponent<LuaScriptComponent>(luaManager, "Scripts/playerControl.lua");
 	chopper.AddComponent<KeyboardControlComponent>("up", "down", "left", "right", "space");
 	
-	Entity& radar = entityManager->AddEntity("radar");
+	Entity& radar = entityManager->AddEntity("radar", UI_LAYER);
 	radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
 	radar.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
 	

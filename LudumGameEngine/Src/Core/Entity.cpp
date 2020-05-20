@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Entity.h"
 #include "Component.h"
+#include "Constants.h"
 
 
 Entity::Entity(EntityManager* manager) 
@@ -10,11 +11,12 @@ Entity::Entity(EntityManager* manager)
 	this->manager = manager;
 }
 
-Entity::Entity(EntityManager* manager, std::string name)
+Entity::Entity(EntityManager* manager, std::string name, LayerType layer)
 {
 	this->isActive = true;
 	this->name = name;
 	this->manager = manager;
+	this->layer = layer;
 }
 
 
