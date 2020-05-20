@@ -130,10 +130,13 @@ void Game::LoadLevel(int levelNumber)
 	// Load entities script files and parse
 
 	// load images to the memory
-	assetManager->AddTexture("tank-left", "Assets/images/tank-small-left.png");
+	assetManager->AddTexture("tank", "Assets/images/tank-small-right.png");
 	assetManager->AddTexture("chopper-image", "Assets/images/chopper-spritesheet.png");
 	assetManager->AddTexture("radar-image", "Assets/images/radar.png");
-	assetManager->AddTexture("tile-map", "Assets/images/jungle.png");//Assets/tilemaps/jungle.png
+	assetManager->AddTexture("tile-map", "Assets/images/jungle.png");
+	assetManager->AddTexture("explosion", "Assets/images/explosion-320x320.png");
+	assetManager->AddTexture("explosion2", "Assets/images/Explosion-1152x96.png");
+	//assetManager->AddTexture("blue-pirate", "Assets/images/spaceship-pirate.png");//880x812
 
 	Map* tileMap = new Map("tile-map", 2, 32);
 	tileMap->LoadMap("Assets/tilemaps/jungle.map", 25, 20);
@@ -143,9 +146,31 @@ void Game::LoadLevel(int levelNumber)
 	//mapa.AddComponent<TransformComponent>(100, 250, 0, 0, 320, 96, 2);
 	//mapa.AddComponent<SpriteComponent>("tile-map");
 
-	Entity& tank = entityManager->AddEntity("tankLeft", ENEMY_LAYER);
-	tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 2);
-	tank.AddComponent<SpriteComponent>("tank-left");
+	Entity& tank = entityManager->AddEntity("Tank", ENEMY_LAYER);
+	tank.AddComponent<TransformComponent>(120, 472, 20, 0, 32, 32, 2);
+	tank.AddComponent<SpriteComponent>("tank");
+
+	//Entity& blueship = entityManager->AddEntity("BluePirate", ENEMY_LAYER);
+	//blueship.AddComponent<TransformComponent>(200, 0, 20, 0, 220, 203, 1);
+	//blueship.AddComponent<SpriteComponent>("blue-pirate", 4, 90, false, false);
+
+	// Animaticao nao percorre as colunas ainda....
+	//Entity& explosion = entityManager->AddEntity("Explosion", ENEMY_LAYER);
+	//explosion.AddComponent<TransformComponent>(200, 200, 0, 0, 64,64, 2);
+	//explosion.AddComponent<SpriteComponent>("explosion", 5, 90, false, true);
+
+	Entity& explosion = entityManager->AddEntity("Explosion", ENEMY_LAYER);
+	explosion.AddComponent<TransformComponent>(200, 200, 0, 0, 96, 96, 2);
+	explosion.AddComponent<SpriteComponent>("explosion2", 12, 90, false, false);
+	Entity& explosion2 = entityManager->AddEntity("Explosion2", ENEMY_LAYER);
+	explosion2.AddComponent<TransformComponent>(400, 200, 0, 0, 96, 96, 2);
+	explosion2.AddComponent<SpriteComponent>("explosion2", 12, 150, false, false);
+	Entity& explosion3 = entityManager->AddEntity("Explosion3", ENEMY_LAYER);
+	explosion3.AddComponent<TransformComponent>(800, 400, 0, 0, 96, 96, 3);
+	explosion3.AddComponent<SpriteComponent>("explosion2", 12, 45, false, false);
+	Entity& explosion4 = entityManager->AddEntity("Explosion4", ENEMY_LAYER);
+	explosion4.AddComponent<TransformComponent>(1200, 600, 0, 0, 96, 96, 5);
+	explosion4.AddComponent<SpriteComponent>("explosion2", 12, 150, false, false);
 
 	player.AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 2);
 	player.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
