@@ -12,17 +12,20 @@ extern "C" {
 #include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lualib.h"
 }
 
+#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/sol.hpp"
+
 #include "Game.h"
 #include "Constants.h"
 #include "EntityManager.h"
 #include "AssetManager.h"
-#include "LuaManager.h"
+//#include "LuaManager.h"
 #include "Map.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/KeyboardControlComponent.h"
 #include "../Components/LuaScriptComponent.h"
 #include "../Components/TileMapComponent.h"
+#include "../Components/CameraFollowComponent.h"
 
 #ifdef _WIN32
 #pragma comment(lib, "Libs/SDL2_net-2.0.1/lib/x86/SDL2_net.lib")
@@ -41,11 +44,12 @@ EntityManager* Game::entityManager = new EntityManager();;
 SDL_Renderer* Game::renderer;
 AssetManager* Game::assetManager; // new AssetManager(&entityManager)
 SDL_Event Game::event;
-LuaManager* luaManager;
+//LuaManager* luaManager;
 SDL_Rect Game::camera = {0,0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
 
-Entity& player = Game::entityManager->AddEntity("chopper", PLAYER_LAYER);
+//Entity& player = Game::entityManager->AddEntity("chopper", PLAYER_LAYER);
+
 
 Game::Game()
 {
@@ -63,10 +67,13 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 {
 	tickLastFrame = SDL_GetTicks();
 
-	luaManager = new LuaManager();
+	//luaManager = new LuaManager();
+	sol::state lua;
+	lua.open_libraries(sol::lib::base);
+	lua.script("print('[LUA]  bark bark bark!')");
 
 	// TODO load initial config files (lua scripts)
-
+	
 
 	int sdlInit = SDL_Init(SDL_INIT_EVERYTHING);
 	if (sdlInit != 0) {
@@ -125,22 +132,140 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 }
 
 
-void Game::LoadLevel(int levelNumber)
-{
-	// Load entities script files and parse
+void Game::LoadLevel(int levelNumber) {
+	sol::state lua;
+	lua.open_libraries(sol::lib::base, sol::lib::os, sol::lib::math, sol::lib::table);
+	lua.script("print('[LUA] Loading....')");
 
-	// load images to the memory
-	assetManager->AddTexture("tank", "Assets/images/tank-small-right.png");
-	assetManager->AddTexture("chopper-image", "Assets/images/chopper-spritesheet.png");
-	assetManager->AddTexture("radar-image", "Assets/images/radar.png");
-	assetManager->AddTexture("tile-map", "Assets/images/jungle.png");
-	assetManager->AddTexture("explosion", "Assets/images/explosion-320x320.png");
-	assetManager->AddTexture("explosion2", "Assets/images/Explosion-1152x96.png");
-	//assetManager->AddTexture("blue-pirate", "Assets/images/spaceship-pirate.png");//880x812
+	std::string levelName = "Level"+std::to_string(levelNumber);
+	lua.script_file("Scripts/"+levelName+".lua");
 
-	Map* tileMap = new Map("tile-map", 2, 32);
-	tileMap->LoadMap("Assets/tilemaps/jungle.map", 25, 20);
+	// Assets Loading
+	sol::table levelData = lua[levelName];
+	sol::table levelAssets = levelData["assets"];
+	int index = 0;
+	while (true) {
+		sol::optional<sol::table> exists = levelAssets[index];
+		if (exists == sol::nullopt) {
+			break;
+		}
 
+		sol::table asset = levelAssets[index];
+		std::string assetType = asset["type"];
+		std::string assetId = asset["id"];
+		std::string assetFile = asset["file"];
+		if (assetType.compare("texture") == 0) {
+			//std::cout << assetId << assetFile << std::endl;
+			assetManager->AddTexture(assetId, assetFile);
+		}
+
+		index++;
+	}
+	
+
+	sol::table tileMapTable = levelData["map"];
+	std::string tileAssetId = tileMapTable["assetId"];
+	std::string tileMapFilePath = tileMapTable["file"];
+	int tileScale = static_cast<int>(tileMapTable["scale"]);
+	int tileSize = static_cast<int>(tileMapTable["tileSize"]);
+	int mapSizeX = static_cast<int>(tileMapTable["mapSizeX"]);
+	int mapSizeY = static_cast<int>(tileMapTable["mapSizeY"]);
+
+	Map* tileMap = new Map(tileAssetId, tileScale, tileSize);
+	tileMap->LoadMap(tileMapFilePath, mapSizeX, mapSizeY);
+
+	
+	sol::table entities = levelData["entities"];
+	int entityIndex = 0;
+	while (true) {
+		sol::optional<sol::table> exists = entities[entityIndex];
+		if (exists == sol::nullopt) {
+			std::cout << "entity index[" << entityIndex << "] not found" << std::endl;
+			break;
+		}
+		sol::table entityTable = entities[entityIndex];
+		std::string name = entityTable["name"];
+		LayerType layer = static_cast<LayerType>(entityTable["layer"]);
+		// Entity
+		Entity& entity = Game::entityManager->AddEntity(name, layer);
+		
+		//TransformComponent
+		sol::table components = entityTable["components"];
+		sol::optional<sol::table> transformExists = components["transform"];
+		if (transformExists != sol::nullopt) {
+			sol::table transform = components["transform"];
+			sol::table position = transform["position"];
+			int posX = static_cast<int>(position["x"].get_or(0));
+			int posY = static_cast<int>(position["y"].get_or(0));
+			
+			sol::table velocity = transform["velocity"];
+			int velX = static_cast<int>(velocity["x"].get_or(0));
+			int velY = static_cast<int>(velocity["y"].get_or(0));
+
+			int width = static_cast<int>(transform["width"].get_or(0));
+			int height = static_cast<int>(transform["height"].get_or(0));
+			int scale = static_cast<int>(transform["scale"].get_or(0));
+			int rotate = static_cast<int>(transform["rotate"].get_or(0));
+
+			entity.AddComponent<TransformComponent>(posX, posY,velX, velY, width, height, scale);
+		}
+
+		//SpriteComponent
+		sol::optional<sol::table> spriteExists = components["sprite"];
+		if (spriteExists != sol::nullopt) {
+			sol::table spriteTable = components["sprite"];
+			std::string id = spriteTable["assetId"];
+			int numFrames = static_cast<int>(spriteTable["numFrames"]);
+			int animationSpeed = static_cast<int>(spriteTable["animationSpeed"]);
+			bool hasDirections = spriteTable["hasDirections"];
+			bool isFixed = spriteTable["isFixed"];
+			
+			entity.AddComponent<SpriteComponent>(id, numFrames, animationSpeed, 
+				hasDirections, isFixed);
+		}
+
+		// MOVE THIS TO SCRIPT COMPONENT and attach it to the player entity
+		sol::optional<sol::table> cameraExists = components["camera"];
+		if (cameraExists != sol::nullopt) {
+			sol::table camera = components["camera"];
+
+			entity.AddComponent<CameraFollowComponent>();
+		}
+
+		//Inputs
+		sol::optional<sol::table> inputExists = components["input"];
+		if (inputExists != sol::nullopt) {
+			sol::table input = components["input"];
+			//KeyboardControlComponent
+			sol::optional<sol::table> keyboardExists = input["keyboard"];
+			if (keyboardExists != sol::nullopt) {
+				sol::table keyboard = input["keyboard"];
+
+				std::string up = keyboard["up"];
+				std::string down = keyboard["down"];
+				std::string left = keyboard["left"];
+				std::string right = keyboard["right"];
+				std::string shoot = keyboard["shoot"];
+
+				entity.AddComponent<KeyboardControlComponent>(up, down, left, right, shoot);
+			}
+
+			//MouseControlComponent
+			sol::optional<sol::table> mouseExists = input["mouse"];
+			if (mouseExists != sol::nullopt) {
+				sol::table mouse = input["mouse"];
+
+
+			}
+		}
+		
+		entityIndex++;
+	}
+	entityManager->PrintAllEntities();
+	
+
+	/*
+	
 	// Challenge: Draw a grid to wrap the image
 	//Entity& mapa = Game::entityManager->AddEntity("Tile");
 	//mapa.AddComponent<TransformComponent>(100, 250, 0, 0, 320, 96, 2);
@@ -159,29 +284,12 @@ void Game::LoadLevel(int levelNumber)
 	//explosion.AddComponent<TransformComponent>(200, 200, 0, 0, 64,64, 2);
 	//explosion.AddComponent<SpriteComponent>("explosion", 5, 90, false, true);
 
-	Entity& explosion = entityManager->AddEntity("Explosion", ENEMY_LAYER);
-	explosion.AddComponent<TransformComponent>(200, 200, 0, 0, 96, 96, 2);
-	explosion.AddComponent<SpriteComponent>("explosion2", 12, 90, false, false);
-	Entity& explosion2 = entityManager->AddEntity("Explosion2", ENEMY_LAYER);
-	explosion2.AddComponent<TransformComponent>(400, 200, 0, 0, 96, 96, 2);
-	explosion2.AddComponent<SpriteComponent>("explosion2", 12, 150, false, false);
-	Entity& explosion3 = entityManager->AddEntity("Explosion3", ENEMY_LAYER);
-	explosion3.AddComponent<TransformComponent>(800, 400, 0, 0, 96, 96, 3);
-	explosion3.AddComponent<SpriteComponent>("explosion2", 12, 45, false, false);
-	Entity& explosion4 = entityManager->AddEntity("Explosion4", ENEMY_LAYER);
-	explosion4.AddComponent<TransformComponent>(1200, 600, 0, 0, 96, 96, 5);
-	explosion4.AddComponent<SpriteComponent>("explosion2", 12, 150, false, false);
-
-	player.AddComponent<TransformComponent>(240, 160, 0, 0, 32, 32, 2);
-	player.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
-	//chopper.AddComponent<LuaScriptComponent>(luaManager, "Scripts/playerControl.lua");
-	player.AddComponent<KeyboardControlComponent>("up", "down", "left", "right", "space");
-	
 	Entity& radar = entityManager->AddEntity("radar", UI_LAYER);
 	radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
 	radar.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
 	
 	entityManager->PrintAllEntities();
+	*/
 }
 
 void Game::ProcessInput()
@@ -232,10 +340,16 @@ void Game::Update()
 
 	entityManager->Update(deltaTime);
 
-	HandleCameraMovement();
+	//HandleCameraMovement();
 }
 
+/**
 void Game::HandleCameraMovement() {
+	if (!player.HasComponent<TransformComponent>()) {
+		std::cout << "player has no transform" << std::endl;
+		return;
+	}
+
 	TransformComponent* transform = player.GetComponent<TransformComponent>();
 	
 	camera.x = transform->position.x - (WINDOW_WIDTH / 2);
@@ -255,7 +369,7 @@ void Game::HandleCameraMovement() {
 	transform->position.x = transform->position.x > (WINDOW_WIDTH * 2 - transform->width*2) ? static_cast<float>(WINDOW_WIDTH * 2 - transform->width*2) : transform->position.x;
 	transform->position.y = transform->position.y > (WINDOW_HEIGHT* 2 - transform->height * 2) ? static_cast<float>(WINDOW_HEIGHT * 2 - transform->height * 2) : transform->position.y;
 
-}
+}*/
 
 void Game::Destroy()
 {
@@ -271,7 +385,7 @@ void Game::Destroy()
 
 	delete assetManager;
 	delete entityManager;
-	delete luaManager;
+	//delete luaManager;
 	SDL_Quit();
 }
 
