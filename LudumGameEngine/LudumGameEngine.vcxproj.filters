@@ -117,5 +117,14 @@
     <ClInclude Include="Src\Components\CameraFollowComponent.h">
       <Filter>Src\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Components\CameraShakeComponent.h">
+      <Filter>Src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\AudioComponent.h">
+      <Filter>Src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\NetworkingComponent.h">
+      <Filter>Src\Components</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

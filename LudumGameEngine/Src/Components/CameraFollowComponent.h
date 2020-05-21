@@ -19,6 +19,8 @@ public:
 	}
 
 	void Update(float deltaTime) override {
+		if (!transform) return;
+
 		Game::camera.x = transform->position.x - (WINDOW_WIDTH / 2);
 		Game::camera.y = transform->position.y - (WINDOW_HEIGHT / 2);
 
@@ -28,7 +30,8 @@ public:
 		Game::camera.x = Game::camera.x > Game::camera.w ? Game::camera.w : Game::camera.x;
 		Game::camera.y = Game::camera.y > Game::camera.h ? Game::camera.h : Game::camera.y;
 
-		std::cout << transform->position.x << "," << transform->position.y << std::endl;
+		// just for debugging
+		//std::cout << transform->position.x << "," << transform->position.y << std::endl;
 
 		// Campling player
 		transform->position.x = transform->position.x < 0 ? 0 : transform->position.x;

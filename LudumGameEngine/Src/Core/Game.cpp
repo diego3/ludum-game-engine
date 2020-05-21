@@ -26,6 +26,7 @@ extern "C" {
 #include "../Components/LuaScriptComponent.h"
 #include "../Components/TileMapComponent.h"
 #include "../Components/CameraFollowComponent.h"
+#include "../Components/CameraShakeComponent.h"
 
 #ifdef _WIN32
 #pragma comment(lib, "Libs/SDL2_net-2.0.1/lib/x86/SDL2_net.lib")
@@ -46,10 +47,6 @@ AssetManager* Game::assetManager; // new AssetManager(&entityManager)
 SDL_Event Game::event;
 //LuaManager* luaManager;
 SDL_Rect Game::camera = {0,0, WINDOW_WIDTH, WINDOW_HEIGHT};
-
-
-//Entity& player = Game::entityManager->AddEntity("chopper", PLAYER_LAYER);
-
 
 Game::Game()
 {
@@ -86,7 +83,7 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 		SDL_WINDOWPOS_CENTERED,
 		windowWidth,
 		windowHeight,
-		0
+		0//SDL_WINDOW_FULLSCREEN_DESKTOP
 	);
 	if (this->window == NULL) {
 		std::cout << "sdl window initialization fails: " << SDL_GetError() << std::endl;
@@ -231,6 +228,14 @@ void Game::LoadLevel(int levelNumber) {
 
 			entity.AddComponent<CameraFollowComponent>();
 		}
+		
+		// JUST for TESTS
+		sol::optional<sol::table> cameraShakeExists = components["cameraShake"];
+		if (cameraShakeExists != sol::nullopt) {
+			//sol::table camera = components["cameraShake"];
+			entity.AddComponent<CameraShakeComponent>();
+		}
+
 
 		//Inputs
 		sol::optional<sol::table> inputExists = components["input"];
@@ -262,34 +267,6 @@ void Game::LoadLevel(int levelNumber) {
 		entityIndex++;
 	}
 	entityManager->PrintAllEntities();
-	
-
-	/*
-	
-	// Challenge: Draw a grid to wrap the image
-	//Entity& mapa = Game::entityManager->AddEntity("Tile");
-	//mapa.AddComponent<TransformComponent>(100, 250, 0, 0, 320, 96, 2);
-	//mapa.AddComponent<SpriteComponent>("tile-map");
-
-	Entity& tank = entityManager->AddEntity("Tank", ENEMY_LAYER);
-	tank.AddComponent<TransformComponent>(120, 472, 20, 0, 32, 32, 2);
-	tank.AddComponent<SpriteComponent>("tank");
-
-	//Entity& blueship = entityManager->AddEntity("BluePirate", ENEMY_LAYER);
-	//blueship.AddComponent<TransformComponent>(200, 0, 20, 0, 220, 203, 1);
-	//blueship.AddComponent<SpriteComponent>("blue-pirate", 4, 90, false, false);
-
-	// Animaticao nao percorre as colunas ainda....
-	//Entity& explosion = entityManager->AddEntity("Explosion", ENEMY_LAYER);
-	//explosion.AddComponent<TransformComponent>(200, 200, 0, 0, 64,64, 2);
-	//explosion.AddComponent<SpriteComponent>("explosion", 5, 90, false, true);
-
-	Entity& radar = entityManager->AddEntity("radar", UI_LAYER);
-	radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
-	radar.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
-	
-	entityManager->PrintAllEntities();
-	*/
 }
 
 void Game::ProcessInput()
@@ -329,47 +306,31 @@ void Game::Render()
 void Game::Update()
 {
 	// sleeps the execution if we are too fast
+	std::cout << "\n******\nSDL_GetTicks() = " << SDL_GetTicks() << std::endl;
+
 	int timeToWait = FRAME_RATE - (SDL_GetTicks() - tickLastFrame);
+
+	std::cout << "FPS = " << FPS << std::endl;
+	std::cout << "FRAME_RATE = " << FRAME_RATE << std::endl;
+	std::cout << "SDL_GetTicks() - tickLastFrame = " << SDL_GetTicks() - tickLastFrame << std::endl;
+	std::cout << "timeToWait = " << timeToWait << std::endl;
+
 	if (timeToWait > 0 && timeToWait <= FRAME_RATE) {
+		std::cout << "SDL_Delay(" << timeToWait << ")" << std::endl;
 		SDL_Delay(timeToWait);
 	}
 
 	float deltaTime = (SDL_GetTicks() - tickLastFrame) / 1000.0f;
+	std::cout << "deltaTime = " << deltaTime << std::endl;
 
 	tickLastFrame = SDL_GetTicks();
 
+	std::cout << "tickLastFrame = " << tickLastFrame << std::endl;
+
 	entityManager->Update(deltaTime);
 
-	//HandleCameraMovement();
 }
 
-/**
-void Game::HandleCameraMovement() {
-	if (!player.HasComponent<TransformComponent>()) {
-		std::cout << "player has no transform" << std::endl;
-		return;
-	}
-
-	TransformComponent* transform = player.GetComponent<TransformComponent>();
-	
-	camera.x = transform->position.x - (WINDOW_WIDTH / 2);
-	camera.y = transform->position.y - (WINDOW_HEIGHT / 2);
-
-	// Campling 
-	camera.x = camera.x < 0 ? 0 : camera.x;
-	camera.y = camera.y < 0 ? 0 : camera.y;
-	camera.x = camera.x > camera.w ? camera.w : camera.x;
-	camera.y = camera.y > camera.h ? camera.h : camera.y;
-
-	std::cout << transform->position.x << "," << transform->position.y << std::endl;
-
-	// Campling player
-	transform->position.x = transform->position.x < 0 ? 0 : transform->position.x;
-	transform->position.y = transform->position.y < 0 ? 0 : transform->position.y;
-	transform->position.x = transform->position.x > (WINDOW_WIDTH * 2 - transform->width*2) ? static_cast<float>(WINDOW_WIDTH * 2 - transform->width*2) : transform->position.x;
-	transform->position.y = transform->position.y > (WINDOW_HEIGHT* 2 - transform->height * 2) ? static_cast<float>(WINDOW_HEIGHT * 2 - transform->height * 2) : transform->position.y;
-
-}*/
 
 void Game::Destroy()
 {

@@ -7,7 +7,7 @@ Level1 = {
 		[4] = {type="texture", id="explosion", file="Assets/images/explosion-320x320.png"},
 		[5] = {type="texture", id="explosion2", file="Assets/images/Explosion-1152x96.png"},
 	},
-	layers ={
+	layers = {
 		TILE_LAYER = 0,
 		VEGETATION_LAYER = 1,
 		ENEMY_LAYER = 2,
@@ -43,6 +43,7 @@ Level1 = {
 					rotate = 0
 				},
 				camera = {},
+				cameraShake = {},
 				sprite = {
 					assetId = "chopper",
 					animated = true,
@@ -174,3 +175,21 @@ Level1 = {
 		},
 	}
 }
+
+--[[
+
+	-- Challenge: Draw a grid to wrap the image
+	Entity& mapa = Game::entityManager->AddEntity("Tile");
+	mapa.AddComponent<TransformComponent>(100, 250, 0, 0, 320, 96, 2);
+	mapa.AddComponent<SpriteComponent>("tile-map");
+
+	Entity& tank = entityManager->AddEntity("Tank", ENEMY_LAYER);
+	tank.AddComponent<TransformComponent>(120, 472, 20, 0, 32, 32, 2);
+	tank.AddComponent<SpriteComponent>("tank");
+
+	-- Animaticao nao percorre as colunas ainda....
+	Entity& explosion = entityManager->AddEntity("Explosion", ENEMY_LAYER);
+	explosion.AddComponent<TransformComponent>(200, 200, 0, 0, 64,64, 2);
+	explosion.AddComponent<SpriteComponent>("explosion", 5, 90, false, true);
+
+]]

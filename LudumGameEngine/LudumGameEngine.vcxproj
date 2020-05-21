@@ -173,11 +173,14 @@
     <Image Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Components\AudioComponent.h" />
     <ClInclude Include="Src\Components\BoxColliderComponent.h" />
     <ClInclude Include="Src\Components\CameraFollowComponent.h" />
+    <ClInclude Include="Src\Components\CameraShakeComponent.h" />
     <ClInclude Include="Src\Components\KeyboardControlComponent.h" />
     <ClInclude Include="Src\Components\LuaScriptComponent.h" />
     <ClInclude Include="Src\Components\MouseControlComponent.h" />
+    <ClInclude Include="Src\Components\NetworkingComponent.h" />
     <ClInclude Include="Src\Components\SpriteComponent.h" />
     <ClInclude Include="Src\Components\TileMapComponent.h" />
     <ClInclude Include="Src\Components\TransformComponent.h" />

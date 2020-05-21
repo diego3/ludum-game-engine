@@ -28,7 +28,5 @@ public:
 	void Render();
 	void Destroy();
 
-	void HandleCameraMovement();
-
 	void LoadLevel(int levelNumber);
 };

@@ -8,6 +8,7 @@
 #include "../Core/Entity.h"
 #include "TransformComponent.h"
 
+// https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_collision_detection
 class BoxColliderComponent : public Component {
 public:
 
