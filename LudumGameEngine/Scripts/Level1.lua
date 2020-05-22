@@ -39,7 +39,14 @@ Level1 = {
 				},
 				camera = {},
 				cameraShake = {},
-				collider = { tag = "PLAYER", boundingAssetId = "boundingBox" },
+				collider = { 
+					tag = "PLAYER", 
+					boundingAssetId = "boundingBox", 
+					x = 240,
+					y = 106,
+					w = 64,
+					h = 64
+				},
 				sprite = {
 					assetId = "chopper",
 					animated = true,
@@ -84,8 +91,8 @@ Level1 = {
 					boundingAssetId = "boundingBox",
 					x = 300,
 					y = 200,
-					w = 96,
-					h = 96
+					w = 96 * 2,
+					h = 96 * 2
 				}
 			}
 		},

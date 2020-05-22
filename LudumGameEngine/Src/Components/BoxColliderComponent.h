@@ -44,7 +44,7 @@ public:
 		}
 		transform = owner->GetComponent<TransformComponent>();
 		source = {0, 0, transform->width, transform->height};
-		destination = {collider.x, collider.y, transform->width * transform->scale, transform->height * transform->scale };
+		destination = {collider.x, collider.y, collider.w, collider.h };
 	}
 
 
