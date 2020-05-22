@@ -35,8 +35,8 @@ public:
 		destination.w = tileSize * tileScale;
 		destination.h = tileSize * tileScale;
 
-		position.x = x;
-		position.y = y;
+		position.x = static_cast<float>(x);
+		position.y = static_cast<float>(y);
 	}
 	
 	~TileMapComponent() {
@@ -49,8 +49,8 @@ public:
 	}
 
 	void Update(float deltaTime) override {
-		destination.x = position.x - Game::camera.x;
-		destination.y = position.y - Game::camera.y;
+		destination.x = static_cast<int>(position.x - Game::camera.x);
+		destination.y = static_cast<int>(position.y - Game::camera.y);
 	}
 
 	void Render() override {

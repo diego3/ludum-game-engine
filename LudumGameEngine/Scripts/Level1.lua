@@ -29,14 +29,8 @@ Level1 = {
 			layer = 3,
 			components = {
 				transform = {
-					position ={
-						x = 240,
-						y = 106
-					},
-					velocity = {
-						x = 0,
-						y = 0
-					},
+					position ={x = 240, y = 106},
+					velocity = {x = 0, y = 0},
 					width = 32,
 					height= 32,
 					scale = 2,
@@ -44,6 +38,7 @@ Level1 = {
 				},
 				camera = {},
 				cameraShake = {},
+				collider = { tag = "PLAYER" },
 				sprite = {
 					assetId = "chopper",
 					animated = true,
@@ -68,8 +63,8 @@ Level1 = {
 			layer = 1, -- vegetation layer
 			components = {
 				transform = {
-					position ={ x = 300, y = 200},
-					velocity = {x = 0,y = 0},
+					position = {x = 300, y = 200},
+					velocity = {x = 0, y = 0},
 					width = 96,
 					height= 96,
 					scale = 2,
@@ -82,7 +77,8 @@ Level1 = {
 					animationSpeed = 90,
 					hasDirections = false,
 					isFixed = false
-				}
+				},
+				collider = {tag = "ENEMY"}
 			}
 		},
 		[2] = {

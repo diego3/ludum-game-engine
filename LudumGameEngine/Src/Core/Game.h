@@ -20,8 +20,11 @@ public:
 	static SDL_Event event;
 	static EntityManager* entityManager;
 	static SDL_Rect camera;
+	
+	static bool showPlayerPositionDebug;
+	static bool showCollisionsDebug;
 
-	bool Initialize(const char *title, int windowWidth, int windowHeight);
+	bool Initialize();
 	bool IsRunning() const;
 	void ProcessInput();
 	void Update();
@@ -29,4 +32,5 @@ public:
 	void Destroy();
 
 	void LoadLevel(int levelNumber);
+	void CheckCollisions();
 };

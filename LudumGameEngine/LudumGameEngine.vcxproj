@@ -155,6 +155,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Src\Core\Animation.cpp" />
     <ClCompile Include="Src\Core\AssetManager.cpp" />
+    <ClCompile Include="Src\Core\Collision.cpp" />
     <ClCompile Include="Src\Core\Entity.cpp" />
     <ClCompile Include="Src\Core\EntityManager.cpp" />
     <ClCompile Include="Src\Core\Game.cpp" />
@@ -166,6 +167,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="Scripts\Features.lua" />
+    <None Include="Scripts\gameOptions.lua" />
     <None Include="Scripts\Level1.lua" />
     <None Include="Scripts\playerControl.lua" />
   </ItemGroup>
@@ -186,6 +189,7 @@
     <ClInclude Include="Src\Components\TransformComponent.h" />
     <ClInclude Include="Src\Core\Animation.h" />
     <ClInclude Include="Src\Core\AssetManager.h" />
+    <ClInclude Include="Src\Core\Collision.h" />
     <ClInclude Include="Src\Core\Component.h" />
     <ClInclude Include="Src\Core\Constants.h" />
     <ClInclude Include="Src\Core\Entity.h" />

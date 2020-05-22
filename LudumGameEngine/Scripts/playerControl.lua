@@ -19,3 +19,12 @@ end
 function Render()
 
 end
+
+--[[
+https://p5js.org/examples/math-linear-interpolation.html
+
+function Lerp(start, stop, amt) {
+  return amt * (stop - start) + start;
+};
+
+]]

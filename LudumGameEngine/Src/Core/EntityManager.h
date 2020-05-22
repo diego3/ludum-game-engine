@@ -18,6 +18,8 @@ public:
 	void AddEntity(Entity* entity);
 	std::vector<Entity*> GetEntitiesByLayer(LayerType layer);
 	std::vector<Entity*> GetEntities() const;
+	Entity* FindEntityByName(std::string name);
+	CollisionType CheckCollisions();
 	unsigned int GetEntityCount();
 	void PrintAllEntities();
 };

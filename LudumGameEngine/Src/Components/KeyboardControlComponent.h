@@ -8,7 +8,7 @@
 #include "TransformComponent.h"
 #include "SpriteComponent.h"
 #include "LuaScriptComponent.h"
-#include "../../Libs/glm/glm/ext/vector_float2.hpp";
+#include "../../Libs/glm/glm/ext/vector_float2.hpp"
 
 class KeyboardControlComponent : public Component {
 public:

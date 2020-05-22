@@ -31,7 +31,9 @@ public:
 		Game::camera.y = Game::camera.y > Game::camera.h ? Game::camera.h : Game::camera.y;
 
 		// just for debugging
-		//std::cout << transform->position.x << "," << transform->position.y << std::endl;
+		if (Game::showPlayerPositionDebug) {
+			std::cout << transform->position.x << ", " << transform->position.y << std::endl;
+		}
 
 		// Campling player
 		transform->position.x = transform->position.x < 0 ? 0 : transform->position.x;

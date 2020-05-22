@@ -12,10 +12,10 @@ int main(int argc, char* args[])
 	std::cout << "[C++] Initializing..." << std::endl;
 	
 	Game* game = new Game();
-	bool initialized = game->Initialize("Game Engine", WINDOW_WIDTH, WINDOW_HEIGHT);
+	bool initialized = game->Initialize();
 	if (!initialized)
 	{
-		std::cout << "Initialization fails" << std::endl;
+		std::cout << "Game Initialize fails" << std::endl;
 		delete game;
 		return 0;
 	}

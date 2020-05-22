@@ -27,6 +27,7 @@ extern "C" {
 #include "../Components/TileMapComponent.h"
 #include "../Components/CameraFollowComponent.h"
 #include "../Components/CameraShakeComponent.h"
+#include "../Components/BoxColliderComponent.h"
 
 #ifdef _WIN32
 #pragma comment(lib, "Libs/SDL2_net-2.0.1/lib/x86/SDL2_net.lib")
@@ -39,7 +40,6 @@ extern "C" {
 using namespace std;
 using namespace glm;
 
-
 // GLOBALS
 EntityManager* Game::entityManager = new EntityManager();;
 SDL_Renderer* Game::renderer;
@@ -47,6 +47,12 @@ AssetManager* Game::assetManager; // new AssetManager(&entityManager)
 SDL_Event Game::event;
 //LuaManager* luaManager;
 SDL_Rect Game::camera = {0,0, WINDOW_WIDTH, WINDOW_HEIGHT};
+
+
+bool gameLoopDebug = false;
+bool loadTileMap = true;
+bool Game::showCollisionsDebug = false;
+bool Game::showPlayerPositionDebug = false;
 
 Game::Game()
 {
@@ -60,7 +66,7 @@ bool Game::IsRunning() const
 	return this->isRunning;
 }
 
-bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
+bool Game::Initialize()
 {
 	tickLastFrame = SDL_GetTicks();
 
@@ -68,9 +74,19 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 	sol::state lua;
 	lua.open_libraries(sol::lib::base);
 	lua.script("print('[LUA]  bark bark bark!')");
-
+	lua.script_file("Scripts/gameOptions.lua");
 	// TODO load initial config files (lua scripts)
+	sol::table options = lua["Config"];
 	
+	gameLoopDebug = options["gameLoopUpdateDebug"];
+	loadTileMap = options["loadTileMap"];
+	showPlayerPositionDebug = options["showPlayerPositionDebug"];
+	showCollisionsDebug = options["showCollisionsDebug"];
+
+	bool fullscreen = options["fullscreen"]; 
+	std::string windowTitle = options["windowTitle"]; 
+	int windowWidth = options["windowWidth"]; 
+	int windowHeight = options["windowHeight"];
 
 	int sdlInit = SDL_Init(SDL_INIT_EVERYTHING);
 	if (sdlInit != 0) {
@@ -78,13 +94,21 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 		return false;
 	}
 	this->window = SDL_CreateWindow(
-		title,
+		windowTitle.c_str(),
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		windowWidth,
 		windowHeight,
 		0//SDL_WINDOW_FULLSCREEN_DESKTOP
 	);
+
+	if (fullscreen) {
+		int full = SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		if (full == -1) {
+			std::cout << "SDL_SetWindowFullscreen FAILED" << std::endl;
+		}
+	}
+
 	if (this->window == NULL) {
 		std::cout << "sdl window initialization fails: " << SDL_GetError() << std::endl;
 		return false;
@@ -128,7 +152,6 @@ bool Game::Initialize(const char* title, int windowWidth, int windowHeight)
 	return true;
 }
 
-
 void Game::LoadLevel(int levelNumber) {
 	sol::state lua;
 	lua.open_libraries(sol::lib::base, sol::lib::os, sol::lib::math, sol::lib::table);
@@ -160,17 +183,18 @@ void Game::LoadLevel(int levelNumber) {
 	}
 	
 
-	sol::table tileMapTable = levelData["map"];
-	std::string tileAssetId = tileMapTable["assetId"];
-	std::string tileMapFilePath = tileMapTable["file"];
-	int tileScale = static_cast<int>(tileMapTable["scale"]);
-	int tileSize = static_cast<int>(tileMapTable["tileSize"]);
-	int mapSizeX = static_cast<int>(tileMapTable["mapSizeX"]);
-	int mapSizeY = static_cast<int>(tileMapTable["mapSizeY"]);
+	if (loadTileMap) {
+		sol::table tileMapTable = levelData["map"];
+		std::string tileAssetId = tileMapTable["assetId"];
+		std::string tileMapFilePath = tileMapTable["file"];
+		int tileScale = static_cast<int>(tileMapTable["scale"]);
+		int tileSize = static_cast<int>(tileMapTable["tileSize"]);
+		int mapSizeX = static_cast<int>(tileMapTable["mapSizeX"]);
+		int mapSizeY = static_cast<int>(tileMapTable["mapSizeY"]);
 
-	Map* tileMap = new Map(tileAssetId, tileScale, tileSize);
-	tileMap->LoadMap(tileMapFilePath, mapSizeX, mapSizeY);
-
+		Map* tileMap = new Map(tileAssetId, tileScale, tileSize);
+		tileMap->LoadMap(tileMapFilePath, mapSizeX, mapSizeY);
+	}
 	
 	sol::table entities = levelData["entities"];
 	int entityIndex = 0;
@@ -219,6 +243,15 @@ void Game::LoadLevel(int levelNumber) {
 			
 			entity.AddComponent<SpriteComponent>(id, numFrames, animationSpeed, 
 				hasDirections, isFixed);
+		}
+
+		//BoxColliderComponent
+		sol::optional<sol::table> colliderExists = components["collider"];
+		if (colliderExists != sol::nullopt) {
+			sol::table colliderTable = components["collider"];
+			std::string tag = colliderTable["tag"];
+
+			entity.AddComponent<BoxColliderComponent>(tag);
 		}
 
 		// MOVE THIS TO SCRIPT COMPONENT and attach it to the player entity
@@ -306,29 +339,58 @@ void Game::Render()
 void Game::Update()
 {
 	// sleeps the execution if we are too fast
-	std::cout << "\n******\nSDL_GetTicks() = " << SDL_GetTicks() << std::endl;
-
+	if (gameLoopDebug) {
+		std::cout << "\n******\nSDL_GetTicks() = " << SDL_GetTicks() << std::endl;
+	}
 	int timeToWait = FRAME_RATE - (SDL_GetTicks() - tickLastFrame);
 
-	std::cout << "FPS = " << FPS << std::endl;
-	std::cout << "FRAME_RATE = " << FRAME_RATE << std::endl;
-	std::cout << "SDL_GetTicks() - tickLastFrame = " << SDL_GetTicks() - tickLastFrame << std::endl;
-	std::cout << "timeToWait = " << timeToWait << std::endl;
+	if (gameLoopDebug) {
+		std::cout << "FPS = " << FPS << std::endl;
+		std::cout << "FRAME_RATE = " << FRAME_RATE << std::endl;
+		std::cout << "SDL_GetTicks() - tickLastFrame = " << SDL_GetTicks() - tickLastFrame << std::endl;
+		std::cout << "timeToWait = " << timeToWait << std::endl;
+	}
 
 	if (timeToWait > 0 && timeToWait <= FRAME_RATE) {
-		std::cout << "SDL_Delay(" << timeToWait << ")" << std::endl;
+		if (gameLoopDebug) {
+			std::cout << "SDL_Delay(" << timeToWait << ")" << std::endl;
+		}
 		SDL_Delay(timeToWait);
 	}
 
 	float deltaTime = (SDL_GetTicks() - tickLastFrame) / 1000.0f;
-	std::cout << "deltaTime = " << deltaTime << std::endl;
+	if (gameLoopDebug) {
+		std::cout << "deltaTime = " << deltaTime << std::endl;
+	}
 
 	tickLastFrame = SDL_GetTicks();
-
-	std::cout << "tickLastFrame = " << tickLastFrame << std::endl;
-
+	if (gameLoopDebug) {
+		std::cout << "tickLastFrame = " << tickLastFrame << std::endl;
+	}
 	entityManager->Update(deltaTime);
 
+	CheckCollisions();
+}
+
+void Game::CheckCollisions() {
+	CollisionType collision = entityManager->CheckCollisions();
+	switch (collision) {
+		case CollisionType::PLAYER_ENEMY: {
+			std::cout << "CollisionType::PLAYER_ENEMY " << std::endl;
+		}
+		case CollisionType::PLAYER_PROJECTILE: {
+
+		}
+		case CollisionType::PLAYER_TRIGGER: {
+
+		}
+		case CollisionType::NEXT_LEVEL: {
+
+		}
+		case CollisionType::NONE: {
+			std::cout << "" << std::endl;
+		}
+	}
 }
 
 

@@ -6,6 +6,8 @@
 #include "Entity.h"
 #include "EntityManager.h"
 #include "Constants.h"
+#include "Collision.h"
+#include "../Components/BoxColliderComponent.h"
 
 Entity& EntityManager::AddEntity(std::string name, LayerType layer)
 {
@@ -17,6 +19,57 @@ Entity& EntityManager::AddEntity(std::string name, LayerType layer)
 void EntityManager::AddEntity(Entity* entity)
 {
 	entities.push_back(entity);
+}
+
+Entity* EntityManager::FindEntityByName(std::string name) {
+	for (Entity* entity : entities) {
+		if (entity->name.compare(name) == 0) {
+			return entity;
+		}
+	}
+	return NULL;
+}
+
+// https://gameprogrammingpatterns.com/spatial-partition.html
+CollisionType EntityManager::CheckCollisions() {
+	for (Entity* entity : entities) {
+		if (entity->layer == LayerType::TILE_LAYER || entity->layer == LayerType::UI_LAYER) continue;
+		if (!entity->HasComponent<BoxColliderComponent>()) continue;
+
+		//std::cout << "checking: "<< entity->name << std::endl;
+
+		BoxColliderComponent* collider = entity->GetComponent<BoxColliderComponent>();
+		for (Entity* other : entities) {
+			if (other->layer == LayerType::TILE_LAYER || other->layer == LayerType::UI_LAYER) continue;
+			if (!other->HasComponent<BoxColliderComponent>() || other->name.compare(entity->name) == 0) continue;
+			
+			BoxColliderComponent* otherCollider = other->GetComponent<BoxColliderComponent>();
+
+			/*std::cout << other->name << " other collider {" <<
+				otherCollider->collider.x << "," << 
+				otherCollider->collider.y << "," <<
+				otherCollider->collider.w << "," <<
+				otherCollider->collider.h << "}" << std::endl;*/
+
+			if (Collision::CheckRectangleCollision(collider->collider, otherCollider->collider)) {
+				///std::cout << "\t COLLISION ENTER tag(" << otherCollider->colliderTag << ")"<< std::endl;
+
+				if (otherCollider->colliderTag.compare("ENEMY") == 0) {
+					return CollisionType::PLAYER_ENEMY;
+				}
+				if (otherCollider->colliderTag.compare("PROJECTILE") == 0) {
+					return CollisionType::PLAYER_PROJECTILE;
+				}
+				if (otherCollider->colliderTag.compare("NEXT_LEVEL") == 0) {
+					return CollisionType::NEXT_LEVEL;
+				}
+			}
+			//else {
+				///std::cout << "\t COLLISION OUT "<< std::endl;
+			//}
+		}
+	}
+	return CollisionType::NONE;
 }
 
 std::vector<Entity*> EntityManager::GetEntitiesByLayer(LayerType layer)
