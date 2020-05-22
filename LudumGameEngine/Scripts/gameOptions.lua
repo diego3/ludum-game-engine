@@ -11,6 +11,6 @@ Config = {
     -- debug stuffs
     gameLoopUpdateDebug = false,
     showPlayerPositionDebug = false,
-    showCollisionsDebug = true,
-    loadTileMap=false,
+    showCollisionsDebug = false,
+    loadTileMap=true,
 }

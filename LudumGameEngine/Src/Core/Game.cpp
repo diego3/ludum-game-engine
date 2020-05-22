@@ -275,8 +275,8 @@ void Game::LoadLevel(int levelNumber) {
 		// JUST for TESTS
 		sol::optional<sol::table> cameraShakeExists = components["cameraShake"];
 		if (cameraShakeExists != sol::nullopt) {
-			//sol::table camera = components["cameraShake"];
-			entity.AddComponent<CameraShakeComponent>();
+			sol::table shakeConfig = components["cameraShake"];
+			entity.AddComponent<CameraShakeComponent>(shakeConfig["algorithm"], shakeConfig["duration"]);
 		}
 
 

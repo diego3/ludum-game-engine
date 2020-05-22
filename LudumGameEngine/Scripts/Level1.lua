@@ -38,7 +38,10 @@ Level1 = {
 					rotate = 0
 				},
 				camera = {},
-				cameraShake = {},
+				cameraShake = {
+					algorithm = 2,
+					duration = 15
+				},
 				collider = { 
 					tag = "PLAYER", 
 					boundingAssetId = "boundingBox", 
