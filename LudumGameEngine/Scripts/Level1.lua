@@ -6,6 +6,7 @@ Level1 = {
 		[3] = {type="texture", id="tile-map", file="Assets/images/jungle.png"},
 		[4] = {type="texture", id="explosion", file="Assets/images/explosion-320x320.png"},
 		[5] = {type="texture", id="explosion2", file="Assets/images/Explosion-1152x96.png"},
+		[6] = {type="texture", id="boundingBox", file="Assets/images/collision-texture.png"},
 	},
 	layers = {
 		TILE_LAYER = 0,
@@ -38,7 +39,7 @@ Level1 = {
 				},
 				camera = {},
 				cameraShake = {},
-				collider = { tag = "PLAYER" },
+				collider = { tag = "PLAYER", boundingAssetId = "boundingBox" },
 				sprite = {
 					assetId = "chopper",
 					animated = true,
@@ -78,7 +79,14 @@ Level1 = {
 					hasDirections = false,
 					isFixed = false
 				},
-				collider = {tag = "ENEMY"}
+				collider = {
+					tag = "ENEMY",
+					boundingAssetId = "boundingBox",
+					x = 300,
+					y = 200,
+					w = 96,
+					h = 96
+				}
 			}
 		},
 		[2] = {

@@ -251,7 +251,17 @@ void Game::LoadLevel(int levelNumber) {
 			sol::table colliderTable = components["collider"];
 			std::string tag = colliderTable["tag"];
 
-			entity.AddComponent<BoxColliderComponent>(tag);
+			std::string boundingAssetId = colliderTable["boundingAssetId"];
+			int x = colliderTable["x"];
+			int y = colliderTable["y"];
+			int w = colliderTable["w"];
+			int h = colliderTable["h"];
+			if (x > 0 || y > 0 || w > 0 || h > 0) {
+				entity.AddComponent<BoxColliderComponent>(tag, boundingAssetId, x, y, w, h);
+			}
+			else {
+				entity.AddComponent<BoxColliderComponent>(tag, boundingAssetId);
+			}
 		}
 
 		// MOVE THIS TO SCRIPT COMPONENT and attach it to the player entity
