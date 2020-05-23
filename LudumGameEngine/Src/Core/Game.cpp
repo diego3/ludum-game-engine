@@ -87,6 +87,7 @@ bool Game::Initialize()
 	std::string windowTitle = options["windowTitle"]; 
 	int windowWidth = options["windowWidth"]; 
 	int windowHeight = options["windowHeight"];
+	int loadLevel = options["loadLevel"];
 
 	int sdlInit = SDL_Init(SDL_INIT_EVERYTHING);
 	if (sdlInit != 0) {
@@ -145,7 +146,7 @@ bool Game::Initialize()
 
 	Game::assetManager = new AssetManager(entityManager);
 	
-	LoadLevel(1);
+	LoadLevel(loadLevel);
 
 	this->isRunning = true;
 
@@ -272,7 +273,7 @@ void Game::LoadLevel(int levelNumber) {
 			entity.AddComponent<CameraFollowComponent>();
 		}
 		
-		// JUST for TESTS
+		//CameraShakeComponent
 		sol::optional<sol::table> cameraShakeExists = components["cameraShake"];
 		if (cameraShakeExists != sol::nullopt) {
 			sol::table shakeConfig = components["cameraShake"];

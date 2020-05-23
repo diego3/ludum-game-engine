@@ -13,4 +13,6 @@ Config = {
     showPlayerPositionDebug = false,
     showCollisionsDebug = false,
     loadTileMap=true,
+
+    loadLevel = 1,
 }

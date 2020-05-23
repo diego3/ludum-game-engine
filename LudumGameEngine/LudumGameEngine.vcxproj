@@ -171,6 +171,7 @@
     <None Include="Scripts\gameOptions.lua" />
     <None Include="Scripts\Level1.lua" />
     <None Include="Scripts\playerControl.lua" />
+    <None Include="Scripts\prototype.lua" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />

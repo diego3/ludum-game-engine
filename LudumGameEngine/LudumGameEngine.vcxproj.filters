@@ -70,6 +70,9 @@
     <None Include="Scripts\gameOptions.lua">
       <Filter>Scripts</Filter>
     </None>
+    <None Include="Scripts\prototype.lua">
+      <Filter>Scripts</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Game.h">
