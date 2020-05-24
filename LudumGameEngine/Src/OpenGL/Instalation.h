@@ -7,6 +7,8 @@
 
 const int FPS = 60;
 const int FRAME_RATE = 1000 / FPS;
+const unsigned int WINDOW_WIDTH = 800;
+const unsigned int WINDOW_HEIGHT = 600;
 float lastFrame = 0.0f;
 bool isRunning = true;
 
@@ -20,7 +22,8 @@ public:
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 		
-		/*PRECISA???? Turn on double buffering with a 24bit Z buffer. You may need to change this to 16 or 32 for your system */
+		/*How this stuffs really works???? 
+		Turn on double buffering with a 24bit Z buffer. You may need to change this to 16 or 32 for your system */
 		//SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		//SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 		
@@ -33,8 +36,8 @@ public:
 			"OpenGL",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
-			800,
-			600,
+			WINDOW_WIDTH,
+			WINDOW_HEIGHT,
 			SDL_WINDOW_OPENGL
 		);
 
@@ -62,7 +65,7 @@ public:
 		/* This makes our buffer swap syncronized with the monitor's vertical refresh */
 		SDL_GL_SetSwapInterval(1);
 		
-		glViewport(0, 0, 800, 600);
+		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 		lastFrame = SDL_GetTicks();
 		while (isRunning) {
@@ -75,6 +78,7 @@ public:
 			std::cout << "deltaTime: " << deltaTime << std::endl;
 
 			ProcessInputs();
+			Update(deltaTime);
 			Render(deltaTime);
 
 			lastFrame = SDL_GetTicks();
@@ -85,6 +89,9 @@ public:
 		return true;
 	}
 
+	void Update(float deltaTime) {
+
+	}
 
 	void ProcessInputs() {
 		SDL_Event event;
@@ -108,7 +115,7 @@ public:
 	}
 
 	void Render(float deltaTime) {
-
+		// rendering tasks go here....
 
 		glClearColor(1.f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
