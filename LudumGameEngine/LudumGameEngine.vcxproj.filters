@@ -16,6 +16,12 @@
     <Filter Include="Scripts">
       <UniqueIdentifier>{8e0b06e8-d26f-4e83-a871-bdd19f9da909}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Networking">
+      <UniqueIdentifier>{19606d31-95c3-4503-8a7a-113246eee7fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\OpenGL">
+      <UniqueIdentifier>{8e2fe252-5f2a-471b-bf6f-8448a33a1976}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -140,6 +146,12 @@
     </ClInclude>
     <ClInclude Include="Src\Core\Collision.h">
       <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Networking\NetworkManager.h">
+      <Filter>Src\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\OpenGL\Instalation.h">
+      <Filter>Src\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
