@@ -1,8 +1,9 @@
 #include <iostream>
 #include <string>
 
-#include "Src/Core/Game.h"
-#include "Src/Core/Constants.h"
+//#include "Src/Core/Game.h"
+//#include "Src/Core/Constants.h"
+#include "Src/OpenGL/Instalation.h"
 
 using namespace std;
 
@@ -11,6 +12,11 @@ int main(int argc, char* args[])
 {
 	std::cout << "[C++] Initializing..." << std::endl;
 	
+	Instalation* opengl = new Instalation();
+	opengl->create();
+	
+	delete opengl;
+	/*
 	Game* game = new Game();
 	bool initialized = game->Initialize();
 	if (!initialized)
@@ -29,6 +35,7 @@ int main(int argc, char* args[])
 
 	game->Destroy();
 	delete game;
+	*/
 
 	return 0;
 }
