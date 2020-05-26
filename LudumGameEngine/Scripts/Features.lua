@@ -20,3 +20,15 @@
 	 - State Machine para o game (gameover, menus, telas, transi��es etc)
 	 - 3D Game Engine ( estudos em OpenGL )
 ]]
+
+-- oop em lua
+
+function divisores(num) 
+	for i = 1, num, 1 do
+		if num % i == 0 then
+			print(i, " ", num/i)
+		end
+	end
+end
+
+divisores(1024)

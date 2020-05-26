@@ -31,6 +31,9 @@
     <Filter Include="Src\Decoupling">
       <UniqueIdentifier>{5215376a-7c77-4af0-9ac4-e21bc8bf53df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Editor">
+      <UniqueIdentifier>{417a5e28-4c05-4ec3-bb60-f3f00aae3dbb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -182,6 +185,15 @@
     </ClInclude>
     <ClInclude Include="Src\Util\FileUtil.h">
       <Filter>Src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Editor\SpriteAnimationEditor.h">
+      <Filter>Src\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Editor\SpriteEditor.h">
+      <Filter>Src\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Editor\TileMapEditor.h">
+      <Filter>Src\Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
