@@ -10,7 +10,6 @@ Chopper = {
             scale = 2,
             rotate = 0
         },
-        
         collider = { 
             tag = "PLAYER", 
             boundingAssetId = "boundingBox", 
@@ -27,7 +26,6 @@ Chopper = {
             hasDirections = true,
             isFixed = false
         },
-        
     }
 }
 

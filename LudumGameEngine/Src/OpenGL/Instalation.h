@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <GL/glew.h>
+#include <fstream>
 
 const int FPS = 60;
 const int FRAME_RATE = 1000 / FPS;
@@ -67,6 +68,11 @@ public:
 		
 		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
+		
+		std::string vShader = ReadFile("Src/OpenGL/vertexShader.vs");
+		std::string fShader = ReadFile("Src/OpenGL/fragmentShader.fs");
+		
+
 		lastFrame = SDL_GetTicks();
 		while (isRunning) {
 			float elapsed = SDL_GetTicks() - lastFrame;
@@ -120,6 +126,19 @@ public:
 		glClearColor(1.f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		SDL_GL_SwapWindow(window);
+	}
+
+	std::string ReadFile(std::string filePath) {
+		std::string content;
+		std::string line;
+		std::ifstream file(filePath);
+		if (file.is_open()) {
+			while (getline(file, line)) {
+				content.append(line + "\n");
+			}
+		}
+		file.close();
+		return content;
 	}
 
 	~Instalation() {

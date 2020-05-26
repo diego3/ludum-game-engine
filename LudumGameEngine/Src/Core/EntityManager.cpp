@@ -30,6 +30,13 @@ Entity* EntityManager::FindEntityByName(std::string name) {
 	return NULL;
 }
 
+Entity* EntityManager::Instantiate(std::string name, LayerType layer) {
+	Entity* e = new Entity(this, name, layer);
+
+
+	return e;
+}
+
 // https://gameprogrammingpatterns.com/spatial-partition.html
 CollisionType EntityManager::CheckCollisions() {
 	for (Entity* entity : entities) {

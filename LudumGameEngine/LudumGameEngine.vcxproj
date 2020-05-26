@@ -174,6 +174,8 @@
     <None Include="Scripts\Level1.lua" />
     <None Include="Scripts\playerControl.lua" />
     <None Include="Scripts\prototype.lua" />
+    <None Include="Src\OpenGL\fragmentShader.fs" />
+    <None Include="Src\OpenGL\vertexShader.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />
@@ -201,8 +203,13 @@
     <ClInclude Include="Src\Core\LuaManager.h" />
     <ClInclude Include="Src\Core\Map.h" />
     <ClInclude Include="Src\Core\TextureManager.h" />
+    <ClInclude Include="Src\Decoupling\EventManager.h" />
+    <ClInclude Include="Src\Graphics\Camera3D.h" />
+    <ClInclude Include="Src\Graphics\Mesh.h" />
+    <ClInclude Include="Src\Graphics\Shader.h" />
     <ClInclude Include="Src\Networking\NetworkManager.h" />
     <ClInclude Include="Src\OpenGL\Instalation.h" />
+    <ClInclude Include="Src\Util\FileUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

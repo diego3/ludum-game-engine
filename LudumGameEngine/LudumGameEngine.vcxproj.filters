@@ -22,6 +22,15 @@
     <Filter Include="Src\OpenGL">
       <UniqueIdentifier>{8e2fe252-5f2a-471b-bf6f-8448a33a1976}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Util">
+      <UniqueIdentifier>{12a74a39-50b9-4d9f-8904-7114817ba056}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Graphics">
+      <UniqueIdentifier>{9af8db15-491e-4f98-9ebf-312d6326d566}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Decoupling">
+      <UniqueIdentifier>{5215376a-7c77-4af0-9ac4-e21bc8bf53df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -78,6 +87,12 @@
     </None>
     <None Include="Scripts\prototype.lua">
       <Filter>Scripts</Filter>
+    </None>
+    <None Include="Src\OpenGL\fragmentShader.fs">
+      <Filter>Src\OpenGL</Filter>
+    </None>
+    <None Include="Src\OpenGL\vertexShader.vs">
+      <Filter>Src\OpenGL</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +167,21 @@
     </ClInclude>
     <ClInclude Include="Src\OpenGL\Instalation.h">
       <Filter>Src\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Graphics\Camera3D.h">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Graphics\Mesh.h">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Graphics\Shader.h">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Decoupling\EventManager.h">
+      <Filter>Src\Decoupling</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Util\FileUtil.h">
+      <Filter>Src\Util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
