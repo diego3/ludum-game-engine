@@ -1,6 +1,10 @@
 #include "AssetManager.h"
 #include "TextureManager.h"
 
+AssetManager::AssetManager()
+{
+}
+
 AssetManager::AssetManager(EntityManager* manager)
 {
 	manager = manager;

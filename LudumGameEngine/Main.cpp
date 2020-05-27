@@ -4,6 +4,7 @@
 #include "Src/Core/Game.h"
 #include "Src/Core/Constants.h"
 #include "Src/OpenGL/Instalation.h"
+#include "Src/Editor/SpriteEditor.h"
 
 using namespace std;
 
@@ -29,17 +30,23 @@ void GameEngineApplication() {
 
 void OpenGLApplication() {
 	std::cout << "[C++] OpenGLApplication..." << std::endl;
-	OpenGL::Instalation* opengl = new OpenGL::Instalation();
-	opengl->create();
-	delete opengl;
+	opengl::Instalation* openglApp = new opengl::Instalation();
+	openglApp->create();
+	delete openglApp;
 }
 
+void SpriteEditorApplication() {
+	std::cout << "[C++] SpriteEditorApplication..." << std::endl;
+	spriteditor::SpriteEditor* editor = new spriteditor::SpriteEditor();
+	editor->Initialize();
+	delete editor;
+}
 
 int main(int argc, char* args[])
 {
 	std::cout << "[C++] Main..." << std::endl;
 	
-	GameEngineApplication();
+	SpriteEditorApplication();
 
 	return 0;
 }

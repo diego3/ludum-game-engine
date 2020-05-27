@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <fstream>
 
-namespace OpenGL {
+namespace opengl {
 
 	const int FPS = 60;
 	const int FRAME_RATE = 1000 / FPS;

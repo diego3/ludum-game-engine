@@ -12,6 +12,7 @@ public:
 	std::map<std::string, SDL_Texture*> textures;
 
 	AssetManager(EntityManager* manager);
+	AssetManager();
 	~AssetManager();
 	
 	void ClearData();
