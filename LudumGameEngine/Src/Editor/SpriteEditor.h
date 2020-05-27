@@ -1,21 +1,24 @@
 #pragma once
 
+//extern "C" {
+//#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lua.h"
+//#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lauxlib.h"
+//#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lualib.h"
+//}
+//#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/sol.hpp"
+#ifdef _WIN32
+//#pragma comment(lib, "Libs/lua-5.3.5_Win32_dllw6_lib/liblua53.a")
+#endif // WIN
+
+
+
 #include <iostream>
 #include <SDL.h>
+#include <vector>
 #include "../../Libs/SDL2_image-2.0.5/include/SDL_image.h"
-#include "../../Libs/SDL2_ttf-2.0.15/include/SDL_ttf.h"
-#include "../../Libs/glm/glm/vec2.hpp"
-
-extern "C" {
-#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lua.h"
-#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lauxlib.h"
-#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lualib.h"
-}
-
-#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/sol.hpp"
-
+//#include "../../Libs/SDL2_ttf-2.0.15/include/SDL_ttf.h"
+//#include "../../Libs/glm/glm/vec2.hpp"
 #include "../Core/EntityManager.h"
-//#include "LuaManager.h"
 #include "../Core/Map.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
@@ -23,22 +26,20 @@ extern "C" {
 #include "../Components/TileMapComponent.h"
 #include "../Components/CameraFollowComponent.h"
 #include "../Components/BoxColliderComponent.h"
+#include "../Core/Collision.h"
 
-#ifdef _WIN32
-#pragma comment(lib, "Libs/SDL2_image-2.0.5/lib/x86/SDL2_image.lib")
-#pragma comment(lib, "Libs/SDL2_ttf-2.0.15/lib/x86/SDL2_ttf.lib")
-#pragma comment(lib, "Libs/lua-5.3.5_Win32_dllw6_lib/liblua53.a")
-#endif // WIN
 
 namespace spriteditor {
 
 	const int FPS = 60;
 	const int FRAME_RATE = 1000 / FPS;
-	const unsigned int WINDOW_WIDTH = 800;
+	const unsigned int WINDOW_WIDTH = 1200;
 	const unsigned int WINDOW_HEIGHT = 600;
 	float lastFrame = 0.0f;
 	bool isRunning = true;
 	bool IS_MOUSE_PRESSED = false;
+
+	SDL_Color textColor;
 
 	int mouseX = 0;
 	int mouseY = 0;
@@ -50,6 +51,22 @@ namespace spriteditor {
 	bool isDown = false;
 	int gridPosition = 0;
 	
+	int timer = 60;
+
+
+	class Tile {
+	public:
+		SDL_Rect source;
+		SDL_Rect destination;
+		Tile(int x, int y, int dx, int dy) {
+			source = { x, y, 32,32 };//texture coordinate
+			destination = { dx, dy, 32, 32 };//screen coordinate
+		}
+	};
+
+
+	std::vector<Tile> grid;
+
 	class SpriteEditor {
 	public:
 		SDL_Window* window;
@@ -60,6 +77,11 @@ namespace spriteditor {
 		SDL_Texture* texture;
 		int spriteSize = 32;
 		SDL_Rect rectSource;
+
+		SDL_Rect UIArea;
+
+		//TTF_Font* font;
+		//SDL_Texture* textTexture;
 
 		~SpriteEditor() {
 			if (texture) {
@@ -95,12 +117,22 @@ namespace spriteditor {
 				return;
 			}
 			
+			/*
+			if (TTF_Init() == -1) {
+				printf("TTF_Init: %s\n", TTF_GetError());
+				return;
+			}
+			textColor = {255,255,255};
+			font  = TTF_OpenFont("Assets/fonts/carriot.ttf", 24);
+			SDL_Surface* textSurface = TTF_RenderText_Solid(font, "TEXTO", textColor);
+			textTexture = SDL_CreateTextureFromSurface(renderer, textSurface); */
+
+			UIArea = {0, 0, 400, 600};
+
 			texture = LoadTexture("Assets/images/jungle.png");//320x96
 			source = {0,0, 320, 96};
 			destination = {0,0,320,96};
 			rectSource = { source.x, source.y, spriteSize, spriteSize };
-
-
 
 			lastFrame = SDL_GetTicks();
 			while (isRunning) {
@@ -114,21 +146,23 @@ namespace spriteditor {
 
 				ProcessInputs();
 				Update(deltaTime);
-				Render(deltaTime);
+				Render();
 
 				lastFrame = SDL_GetTicks();
+
+				timer--;
+				if (timer <= 0) timer = 60;
 			}
 
 		}
 
 		void Update(float deltaTime) {
-			if (isRight) {
-				printf("isRight true\n");
+			if (isRight) {printf("isRight true\n");}
+			if (isLeft) {printf("isLeft true\n");}
 
-			}
-			if (isLeft) {
-				printf("isLeft true\n");
-				
+
+			if (timer == 60) {
+				printf("tiles = %d\n", grid.size());
 			}
 
 			//std::cout << "grid " << gridPosition << std::endl;
@@ -136,36 +170,49 @@ namespace spriteditor {
 		}
 
 
-		void Render(float deltaTime) {
+		void Render() {
 			SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
 			SDL_RenderClear(renderer);
-			/* pasted from transform component, just in case
-				SDL_Rect rectangle = {
-					(int)position.x,
-					(int)position.y,
-					width, height
-				};
+			
+			// UI Background
+			//SDL_SetRenderDrawColor(renderer, 200, 200, 200, 1);
+			//SDL_RenderFillRect(renderer, &UIArea);
 
-				SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 255);
-				SDL_RenderFillRect(Game::renderer, &rectangle);
-			*/
-			SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-			// acho q precisa de 4 linhas que devem ser desenhadas
-			// ao mesmo tempo mas cada uma em sua direção e posição
-			// duas pra direita e duas na vertical
-			int x1 = mouseClickPointX;
-			int y1 = mouseClickPointY;
-			int x2 = mouseX;
-			int y2 = mouseY;
-			SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
-			SDL_RenderDrawLine(renderer, 300, 300, 350, 300);
-			SDL_RenderDrawLine(renderer, 300, 350, 350, 350);
-			SDL_RenderDrawLine(renderer, 300, 300, 300, 350);
-			SDL_RenderDrawLine(renderer, 350, 300, 350, 350);
+			//SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+			//int x1 = mouseClickPointX;
+			//int y1 = mouseClickPointY;
+			//int x2 = mouseX;
+			//int y2 = mouseY;
+			//SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+			//SDL_RenderDrawLine(renderer, 300, 300, 350, 300);
+			//SDL_RenderDrawLine(renderer, 300, 350, 350, 350);
+			//SDL_RenderDrawLine(renderer, 300, 300, 300, 350);
+			//SDL_RenderDrawLine(renderer, 350, 300, 350, 350);
+
+			// Tiles sprite sheet source
 			SDL_RenderCopyEx(renderer, texture, &source, &destination, 0.0f, NULL, flip);
 
+
+			SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+			for (int i = 0; i < (WINDOW_WIDTH/spriteSize); i++) {
+				SDL_RenderDrawLine(renderer, 400, i * spriteSize, WINDOW_WIDTH, i * spriteSize);
+				SDL_RenderDrawLine(renderer, 400+(i * spriteSize), 0, 400+(i * spriteSize), WINDOW_HEIGHT);
+			}
+
+			// draw each tile
+			for (Tile tile : grid) {
+				SDL_RenderCopyEx(renderer, texture, &tile.source, &tile.destination, 0.0f, NULL, flip);
+			}
+
 			
+			// separator line between UI area and grid area
+			SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
+			SDL_RenderDrawLine(renderer, 400, 0, 400, WINDOW_HEIGHT);
+
+			// green navigator rect
+			SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 			SDL_RenderDrawRect(renderer, &rectSource);
+
 			SDL_RenderPresent(renderer);
 		}
 
@@ -227,20 +274,19 @@ namespace spriteditor {
 
 							mouseClickPointX = event.button.x;
 							mouseClickPointY = event.button.y;
+							//AddTile(mouseClickPointX, mouseClickPointY);
+							
 							mouseX = event.button.x;
 							mouseY = event.button.y;
-							std::cout << "x[" << event.button.x
-								<< "]y[" << event.button.y << "]" << std::endl;
+							//printf("x[%d] y[%d]\n", event.button.x, event.button.y);
 						}
 					}
 					case SDL_MOUSEBUTTONUP:
 					{
 						if (event.button.button == SDL_BUTTON_LEFT
 							&& event.button.state == SDL_RELEASED) {
-							std::cout << "button UP" << std::endl;
+							//std::cout << "button UP" << std::endl;
 							IS_MOUSE_PRESSED = false;
-							//mouseX = 0;
-							//mouseY = 0;
 						}
 					}
 					case SDL_MOUSEMOTION:
@@ -248,13 +294,26 @@ namespace spriteditor {
 						if (IS_MOUSE_PRESSED) {
 							mouseX = event.button.x;
 							mouseY = event.button.y;
-							std::cout << "paiting x[" << event.button.x
-								<< "]y[" << event.button.y << "]" << std::endl;
+
+							AddTile(mouseX, mouseY);
+							//printf("x[%d] y[%d]\n", event.button.x, event.button.y);
 						}
 					}
 				}
 			}
 
+		}
+
+		void AddTile(int x, int y) {
+			SDL_Rect mousePos = { x -(spriteSize/2),y-(spriteSize/2),spriteSize, spriteSize};
+			bool intersect = Collision::CheckRectangleCollision(mousePos, UIArea);
+			if (intersect) {
+				printf("no draw area\n");
+				return;
+			}
+			Tile t(rectSource.x, rectSource.y, x-(spriteSize/2), y-(spriteSize/2));
+
+			grid.push_back(t);
 		}
 
 		SDL_Texture* LoadTexture(std::string fileName)

@@ -195,5 +195,8 @@
     <ClInclude Include="Src\Editor\TileMapEditor.h">
       <Filter>Src\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Networking\TcpChat.h">
+      <Filter>Src\Networking</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
