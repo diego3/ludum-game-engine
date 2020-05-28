@@ -5,7 +5,7 @@
 #include "Src/Core/Constants.h"
 #include "Src/OpenGL/Instalation.h"
 #include "Src/Editor/SpriteEditor.h"
-#include "Src/Networking/TcpChat.h"
+#include "Src/Networking/ServerTcpChat.h"
 
 using namespace std;
 
@@ -43,8 +43,8 @@ void SpriteEditorApplication() {
 	delete editor;
 }
 
-void ChatApplication() {
-	network::TcpChat* chat = new network::TcpChat();
+void ChatServerApplication() {
+	network::ServerTcpChat* chat = new network::ServerTcpChat();
 	chat->Run();
 	delete chat;
 }
@@ -54,7 +54,7 @@ int main(int argc, char* args[])
 {
 	std::cout << "[C++] Main..." << std::endl;
 	
-	ChatApplication();
+	ChatServerApplication();
 
 	return 0;
 }

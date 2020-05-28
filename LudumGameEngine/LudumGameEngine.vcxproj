@@ -212,8 +212,9 @@
     <ClInclude Include="Src\Graphics\Camera3D.h" />
     <ClInclude Include="Src\Graphics\Mesh.h" />
     <ClInclude Include="Src\Graphics\Shader.h" />
+    <ClInclude Include="Src\Networking\ClientTcpChat.h" />
     <ClInclude Include="Src\Networking\NetworkManager.h" />
-    <ClInclude Include="Src\Networking\TcpChat.h" />
+    <ClInclude Include="Src\Networking\ServerTcpChat.h" />
     <ClInclude Include="Src\OpenGL\Instalation.h" />
     <ClInclude Include="Src\Util\FileUtil.h" />
   </ItemGroup>
