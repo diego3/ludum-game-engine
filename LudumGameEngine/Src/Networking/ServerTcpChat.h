@@ -19,28 +19,9 @@
 
 // https://www.libsdl.org/projects/SDL_net/docs/SDL_net_frame.html
 //https://stephenmeier.net/2015/12/29/sdl-2-0-tutorial-06-networking-3/
+// https://www.geeksforgeeks.org/socket-programming-in-cc-handling-multiple-clients-on-server-without-multi-threading/
 namespace network {
-	/*
-		host  = localhost
-		port
-		addres = um item de host
-		endpoint = address + port
 
-		criar um socket
-		bind com o address
-		listen x número de conexões
-		criar um handler (o cara que de fato aceita conexões)
-
-		# receber mensagem (recebe em bytes e decoda em string para processar)
-			- configurar um array de bytes (precisa do tamanho)
-			- recebe pelo stream usando o handler
-			- decoding para string
-
-		# enviar mensagem de resposta (opcional)
-			- transforma a mensagem em bytes
-			- encoding e envia
-
-	*/
 	class ServerTcpChat {
 	public:
 		ServerTcpChat() {};
@@ -99,51 +80,44 @@ namespace network {
 				printf("sockets ready = %d\n", numready);
 
 				if (numready > 0) {
-					if (!SDLNet_SocketReady(socket)) {
-						printf("SDLNet_SocketReady FALSE\n");
-						continue;
-					}
-					
-					// This is the server TCPsocket which was previously created by SDLNet_TCP_Open.
-					// This is a non-blocking call, so if no connections are there to be accepted, 
-					// you will get a NULL TCPsocket and the program will continue going.
-					TCPsocket newSocket = SDLNet_TCP_Accept(socket);
-					if (newSocket) {
-						printf("Accept socket SUCCESS\n");
-						if (SDLNet_TCP_AddSocket(set, newSocket) == -1) {
-							printf("SDLNet_TCP_AddSocket Error: %s\n", SDLNet_GetError());
-							continue;
-						}
+					if (SDLNet_SocketReady(socket)) {
+						// Houve atividade no socket master, é uma nova conexão
+						// This is the server TCPsocket which was previously created by SDLNet_TCP_Open.
+						// This is a non-blocking call, so if no connections are there to be accepted, 
+						// you will get a NULL TCPsocket and the program will continue going.
+						TCPsocket newSocket = SDLNet_TCP_Accept(socket);
+						if (newSocket) {
+							printf("Accept socket SUCCESS\n");
+							if (SDLNet_TCP_AddSocket(set, newSocket) == -1) {
+								printf("SDLNet_TCP_AddSocket Error: %s\n", SDLNet_GetError());
+								continue;
+							}
 
-						const char* data = "Welcome";
-						SDLNet_TCP_Send(newSocket, data, strlen(data));
-						clients.push_back(newSocket);
-						break;
+							const char* data = "Welcome";
+							SDLNet_TCP_Send(newSocket, data, strlen(data));
+							clients.push_back(newSocket);
+						}
+						else {
+							printf("SDLNet_TCP_Accept Error: %s\n", SDLNet_GetError());
+						}
 					}
-					else {
-						printf("SDLNet_TCP_Accept Error: %s\n", SDLNet_GetError());
+
+					for (TCPsocket client : clients) {
+						if (SDLNet_SocketReady(client)) {
+							char dataR[10];
+							int res = SDLNet_TCP_Recv(client, dataR, 10);
+							if (res > 0) {
+								std::cout << "res = " << res << std::endl;
+								printf("***client says: %s ****\n", dataR);
+							}
+						}
 					}
-					
 				}
-				
+
 				if (count <= 0) {
 					break;
 				}
 				count--;
-			}
-
-			// NOT WORKING YET fica em loop infinito, pq?
-			while (1) {
-				for (TCPsocket client : clients) {
-					if (SDLNet_SocketReady(client)) {
-						char dataR[10];
-						int res = SDLNet_TCP_Recv(client, dataR, 10);
-						if (res > 0) {
-							std::cout << "res = " << res << std::endl;
-							printf("***client says: %s ****\n", dataR);
-						}
-					}
-				}
 			}
 
 			// "This routine is not used for server sockets." Why not? there is something specific to servers?

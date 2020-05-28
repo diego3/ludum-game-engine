@@ -53,6 +53,7 @@ namespace spriteditor {
 	
 	int timer = 60;
 
+	bool printedGridPositions = false;
 
 	class Tile {
 	public:
@@ -194,10 +195,33 @@ namespace spriteditor {
 
 
 			SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-			for (int i = 0; i < (WINDOW_WIDTH/spriteSize); i++) {
+			int gridSize = (WINDOW_WIDTH - UIArea.w) / spriteSize;//25units
+			for (int i = 0; i < gridSize; i++) {
+				// 400, 432, 1200, 432
+				// 400,0  432,0
+				int colX1 = 400;
+				int colY1 = i * spriteSize;
+				int colX2 = WINDOW_WIDTH;
+				int colY2 = colY1;
+
+				int rowX1 = 400 + (i * spriteSize);
+				int rowY1 = 0;
+				int rowX2 = rowX1;
+				int rowY2 = WINDOW_HEIGHT;
+				//top {x1:400, y1:0,  x2:432, y2:0}
+				//dow{ x1:400, y1 : 32, x2 : 432, y2 : 32 }
+			
+				if (!printedGridPositions) {
+					//printf("i = %d row[%d,%d,%d,%d]\n", i, colX1, colY1, colX2, colY2);
+					//printf("i = %d col[%d,%d,%d,%d]\n", i, rowX1, rowY1, rowX2, rowY2);
+					printf("top{%d,%d,%d,%d}\ndown{%d,%d,%d,%d}\n\n", 400,i*spriteSize, 400+ (i * spriteSize), i*spriteSize, 400,i*spriteSize, 400 + spriteSize, i*spriteSize);
+				}
+
 				SDL_RenderDrawLine(renderer, 400, i * spriteSize, WINDOW_WIDTH, i * spriteSize);
 				SDL_RenderDrawLine(renderer, 400+(i * spriteSize), 0, 400+(i * spriteSize), WINDOW_HEIGHT);
 			}
+
+			printedGridPositions = true;
 
 			// draw each tile
 			for (Tile tile : grid) {
@@ -233,13 +257,11 @@ namespace spriteditor {
 						}
 						if (event.key.keysym.sym == SDLK_LEFT) {
 							gridPosition--;
-							//source.x = gridPosition * spriteSize;
 							rectSource.x -= spriteSize;
 							isLeft = true;
 						}
 						if (event.key.keysym.sym == SDLK_RIGHT) {
 							gridPosition++;
-							//source.x = gridPosition * spriteSize;
 							rectSource.x += spriteSize;
 							isRight = true;
 						}
@@ -278,7 +300,7 @@ namespace spriteditor {
 							
 							mouseX = event.button.x;
 							mouseY = event.button.y;
-							//printf("x[%d] y[%d]\n", event.button.x, event.button.y);
+							printf("x[%d] y[%d]\n", event.button.x, event.button.y);
 						}
 					}
 					case SDL_MOUSEBUTTONUP:
@@ -305,7 +327,7 @@ namespace spriteditor {
 		}
 
 		void AddTile(int x, int y) {
-			SDL_Rect mousePos = { x -(spriteSize/2),y-(spriteSize/2),spriteSize, spriteSize};
+			SDL_Rect mousePos = {x-(spriteSize/2), y-(spriteSize/2), spriteSize, spriteSize};
 			bool intersect = Collision::CheckRectangleCollision(mousePos, UIArea);
 			if (intersect) {
 				printf("no draw area\n");
