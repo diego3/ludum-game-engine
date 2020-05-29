@@ -72,12 +72,17 @@ namespace network {
 			}
 
 			std::vector<TCPsocket> clients;
+			//clients.push_back(socket);
+			
+			int numready = 0;
+			while (true) {
+				numready = SDLNet_CheckSockets(set, 1000);
+				printf("SDLNet_CheckSockets = %d\n", numready);
 
-			int running = 1;
-			int count = 10000000;
-			while (running) {
-				int numready = SDLNet_CheckSockets(set, 1000);
-				printf("sockets ready = %d\n", numready);
+				if (numready == -1) {
+					printf("SDLNet_CheckSockets error: %s\n", SDLNet_GetError());
+					perror(SDLNet_GetError());
+				}
 
 				if (numready > 0) {
 					if (SDLNet_SocketReady(socket)) {
@@ -106,24 +111,23 @@ namespace network {
 						if (SDLNet_SocketReady(client)) {
 							char dataR[10];
 							int res = SDLNet_TCP_Recv(client, dataR, 10);
+							std::cout << "SDLNet_TCP_Recv = " << res << std::endl;
+
 							if (res > 0) {
-								std::cout << "res = " << res << std::endl;
-								printf("***client says: %s ****\n", dataR);
+								printf("\tclient says: %s\n", dataR);
+							}
+							else if(res <= 0){
+								std::cout << "error os disconnection = " << res << std::endl;
+								printf("closing a socket with o recv bytes\n");
+								SDLNet_TCP_Close(client);
+								SDLNet_DelSocket(set, (SDLNet_GenericSocket)client);
 							}
 						}
 					}
 				}
-
-				if (count <= 0) {
-					break;
-				}
-				count--;
 			}
 
-			// "This routine is not used for server sockets." Why not? there is something specific to servers?
-			//SDLNet_TCP_Send
-			//SDLNet_TCP_Recv #define MAXLEN 1024 int result; char msg[MAXLEN]; if(result<=0) then error
-
+			
 			SDLNet_FreeSocketSet(set);
 			SDLNet_TCP_Close(socket);
 		}
