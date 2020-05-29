@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
 #include <string>
 
@@ -6,6 +8,7 @@
 #include "Src/OpenGL/Instalation.h"
 #include "Src/Editor/SpriteEditor.h"
 #include "Src/Networking/ServerTcpChat.h"
+#include "Src/Networking/ClientTcpChat.h"
 
 using namespace std;
 
@@ -49,13 +52,20 @@ void ChatServerApplication() {
 	delete chat;
 }
 
+void ChatClientApplication() {
+	network::ClientTcpChat* client = new network::ClientTcpChat();
+	client->Run();
+	delete client;
+}
+
 
 int main(int argc, char* args[])
 {
 	std::cout << "[C++] Main..." << std::endl;
 	
 	//SpriteEditorApplication();
-	ChatServerApplication();
+	ChatClientApplication();
+
 	/*
 	
 4x4  64x64
