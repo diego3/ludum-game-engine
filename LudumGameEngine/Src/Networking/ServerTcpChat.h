@@ -18,7 +18,7 @@
 #include "../../Libs/SDL2_net-2.0.1/include/SDL_net.h"
 
 // https://www.libsdl.org/projects/SDL_net/docs/SDL_net_frame.html
-//https://stephenmeier.net/2015/12/29/sdl-2-0-tutorial-06-networking-3/
+// https://stephenmeier.net/2015/12/29/sdl-2-0-tutorial-06-networking-3/
 // https://www.geeksforgeeks.org/socket-programming-in-cc-handling-multiple-clients-on-server-without-multi-threading/
 namespace network {
 
@@ -98,8 +98,8 @@ namespace network {
 								continue;
 							}
 
-							const char* data = "Welcome";
-							SDLNet_TCP_Send(newSocket, data, strlen(data));
+							const char* data = "Welcome\n";
+							SDLNet_TCP_Send(newSocket, data, strlen(data)+1);
 							clients.push_back(newSocket);
 						}
 						else {
@@ -117,7 +117,16 @@ namespace network {
 								printf("\tclient says: %s\n", dataR);
 							}
 							else if(res <= 0){
-								std::cout << "error os disconnection = " << res << std::endl;
+								const char* error = SDLNet_GetError();
+								if (strlen(error) == 0) {
+									// Client Disconnection
+									std::cout << "client disconnection: " << res << std::endl;
+								}
+								else {
+									// Error
+									std::cout << "client error:" << error << std::endl;
+								}
+
 								printf("closing a socket with o recv bytes\n");
 								SDLNet_TCP_Close(client);
 								SDLNet_DelSocket(set, (SDLNet_GenericSocket)client);
