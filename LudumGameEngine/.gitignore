@@ -6,3 +6,5 @@ Release/*
 .bin*
 .temp*
 .exe*
+
+.vscode/*
