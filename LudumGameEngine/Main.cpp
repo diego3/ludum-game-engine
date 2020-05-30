@@ -63,9 +63,9 @@ int main(int argc, char* args[])
 {
 	std::cout << "[C++] Main..." << std::endl;
 	
-	//SpriteEditorApplication();
+	SpriteEditorApplication();
 	//ChatClientApplication();
-	GameEngineApplication();
+	//GameEngineApplication();
 	/*
 	
 4x4  64x64

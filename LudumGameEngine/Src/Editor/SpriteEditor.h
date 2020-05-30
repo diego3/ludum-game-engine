@@ -16,7 +16,7 @@
 #include <SDL.h>
 #include <vector>
 #include "../../Libs/SDL2_image-2.0.5/include/SDL_image.h"
-//#include "../../Libs/SDL2_ttf-2.0.15/include/SDL_ttf.h"
+#include "../../Libs/SDL2_ttf-2.0.15/include/SDL_ttf.h"
 //#include "../../Libs/glm/glm/vec2.hpp"
 #include "../Core/EntityManager.h"
 #include "../Core/Map.h"
@@ -28,7 +28,8 @@
 #include "../Components/BoxColliderComponent.h"
 #include "../Core/Collision.h"
 
-
+// https://stackoverflow.com/questions/29064904/how-to-render-fonts-and-text-with-sdl2-efficiently
+// https://stackoverflow.com/questions/8847899/how-to-draw-text-using-only-opengl-methods
 namespace spriteditor {
 
 	const int FPS = 60;
@@ -65,6 +66,13 @@ namespace spriteditor {
 		}
 	};
 
+	class Text {
+	public:
+		SDL_Rect source;
+		SDL_Rect destination;
+
+	};
+
 
 	std::vector<Tile> grid;
 
@@ -81,10 +89,18 @@ namespace spriteditor {
 
 		SDL_Rect UIArea;
 
-		//TTF_Font* font;
-		//SDL_Texture* textTexture;
+
+		TTF_Font* font;
+		SDL_Texture* textTexture;
+		SDL_Surface* textSurface;
+		SDL_Rect tpos = { 10, 200, 20, 100 };
+		std::string texto = "Hello TTF";
+		int elapsedSeconds = 0;
 
 		~SpriteEditor() {
+			if (font) {
+				TTF_CloseFont(font);
+			}
 			if (texture) {
 				SDL_DestroyTexture(texture);
 			}
@@ -118,15 +134,24 @@ namespace spriteditor {
 				return;
 			}
 			
-			/*
+			
 			if (TTF_Init() == -1) {
 				printf("TTF_Init: %s\n", TTF_GetError());
 				return;
 			}
-			textColor = {255,255,255};
-			font  = TTF_OpenFont("Assets/fonts/carriot.ttf", 24);
-			SDL_Surface* textSurface = TTF_RenderText_Solid(font, "TEXTO", textColor);
-			textTexture = SDL_CreateTextureFromSurface(renderer, textSurface); */
+
+			textColor = {255, 0, 0, 255};
+			const char* fontPath = "Assets/fonts/higher-jump.regular.ttf";
+			font  = TTF_OpenFont(fontPath, 10);
+			if (!font) {
+				printf("TTF_OpenFont error %s", TTF_GetError());
+				return;
+			}
+			textSurface = TTF_RenderText_Solid(font, texto.c_str(), textColor);
+			textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+			SDL_QueryTexture(textTexture, NULL, NULL, &tpos.w, &tpos.h);
+
+
 
 			UIArea = {0, 0, 400, 600};
 
@@ -154,7 +179,7 @@ namespace spriteditor {
 				timer--;
 				if (timer <= 0) timer = 60;
 			}
-
+			
 		}
 
 		void Update(float deltaTime) {
@@ -164,6 +189,16 @@ namespace spriteditor {
 
 			if (timer == 60) {
 				printf("tiles = %d\n", grid.size());
+				elapsedSeconds++;
+
+				SDL_DestroyTexture(textTexture);
+				texto = std::to_string(elapsedSeconds);
+				textSurface = TTF_RenderText_Solid(font, texto.c_str(), textColor);
+				textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+				if (textSurface) {
+					SDL_FreeSurface(textSurface);
+				}
+				SDL_QueryTexture(textTexture, NULL, NULL, &tpos.w, &tpos.h);
 			}
 
 			//std::cout << "grid " << gridPosition << std::endl;
@@ -229,6 +264,10 @@ namespace spriteditor {
 			}
 
 			
+			// TODO replace by Text class ....
+			SDL_RenderCopy(renderer, textTexture, NULL, &tpos);
+			
+
 			// separator line between UI area and grid area
 			SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
 			SDL_RenderDrawLine(renderer, 400, 0, 400, WINDOW_HEIGHT);
