@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 //extern "C" {
 //#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lua.h"
 //#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lauxlib.h"
@@ -12,23 +10,15 @@
 //#pragma comment(lib, "Libs/lua-5.3.5_Win32_dllw6_lib/liblua53.a")
 #endif // WIN
 
-
-
 #include <iostream>
-#include <SDL.h>
 #include <vector>
+
+#include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-//#include "../../Libs/glm/glm/vec2.hpp"
-#include "../Core/EntityManager.h"
-#include "../Core/Map.h"
-#include "../Components/TransformComponent.h"
-#include "../Components/SpriteComponent.h"
-#include "../Components/KeyboardControlComponent.h"
-#include "../Components/TileMapComponent.h"
-#include "../Components/CameraFollowComponent.h"
-#include "../Components/BoxColliderComponent.h"
+
 #include "../Core/Collision.h"
+#include "Tile.h"
 
 // https://stackoverflow.com/questions/29064904/how-to-render-fonts-and-text-with-sdl2-efficiently
 // https://stackoverflow.com/questions/8847899/how-to-draw-text-using-only-opengl-methods
@@ -58,16 +48,7 @@ namespace editor {
 
 	bool printedGridPositions = false;
 
-	class Tile {
-	public:
-		SDL_Rect source;
-		SDL_Rect destination;
-		Tile(int x, int y, int dx, int dy) {
-			source = { x, y, 32,32 };//texture coordinate
-			destination = { dx, dy, 32, 32 };//screen coordinate
-		}
-	};
-
+	
 	class Text {
 	public:
 		SDL_Rect source;

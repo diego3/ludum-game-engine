@@ -201,5 +201,14 @@
     <ClInclude Include="Src\Networking\ClientTcpChat.h">
       <Filter>Src\Networking</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Editor\Tile.h">
+      <Filter>Src\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Editor\TileGrid.h">
+      <Filter>Src\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Editor\UITextLabel.h">
+      <Filter>Src\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
