@@ -15,8 +15,8 @@
 #include <iostream>
 #include <SDL.h>
 #include <vector>
-#include "../../Libs/SDL2_image-2.0.5/include/SDL_image.h"
-#include "../../Libs/SDL2_ttf-2.0.15/include/SDL_ttf.h"
+#include <SDL_image.h>
+#include <SDL_ttf.h>
 //#include "../../Libs/glm/glm/vec2.hpp"
 #include "../Core/EntityManager.h"
 #include "../Core/Map.h"
