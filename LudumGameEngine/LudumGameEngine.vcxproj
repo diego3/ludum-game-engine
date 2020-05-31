@@ -80,8 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2-2.0.12\include;C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2_image-2.0.5\include;C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2_mixer-2.0.4\include;C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2_ttf-2.0.15\include;C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2_net-2.0.1\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2-2.0.12\lib;C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2_image-2.0.5\lib\x86;C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2_mixer-2.0.4\lib\x86;C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2_ttf-2.0.15\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)LudumGameEngine\Libs\SDL2-2.0.12\include;$(SolutionDir)LudumGameEngine\Libs\SDL2_image-2.0.5\include;$(SolutionDir)LudumGameEngine\Libs\SDL2_mixer-2.0.4\include;$(SolutionDir)LudumGameEngine\Libs\SDL2_ttf-2.0.15\include;$(SolutionDir)LudumGameEngine\Libs\SDL2_net-2.0.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)LudumGameEngine\Libs\SDL2-2.0.12\lib;$(SolutionDir)LudumGameEngine\Libs\SDL2_image-2.0.5\lib\x86;$(SolutionDir)LudumGameEngine\Libs\SDL2_mixer-2.0.4\lib\x86;$(SolutionDir)LudumGameEngine\Libs\SDL2_ttf-2.0.15\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -124,7 +124,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/D _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)LudumGameEngine\Libs\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +132,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;SDL2_mixer.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\SDL2_ttf-2.0.15\lib\x86;C:\Users\Diego\Documents\LudumGameEngine\2DGameEngine\LudumGameEngine\Libs\glew-2.1.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)LudumGameEngine\Libs\SDL2_ttf-2.0.15\lib\x86;$(SolutionDir)LudumGameEngine\Libs\glew-2.1.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>
