@@ -19,6 +19,7 @@
 
 #include "../Core/Collision.h"
 #include "Tile.h"
+#include "TileGrid.h"
 
 // https://stackoverflow.com/questions/29064904/how-to-render-fonts-and-text-with-sdl2-efficiently
 // https://stackoverflow.com/questions/8847899/how-to-draw-text-using-only-opengl-methods
@@ -57,7 +58,6 @@ namespace editor {
 	};
 
 
-	std::vector<Tile> grid;
 
 	class TileMapEditor {
 	public:
@@ -71,7 +71,9 @@ namespace editor {
 		SDL_Rect rectSource;
 
 		SDL_Rect UIArea;
+		TileGrid* grid;
 
+		std::vector<Tile> tiles;
 
 		TTF_Font* font;
 		SDL_Texture* textTexture;
@@ -81,6 +83,10 @@ namespace editor {
 		int elapsedSeconds = 0;
 
 		~TileMapEditor() {
+			if (grid) {
+				delete grid;
+			}
+
 			if (font) {
 				TTF_CloseFont(font);
 			}
@@ -117,11 +123,18 @@ namespace editor {
 				return;
 			}
 
-
 			if (TTF_Init() == -1) {
 				printf("TTF_Init: %s\n", TTF_GetError());
 				return;
 			}
+
+			grid = new TileGrid(renderer, 800, 600, spriteSize);
+			if (!grid->Initialize()) {
+				printf("Tile grid initialize fails\n");
+				return;
+			}
+
+
 
 			textColor = { 255, 0, 0, 255 };
 			const char* fontPath = "Assets/fonts/higher-jump.regular.ttf";
@@ -143,6 +156,12 @@ namespace editor {
 			destination = { 0,0,320,96 };
 			rectSource = { source.x, source.y, spriteSize, spriteSize };
 
+
+			Looping();
+
+		}
+
+		void Looping() {
 			lastFrame = SDL_GetTicks();
 			while (isRunning) {
 				float elapsed = SDL_GetTicks() - lastFrame;
@@ -162,7 +181,6 @@ namespace editor {
 				timer--;
 				if (timer <= 0) timer = 60;
 			}
-
 		}
 
 		void Update(float deltaTime) {
@@ -171,7 +189,7 @@ namespace editor {
 
 
 			if (timer == 60) {
-				printf("tiles = %d\n", grid.size());
+				printf("tiles = %d\n", tiles.size());
 				elapsedSeconds++;
 
 				SDL_DestroyTexture(textTexture);
@@ -212,37 +230,11 @@ namespace editor {
 			SDL_RenderCopyEx(renderer, texture, &source, &destination, 0.0f, NULL, flip);
 
 
-			SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-			int gridSize = (WINDOW_WIDTH - UIArea.w) / spriteSize;//25units
-			for (int i = 0; i < gridSize; i++) {
-				// 400, 432, 1200, 432
-				// 400,0  432,0
-				int colX1 = 400;
-				int colY1 = i * spriteSize;
-				int colX2 = WINDOW_WIDTH;
-				int colY2 = colY1;
+			grid->Render();
 
-				int rowX1 = 400 + (i * spriteSize);
-				int rowY1 = 0;
-				int rowX2 = rowX1;
-				int rowY2 = WINDOW_HEIGHT;
-				//top {x1:400, y1:0,  x2:432, y2:0}
-				//dow{ x1:400, y1 : 32, x2 : 432, y2 : 32 }
-
-				if (!printedGridPositions) {
-					//printf("i = %d row[%d,%d,%d,%d]\n", i, colX1, colY1, colX2, colY2);
-					//printf("i = %d col[%d,%d,%d,%d]\n", i, rowX1, rowY1, rowX2, rowY2);
-					printf("top{%d,%d,%d,%d}\ndown{%d,%d,%d,%d}\n\n", 400, i * spriteSize, 400 + (i * spriteSize), i * spriteSize, 400, i * spriteSize, 400 + spriteSize, i * spriteSize);
-				}
-
-				SDL_RenderDrawLine(renderer, 400, i * spriteSize, WINDOW_WIDTH, i * spriteSize);
-				SDL_RenderDrawLine(renderer, 400 + (i * spriteSize), 0, 400 + (i * spriteSize), WINDOW_HEIGHT);
-			}
-
-			printedGridPositions = true;
 
 			// draw each tile
-			for (Tile tile : grid) {
+			for (Tile tile : tiles) {
 				SDL_RenderCopyEx(renderer, texture, &tile.source, &tile.destination, 0.0f, NULL, flip);
 			}
 
@@ -357,7 +349,7 @@ namespace editor {
 			}
 			Tile t(rectSource.x, rectSource.y, x - (spriteSize / 2), y - (spriteSize / 2));
 
-			grid.push_back(t);
+			tiles.push_back(t);
 		}
 
 		SDL_Texture* LoadTexture(std::string fileName)
