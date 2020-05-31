@@ -6,7 +6,7 @@
 #include "Src/Core/Game.h"
 #include "Src/Core/Constants.h"
 #include "Src/OpenGL/Instalation.h"
-#include "Src/Editor/SpriteEditor.h"
+#include "Src/Editor/TileMapEditor.h"
 #include "Src/Networking/ServerTcpChat.h"
 #include "Src/Networking/ClientTcpChat.h"
 
@@ -39,9 +39,9 @@ void OpenGLApplication() {
 	delete openglApp;
 }
 
-void SpriteEditorApplication() {
-	std::cout << "[C++] SpriteEditorApplication..." << std::endl;
-	spriteditor::SpriteEditor* editor = new spriteditor::SpriteEditor();
+void TileMapApplication() {
+	std::cout << "[C++] TileMapApplication..." << std::endl;
+	editor::TileMapEditor* editor = new editor::TileMapEditor();
 	editor->Initialize();
 	delete editor;
 }
@@ -63,7 +63,7 @@ int main(int argc, char* args[])
 {
 	std::cout << "[C++] Main..." << std::endl;
 	
-	SpriteEditorApplication();
+	TileMapApplication();
 	//ChatClientApplication();
 	//GameEngineApplication();
 	/*

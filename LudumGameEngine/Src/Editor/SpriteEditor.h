@@ -30,7 +30,7 @@
 
 // https://stackoverflow.com/questions/29064904/how-to-render-fonts-and-text-with-sdl2-efficiently
 // https://stackoverflow.com/questions/8847899/how-to-draw-text-using-only-opengl-methods
-namespace spriteditor {
+namespace editor {
 
 	const int FPS = 60;
 	const int FRAME_RATE = 1000 / FPS;
