@@ -20,6 +20,7 @@
 #include "../Core/Collision.h"
 #include "Tile.h"
 #include "TileGrid.h"
+#include "UITextLabel.h"
 
 // https://stackoverflow.com/questions/29064904/how-to-render-fonts-and-text-with-sdl2-efficiently
 // https://stackoverflow.com/questions/8847899/how-to-draw-text-using-only-opengl-methods
@@ -32,8 +33,6 @@ namespace editor {
 	float lastFrame = 0.0f;
 	bool isRunning = true;
 	bool IS_MOUSE_PRESSED = false;
-
-	SDL_Color textColor;
 
 	int mouseX = 0;
 	int mouseY = 0;
@@ -75,11 +74,8 @@ namespace editor {
 
 		std::vector<Tile> tiles;
 
-		TTF_Font* font;
-		SDL_Texture* textTexture;
-		SDL_Surface* textSurface;
-		SDL_Rect tpos = { 10, 200, 20, 100 };
-		std::string texto = "Hello TTF";
+		UITextLabel* text1;
+		
 		int elapsedSeconds = 0;
 
 		~TileMapEditor() {
@@ -87,9 +83,10 @@ namespace editor {
 				delete grid;
 			}
 
-			if (font) {
-				TTF_CloseFont(font);
+			if (text1) {
+				delete text1;
 			}
+
 			if (texture) {
 				SDL_DestroyTexture(texture);
 			}
@@ -124,7 +121,7 @@ namespace editor {
 			}
 
 			if (TTF_Init() == -1) {
-				printf("TTF_Init: %s\n", TTF_GetError());
+				printf("TTF_Init fails: %s\n", TTF_GetError());
 				return;
 			}
 
@@ -134,20 +131,13 @@ namespace editor {
 				return;
 			}
 
-
-
-			textColor = { 255, 0, 0, 255 };
-			const char* fontPath = "Assets/fonts/higher-jump.regular.ttf";
-			font = TTF_OpenFont(fontPath, 10);
-			if (!font) {
-				printf("TTF_OpenFont error %s", TTF_GetError());
+			SDL_Color textColor = { 255, 0, 0, 255 };
+			SDL_Rect textPosition = { 10, 200, 20, 100 };
+			text1 = new UITextLabel(renderer, "Assets/fonts/higher-jump.regular.ttf",
+				10, &textPosition, textColor);
+			if (!text1->Initialize()) {
 				return;
 			}
-			textSurface = TTF_RenderText_Solid(font, texto.c_str(), textColor);
-			textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-			SDL_QueryTexture(textTexture, NULL, NULL, &tpos.w, &tpos.h);
-
-
 
 			UIArea = { 0, 0, 400, 600 };
 
@@ -192,14 +182,7 @@ namespace editor {
 				printf("tiles = %d\n", tiles.size());
 				elapsedSeconds++;
 
-				SDL_DestroyTexture(textTexture);
-				texto = std::to_string(elapsedSeconds);
-				textSurface = TTF_RenderText_Solid(font, texto.c_str(), textColor);
-				textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-				if (textSurface) {
-					SDL_FreeSurface(textSurface);
-				}
-				SDL_QueryTexture(textTexture, NULL, NULL, &tpos.w, &tpos.h);
+				text1->SetText(std::to_string(elapsedSeconds));
 			}
 
 			//std::cout << "grid " << gridPosition << std::endl;
@@ -238,10 +221,7 @@ namespace editor {
 				SDL_RenderCopyEx(renderer, texture, &tile.source, &tile.destination, 0.0f, NULL, flip);
 			}
 
-
-			// TODO replace by Text class ....
-			SDL_RenderCopy(renderer, textTexture, NULL, &tpos);
-
+			text1->Render();
 
 			// separator line between UI area and grid area
 			SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
