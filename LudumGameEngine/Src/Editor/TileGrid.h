@@ -9,16 +9,6 @@ namespace editor {
 	class TileGrid {
 
 	public:
-
-		std::vector<SDL_Rect> blocks;
-		int width;
-		int height;
-		int rectSize;
-
-		int gridSize;
-
-		SDL_Renderer* renderer;
-
 		TileGrid(SDL_Renderer* render, int sizeX, int sizeY, int rectSize) {
 			this->renderer = render;
 			this->width = sizeX;
@@ -29,41 +19,64 @@ namespace editor {
 
 		bool Initialize() {
 			//TODO Initialize all the rect blocks, for future collision with the user click at grid position
-
-
+			
+			int y = 0;
+			int gridSizeY = height / rectSize;//18.75units or 19
+			for (int i = 0; i < gridSizeY; i++) {
+				for (int j = 0; j < 25; j++) {
+					SDL_Rect p1 = { 400 + (j * rectSize), (i*rectSize), 32, 32 };
+					///printf("block %d x pos = %d\n", i, 400 + (i * rectSize));
+					blocks.push_back(p1);
+				}
+			}
+			
+			/*	y = 32;
+			for (int i = 0; i < 25; i++) {
+				SDL_Rect p1 = { 400 + (i * rectSize), y, 32, 32 };
+				///printf("block %d x pos = %d\n", i, 400 + (i * rectSize));
+				blocks.push_back(p1);
+			}*/
 			//PrintGridPositions();
 
 			return true;
 		}
 
+
+		SDL_Rect GetBlockPosition(SDL_Point point) {
+			for (SDL_Rect rect : blocks) {
+				SDL_bool inside = SDL_PointInRect(&point, &rect);
+				if (inside == SDL_TRUE) {
+					printf("inside: {%d, %d}\n", rect.x, rect.y);
+					return rect;
+				}
+			}
+			printf("ZERO\n");
+			SDL_Rect zero = { 0,0,0,0 };
+			return zero;
+		}
+
+		//int i = 0;
+		//int d = 30;
 		void Render() {
 			SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
 			for (int i = 0; i < gridSize; i++) {
 				SDL_RenderDrawLine(renderer, 400, i * rectSize, width + 400, i * rectSize);
 				SDL_RenderDrawLine(renderer, 400 + (i * rectSize), 0, 400 + (i * rectSize), height);
 			}
+
+			//i++;
+			//d--;
+			//if (i >= 25) i = 0;
+			//if (d <= 0) d = 30;
 		}
 	private:
-		void PrintGridPositions() {
-			for (int i = 0; i < gridSize; i++) {
-				// 400, 432, 1200, 432
-				// 400,0  432,0
-				int colX1 = 400;
-				int colY1 = i * rectSize;
-				int colX2 = width;
-				int colY2 = colY1;
+		std::vector<SDL_Rect> blocks;
+		int width;
+		int height;
+		int rectSize;
 
-				int rowX1 = 400 + (i * rectSize);
-				int rowY1 = 0;
-				int rowX2 = rowX1;
-				int rowY2 = height;
-				//top {x1:400, y1:0,  x2:432, y2:0}
-				//dow{ x1:400, y1 : 32, x2 : 432, y2 : 32 }
+		int gridSize;
 
-				//printf("i = %d row[%d,%d,%d,%d]\n", i, colX1, colY1, colX2, colY2);
-				//printf("i = %d col[%d,%d,%d,%d]\n", i, rowX1, rowY1, rowX2, rowY2);
-				printf("top{%d,%d,%d,%d}\ndown{%d,%d,%d,%d}\n\n", 400, i * rectSize, 400 + (i * rectSize), i * rectSize, 400, i * rectSize, 400 + rectSize, i * rectSize);
-			}
-		}
+		SDL_Renderer* renderer;
 	};
 }

@@ -327,9 +327,18 @@ namespace editor {
 				printf("no draw area\n");
 				return;
 			}
-			Tile t(rectSource.x, rectSource.y, x - (spriteSize / 2), y - (spriteSize / 2));
 
-			tiles.push_back(t);
+			int tileX = x - (spriteSize / 2);
+			int tileY = y - (spriteSize / 2);
+			SDL_Point clicked = { x, y};
+			SDL_Rect block = grid->GetBlockPosition(clicked);
+			if (block.w > 0 && block.h > 0) {
+				tileX = block.x;
+				tileY = block.y;
+			}
+			Tile tile(rectSource.x, rectSource.y, tileX, tileY);
+
+			tiles.push_back(tile);
 		}
 
 		SDL_Texture* LoadTexture(std::string fileName)
