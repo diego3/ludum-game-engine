@@ -15,15 +15,13 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include <SDL_ttf.h>
 
 #include "../Core/Collision.h"
 #include "Tile.h"
 #include "TileGrid.h"
 #include "UITextLabel.h"
 
-// https://stackoverflow.com/questions/29064904/how-to-render-fonts-and-text-with-sdl2-efficiently
-// https://stackoverflow.com/questions/8847899/how-to-draw-text-using-only-opengl-methods
+
 namespace editor {
 
 	const int FPS = 60;
@@ -75,6 +73,8 @@ namespace editor {
 		std::vector<Tile> tiles;
 
 		UITextLabel* text1;
+		UITextLabel* tilesLabel;
+		UITextLabel* tilesQtd;
 		
 		int elapsedSeconds = 0;
 
@@ -85,6 +85,12 @@ namespace editor {
 
 			if (text1) {
 				delete text1;
+			}
+			if (tilesLabel) {
+				delete tilesLabel;
+			}
+			if (tilesQtd) {
+				delete tilesQtd;
 			}
 
 			if (texture) {
@@ -139,9 +145,29 @@ namespace editor {
 				return;
 			}
 
+			SDL_Rect pos2 = { 10, 150, 20, 100 };
+			tilesLabel = new UITextLabel(renderer, "Assets/fonts/arial.ttf",
+				20, &pos2, textColor);
+			if (!tilesLabel->Initialize()) {
+				return;
+			}
+			tilesLabel->SetText("Tiles: ");
+
+			SDL_Rect pos3 = {70, 150, 20, 100 };
+			tilesQtd = new UITextLabel(renderer, "Assets/fonts/arial.ttf",
+				20, &pos3, textColor);
+			if (!tilesQtd->Initialize()) {
+				return;
+			}
+			tilesQtd->SetText("0");
+
 			UIArea = { 0, 0, 400, 600 };
 
 			texture = LoadTexture("Assets/images/jungle.png");//320x96
+			int spriteW;
+			int spriteH;
+			SDL_QueryTexture(texture, NULL, NULL, &spriteW, &spriteH);
+			//printf("spritesheet {%d, %d}\n", spriteW, spriteH);
 			source = { 0,0, 320, 96 };
 			destination = { 0,0,320,96 };
 			rectSource = { source.x, source.y, spriteSize, spriteSize };
@@ -179,7 +205,6 @@ namespace editor {
 
 
 			if (timer == 60) {
-				printf("tiles = %d\n", tiles.size());
 				elapsedSeconds++;
 
 				text1->SetText(std::to_string(elapsedSeconds));
@@ -222,6 +247,8 @@ namespace editor {
 			}
 
 			text1->Render();
+			tilesLabel->Render();
+			tilesQtd->Render();
 
 			// separator line between UI area and grid area
 			SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
@@ -339,6 +366,8 @@ namespace editor {
 			Tile tile(rectSource.x, rectSource.y, tileX, tileY);
 
 			tiles.push_back(tile);
+
+			tilesQtd->SetText(std::to_string(tiles.size()));
 		}
 
 		SDL_Texture* LoadTexture(std::string fileName)

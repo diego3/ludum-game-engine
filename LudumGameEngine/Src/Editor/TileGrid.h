@@ -7,7 +7,16 @@
 
 namespace editor {
 	class TileGrid {
+	private:
+		std::vector<SDL_Rect> blocks;
+		int width;
+		int height;
+		int rectSize;
 
+		int gridSizeX;
+		int gridSizeY;
+
+		SDL_Renderer* renderer;
 	public:
 		TileGrid(SDL_Renderer* render, int sizeX, int sizeY, int rectSize) {
 			this->renderer = render;
@@ -51,15 +60,6 @@ namespace editor {
 				SDL_RenderDrawLine(renderer, 400 + (i * rectSize), 0, 400 + (i * rectSize), height);
 			}
 		}
-	private:
-		std::vector<SDL_Rect> blocks;
-		int width;
-		int height;
-		int rectSize;
-
-		int gridSizeX;
-		int gridSizeY;
-
-		SDL_Renderer* renderer;
+	
 	};
 }

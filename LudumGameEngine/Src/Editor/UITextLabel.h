@@ -4,7 +4,8 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-
+// https://stackoverflow.com/questions/29064904/how-to-render-fonts-and-text-with-sdl2-efficiently
+// https://stackoverflow.com/questions/8847899/how-to-draw-text-using-only-opengl-methods
 class UITextLabel {
 public:
 	std::string text;
