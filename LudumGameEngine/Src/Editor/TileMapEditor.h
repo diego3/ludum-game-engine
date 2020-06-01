@@ -321,7 +321,7 @@ namespace editor {
 		}
 
 		void AddTile(int x, int y) {
-			SDL_Rect mousePos = { x - (spriteSize / 2), y - (spriteSize / 2), spriteSize, spriteSize };
+			SDL_Rect mousePos = { x , y , spriteSize, spriteSize };
 			bool intersect = Collision::CheckRectangleCollision(mousePos, UIArea);
 			if (intersect) {
 				printf("no draw area\n");
@@ -330,7 +330,7 @@ namespace editor {
 
 			int tileX = x - (spriteSize / 2);
 			int tileY = y - (spriteSize / 2);
-			SDL_Point clicked = { x, y};
+			SDL_Point clicked = {x, y};
 			SDL_Rect block = grid->GetBlockPosition(clicked);
 			if (block.w > 0 && block.h > 0) {
 				tileX = block.x;
