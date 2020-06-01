@@ -67,9 +67,9 @@ public:
 
 
 	void SetText(std::string val) {
-		//if (val.compare(this->text) != 0) {
+		if (val.compare(this->text) != 0) {
 			textChanged = true;
-		//}
+		}
 		this->text = val;
 	}
 
