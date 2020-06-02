@@ -7,6 +7,7 @@ Level1 = {
 		[4] = {type="texture", id="explosion", file="Assets/images/explosion-320x320.png"},
 		[5] = {type="texture", id="explosion2", file="Assets/images/Explosion-1152x96.png"},
 		[6] = {type="texture", id="boundingBox", file="Assets/images/collision-texture.png"},
+		[7] = {type="texture", id="projectile1", file="Assets/images/bullet-enemy.png"},
 	},
 	layers = {
 		TILE_LAYER = 0,
@@ -30,8 +31,8 @@ Level1 = {
 			layer = 3,
 			components = {
 				transform = {
-					position ={x = 240, y = 106},
-					velocity = {x = 0, y = 0},
+					position = {x = 240, y = 106},
+					velocity = {x = 0,   y = 0},
 					width = 32,
 					height= 32,
 					scale = 2,
@@ -58,6 +59,14 @@ Level1 = {
 					hasDirections = true,
 					isFixed = false
 				},
+				projectile = {
+					assetId="projectile1",
+					speed = 800,
+					width = 4,
+					height= 4,
+					scale = 3,
+					duration = 60*2 -- 2 frames
+				},
 				input = {
 					keyboard = {
 						up = "up",
@@ -72,6 +81,7 @@ Level1 = {
 		[1] = {
 			name = "explosion1",
 			layer = 1, -- vegetation layer
+			playOnAwake = false,
 			components = {
 				transform = {
 					position = {x = 300, y = 200},
@@ -102,6 +112,7 @@ Level1 = {
 		[2] = {
 			name = "explosion2",
 			layer = 1, -- vegetation layer
+			playOnAwake = false,
 			components = {
 				transform = {
 					position ={ x = 500, y = 200},
@@ -124,6 +135,7 @@ Level1 = {
 		[3] = {
 			name = "explosion3",
 			layer = 1, -- vegetation layer
+			playOnAwake = false,
 			components = {
 				transform = {
 					position ={ x = 800, y = 400},
@@ -146,9 +158,10 @@ Level1 = {
 		[4] = {
 			name = "explosion4",
 			layer = 1, -- vegetation layer
+			playOnAwake = false,
 			components = {
 				transform = {
-					position ={ x = 1200, y = 600},
+					position = { x = 1200, y = 600},
 					velocity = {x = 0,y = 0},
 					width = 96,
 					height= 96,
@@ -165,9 +178,31 @@ Level1 = {
 				}
 			}
 		},
+		--[[[5] = {
+			name="projectile",
+			layer=4, -- PROJECTILE_LAYER
+			components = {
+				transform ={
+					position = {x = 0, y = 0},
+					velocity = {x = 0, y = 0},
+					width = 4,
+					height= 4,
+					scale = 2,
+					rotate = 0
+				},
+				projectile = {
+					assetId="projectile1",
+					speed = 15,
+					width = 4,
+					height= 4,
+					scale = 2,
+				}
+			}
+		}, --]]
 		[5] = {
 			name = "radar",
 			layer = 1, -- UI LAYER
+			playOnAwake = false,
 			components = {
 				transform = {
 					position ={ x = 720, y = 15},

@@ -78,6 +78,9 @@ namespace editor {
 		
 		int elapsedSeconds = 0;
 
+		SDL_Joystick* joy;
+		SDL_GameController* controller;
+
 		~TileMapEditor() {
 			if (grid) {
 				delete grid;
@@ -91,6 +94,13 @@ namespace editor {
 			}
 			if (tilesQtd) {
 				delete tilesQtd;
+			}
+
+			if (joy && SDL_JoystickGetAttached(joy)) {
+				SDL_JoystickClose(joy);
+			}
+			if (controller) {
+				SDL_GameControllerClose(controller);
 			}
 
 			if (texture) {
@@ -172,9 +182,47 @@ namespace editor {
 			destination = { 0,0,320,96 };
 			rectSource = { source.x, source.y, spriteSize, spriteSize };
 
+			JoystickInitialization();
 
 			Looping();
 
+		}
+
+		void JoystickInitialization() {
+			for (int i = 0; i < SDL_NumJoysticks(); ++i) {
+				if (SDL_IsGameController(i)) {
+					printf("Joystick %i is supported by the game controller interface!\n", i);
+
+					char* mapping;
+					controller = SDL_GameControllerOpen(i);
+					mapping = SDL_GameControllerMapping(controller);
+					std::cout << "mapping " << mapping << std::endl;
+
+					int r = SDL_GameControllerRumble(controller, 0xFFFF, 0xFFFF, 500);
+					if (r == -1) {
+						printf("Rumble is not supported\n");
+					}
+				}
+			}
+
+			joy = SDL_JoystickOpen(0);
+
+			if (joy) {
+				printf("Opened Joystick 0\n");
+				printf("Name: %s\n", SDL_JoystickNameForIndex(0));
+				printf("Number of Axes: %d\n", SDL_JoystickNumAxes(joy));
+				printf("Number of Buttons: %d\n", SDL_JoystickNumButtons(joy));
+				printf("Number of Balls: %d\n", SDL_JoystickNumBalls(joy));
+				printf("Number of Hats: %d\n", SDL_JoystickNumHats(joy));
+			}
+			else {
+				printf("Couldn't open Joystick 0\n");
+			}
+
+			// Close if opened
+			//if (SDL_JoystickGetAttached(joy)) {
+			//	SDL_JoystickClose(joy);
+			//}
 		}
 
 		void Looping() {
@@ -265,84 +313,153 @@ namespace editor {
 			SDL_Event event;
 			if (SDL_PollEvent(&event) > 0) {
 				switch (event.type) {
-				case SDL_QUIT:
-				{
-					isRunning = false;
-					break;
-				}
-				case SDL_KEYDOWN:
-				{
-					if (event.key.keysym.sym == SDLK_ESCAPE) {
+					case SDL_QUIT:
+					{
 						isRunning = false;
 						break;
 					}
-					if (event.key.keysym.sym == SDLK_LEFT) {
-						gridPosition--;
-						rectSource.x -= spriteSize;
-						isLeft = true;
+					case SDL_KEYDOWN:
+					{
+						if (event.key.keysym.sym == SDLK_ESCAPE) {
+							isRunning = false;
+							break;
+						}
+						if (event.key.keysym.sym == SDLK_LEFT) {
+							gridPosition--;
+							rectSource.x -= spriteSize;
+							isLeft = true;
+						}
+						if (event.key.keysym.sym == SDLK_RIGHT) {
+							gridPosition++;
+							rectSource.x += spriteSize;
+							isRight = true;
+						}
+						if (event.key.keysym.sym == SDLK_UP) {
+							rectSource.y -= spriteSize;
+							isUp = true;
+						}
+						if (event.key.keysym.sym == SDLK_DOWN) {
+							rectSource.y += spriteSize;
+							isDown = true;
+						}
 					}
-					if (event.key.keysym.sym == SDLK_RIGHT) {
-						gridPosition++;
-						rectSource.x += spriteSize;
-						isRight = true;
+					case SDL_KEYUP: {
+						if (event.key.keysym.sym == SDLK_LEFT) {
+							isLeft = false;
+						}
+						if (event.key.keysym.sym == SDLK_RIGHT) {
+							isRight = false;
+						}
+						if (event.key.keysym.sym == SDLK_UP) {
+							isUp = false;
+						}
+						if (event.key.keysym.sym == SDLK_DOWN) {
+							isDown = false;
+						}
 					}
-					if (event.key.keysym.sym == SDLK_UP) {
-						rectSource.y -= spriteSize;
-						isUp = true;
-					}
-					if (event.key.keysym.sym == SDLK_DOWN) {
-						rectSource.y += spriteSize;
-						isDown = true;
-					}
-				}
-				case SDL_KEYUP: {
-					if (event.key.keysym.sym == SDLK_LEFT) {
-						isLeft = false;
-					}
-					if (event.key.keysym.sym == SDLK_RIGHT) {
-						isRight = false;
-					}
-					if (event.key.keysym.sym == SDLK_UP) {
-						isUp = false;
-					}
-					if (event.key.keysym.sym == SDLK_DOWN) {
-						isDown = false;
-					}
-				}
-				case SDL_MOUSEBUTTONDOWN:
-				{
-					if (event.button.button == SDL_BUTTON_LEFT
-						&& event.button.state == SDL_PRESSED) {
-						IS_MOUSE_PRESSED = true;
+					case SDL_MOUSEBUTTONDOWN:
+					{
+						if (event.button.button == SDL_BUTTON_LEFT
+							&& event.button.state == SDL_PRESSED) {
+							IS_MOUSE_PRESSED = true;
 
-						mouseClickPointX = event.button.x;
-						mouseClickPointY = event.button.y;
-						//AddTile(mouseClickPointX, mouseClickPointY);
+							mouseClickPointX = event.button.x;
+							mouseClickPointY = event.button.y;
+							//AddTile(mouseClickPointX, mouseClickPointY);
 
-						mouseX = event.button.x;
-						mouseY = event.button.y;
-						printf("x[%d] y[%d]\n", event.button.x, event.button.y);
+							mouseX = event.button.x;
+							mouseY = event.button.y;
+							printf("x[%d] y[%d]\n", event.button.x, event.button.y);
+						}
 					}
-				}
-				case SDL_MOUSEBUTTONUP:
-				{
-					if (event.button.button == SDL_BUTTON_LEFT
-						&& event.button.state == SDL_RELEASED) {
-						//std::cout << "button UP" << std::endl;
-						IS_MOUSE_PRESSED = false;
+					case SDL_MOUSEBUTTONUP:
+					{
+						if (event.button.button == SDL_BUTTON_LEFT
+							&& event.button.state == SDL_RELEASED) {
+							//std::cout << "button UP" << std::endl;
+							IS_MOUSE_PRESSED = false;
+						}
 					}
-				}
-				case SDL_MOUSEMOTION:
-				{
-					if (IS_MOUSE_PRESSED) {
-						mouseX = event.button.x;
-						mouseY = event.button.y;
+					case SDL_MOUSEMOTION:
+					{
+						if (IS_MOUSE_PRESSED) {
+							mouseX = event.button.x;
+							mouseY = event.button.y;
 
-						AddTile(mouseX, mouseY);
-						//printf("x[%d] y[%d]\n", event.button.x, event.button.y);
+							AddTile(mouseX, mouseY);
+							//printf("x[%d] y[%d]\n", event.button.x, event.button.y);
+						}
+					}
+
+					case SDL_CONTROLLERBUTTONDOWN: {
+						if (event.cbutton.state == SDL_PRESSED) {
+							printf("*****BUTTON*****\n\n");
+							switch (event.cbutton.button) {
+								case SDL_CONTROLLER_BUTTON_A: {
+									printf("SDL_CONTROLLER_BUTTON_A\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_B: {
+									printf("SDL_CONTROLLER_BUTTON_B\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_X: {
+									printf("SDL_CONTROLLER_BUTTON_X\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_Y: {
+									printf("SDL_CONTROLLER_BUTTON_Y\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_BACK: {
+									printf("SDL_CONTROLLER_BUTTON_BACK\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_START: {
+									printf("SDL_CONTROLLER_BUTTON_START\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_GUIDE: {
+									printf("SDL_CONTROLLER_BUTTON_GUIDE\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_INVALID: {
+									printf("SDL_CONTROLLER_BUTTON_INVALID\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: {
+									printf("SDL_CONTROLLER_BUTTON_LEFTSHOULDER\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_LEFTSTICK: {
+									printf("SDL_CONTROLLER_BUTTON_LEFTSTICK\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_MAX: {
+									printf("SDL_CONTROLLER_BUTTON_MAX\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: {
+									printf("SDL_CONTROLLER_BUTTON_RIGHTSHOULDER\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_RIGHTSTICK: {
+									printf("SDL_CONTROLLER_BUTTON_RIGHTSTICK\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_DPAD_DOWN: {
+									printf("SDL_CONTROLLER_BUTTON_DPAD_DOWN\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_DPAD_UP: {
+									printf("SDL_CONTROLLER_BUTTON_DPAD_UP\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_DPAD_LEFT: {
+									printf("SDL_CONTROLLER_BUTTON_DPAD_LEFT\n"); break;
+								}
+								case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: {
+									printf("SDL_CONTROLLER_BUTTON_DPAD_RIGHT\n"); break;
+								}
+							}
+							printf("\n\n\n");
+						}
+					}
+					case SDL_CONTROLLERAXISMOTION: {
+						printf("*****AXIS*****\n\n");
+						std::cout << "caxis index: " << event.caxis.axis << std::endl;
+						std::cout << "caxis value: " << event.caxis.value << std::endl;
+						if (event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX) {
+							std::cout << "AXIS_LEFTX" << std::endl;
+						}
 					}
 				}
-				}
+				
 			}
 
 		}

@@ -191,6 +191,7 @@
     <ClInclude Include="Src\Components\LuaScriptComponent.h" />
     <ClInclude Include="Src\Components\MouseControlComponent.h" />
     <ClInclude Include="Src\Components\NetworkingComponent.h" />
+    <ClInclude Include="Src\Components\ProjectileComponent.h" />
     <ClInclude Include="Src\Components\SpriteComponent.h" />
     <ClInclude Include="Src\Components\TileMapComponent.h" />
     <ClInclude Include="Src\Components\TransformComponent.h" />

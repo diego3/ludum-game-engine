@@ -63,29 +63,12 @@ int main(int argc, char* args[])
 {
 	std::cout << "[C++] Main..." << std::endl;
 	
-	TileMapApplication();
+	//TileMapApplication();
 	//ChatClientApplication();
-	//GameEngineApplication();
-	/*
-	
-4x4  64x64
-a{0, 0}  b{32, 0}   a{32, 0}  b{64, 0}  
-c{0, 32} d{32, 32}  c{32, 32} d{64, 32}
-
-a{0, 32} b{32, 32}   a{32, 32} b{64, 32}
-c{0, 64} d{64, 64}   c{64, 64} d{64, 64}
-	
+	GameEngineApplication();
 	
 
-	int height = 64;
-	int width = 64;
-	int size = 32;
-	for (int i = 0; i <= width; i+=size) {
-		printf("a{%d,%d} b{%d,%d}\n", i, i, i, i);
 
-	}
-
-	*/
 	return 0;
 }
 

@@ -210,5 +210,8 @@
     <ClInclude Include="Src\Editor\UITextLabel.h">
       <Filter>Src\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Components\ProjectileComponent.h">
+      <Filter>Src\Components</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -21,8 +21,8 @@ public:
 	void Update(float deltaTime) override {
 		if (!transform) return;
 
-		Game::camera.x = transform->position.x - (WINDOW_WIDTH / 2);
-		Game::camera.y = transform->position.y - (WINDOW_HEIGHT / 2);
+		Game::camera.x = (int)transform->position.x - (WINDOW_WIDTH / 2);
+		Game::camera.y = (int)transform->position.y - (WINDOW_HEIGHT / 2);
 
 		// Campling 
 		Game::camera.x = Game::camera.x < 0 ? 0 : Game::camera.x;

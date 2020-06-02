@@ -1,9 +1,9 @@
 #include <iostream>
 #include <SDL.h>
-#include "../../Libs/SDL2_net-2.0.1/include/SDL_net.h"
-#include "../../Libs/SDL2_image-2.0.5/include/SDL_image.h"
-#include "../../Libs/SDL2_ttf-2.0.15/include/SDL_ttf.h"
-#include "../../Libs/SDL2_mixer-2.0.4/include/SDL_mixer.h"
+#include <SDL_net.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include "../../Libs/glm/glm/vec2.hpp"
 
 extern "C" {
@@ -28,6 +28,7 @@ extern "C" {
 #include "../Components/CameraFollowComponent.h"
 #include "../Components/CameraShakeComponent.h"
 #include "../Components/BoxColliderComponent.h"
+#include "../Components/ProjectileComponent.h"
 
 #ifdef _WIN32
 #pragma comment(lib, "Libs/SDL2_net-2.0.1/lib/x86/SDL2_net.lib")
@@ -263,6 +264,19 @@ void Game::LoadLevel(int levelNumber) {
 			else {
 				entity.AddComponent<BoxColliderComponent>(tag, boundingAssetId);
 			}
+		}
+
+		// Projectile Component
+		sol::optional<sol::table> projectileExists = components["projectile"];
+		if (projectileExists != sol::nullopt) {
+			sol::table projectileTable = components["projectile"];
+			std::string projectileAssetId = projectileTable["assetId"];
+			float speed = projectileTable["speed"];
+			int width = projectileTable["width"];
+			int height = projectileTable["height"];
+			int scale = projectileTable["scale"];
+			int duration = projectileTable["duration"];
+			entity.AddComponent<ProjectileComponent>(projectileAssetId, speed, width, height, scale, duration);
 		}
 
 		// MOVE THIS TO SCRIPT COMPONENT and attach it to the player entity
