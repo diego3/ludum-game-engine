@@ -19,6 +19,9 @@
 	   talvez usar o prototype?  https://gameprogrammingpatterns.com/prototype.html
 	 - State Machine para o game (gameover, menus, telas, transi��es etc)
 	 - 3D Game Engine ( estudos em OpenGL )
+
+	 -- aprender Lerp
+	  float lerp (float a, float b, float t) { return a + t * (b - a); }
 ]]
 
 -- oop em lua
