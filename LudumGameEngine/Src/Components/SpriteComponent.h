@@ -29,6 +29,8 @@ public:
 	std::string currentAnimationName;
 	unsigned int animationIndex = 0;
 
+	float rotation = 0;
+
 	SpriteComponent(std::string filePath) {
 		this->isAnimated = false;
 		this->isFixed = false;
@@ -103,6 +105,7 @@ public:
 	}
 
 	void Render() override {
-		TextureManager::Draw(texture, source, destination, flip);
+		//TextureManager::Draw(texture, source, destination, flip);
+		SDL_RenderCopyEx(Game::renderer, texture, &source, &destination, rotation, NULL, flip);
 	}
 };

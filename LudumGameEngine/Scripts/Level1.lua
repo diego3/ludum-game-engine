@@ -32,7 +32,7 @@ Level1 = {
 			layer = 3,
 			components = {
 				transform = {
-					position = {x = 240, y = 106},
+					position = {x = 200, y = 100},
 					velocity = {x = 0,   y = 0},
 					width = 32,
 					height= 32,
@@ -135,7 +135,7 @@ Level1 = {
 			layer = 1, -- vegetation layer
 			components = {
 				transform = {
-					position = {x = 800, y = 600},
+					position = {x = 600, y = 200},
 					velocity = {x = 0,y = 0},
 					width = 128,
 					height= 128,
@@ -145,7 +145,8 @@ Level1 = {
 				sprite = {
 					assetId = "turret2",
 					animated = false
-				}
+				},
+				rotation = {}
 			}
 		},
 		[4] = {
@@ -153,7 +154,7 @@ Level1 = {
 			layer = 1, -- vegetation layer
 			components = {
 				transform = {
-					position = {x = 600, y = 600},
+					position = {x = 400, y = 200},
 					velocity = {x = 0,y = 0},
 					width = 128,
 					height= 128,
@@ -204,7 +205,7 @@ Level1 = {
 					assetId = "radar",
 					animated = true,
 					numFrames = 8,
-					animationSpeed = 90,
+					animationSpeed = 180,
 					hasDirections = false,
 					isFixed = true
 				}
