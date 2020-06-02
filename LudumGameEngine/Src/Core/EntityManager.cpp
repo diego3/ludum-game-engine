@@ -33,6 +33,9 @@ Entity* EntityManager::FindEntityByName(std::string name) {
 Entity* EntityManager::Instantiate(std::string name, LayerType layer) {
 	Entity* e = new Entity(this, name, layer);
 
+	Entity* proto = FindEntityByName(name);
+	TransformComponent* transform = proto->GetComponent<TransformComponent>();
+
 
 	return e;
 }

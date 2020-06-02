@@ -213,5 +213,11 @@
     <ClInclude Include="Src\Components\ProjectileComponent.h">
       <Filter>Src\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Core\CameraShake.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\Projectile.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

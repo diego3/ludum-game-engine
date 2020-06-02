@@ -90,8 +90,8 @@ public:
 			int ax = source.w * (static_cast<int>(SDL_GetTicks() / animationSpeed) % numFrames);
 			//std::cout << "ax = " << ax << std::endl;
 			source.x = ax;
+			source.y = animationIndex * transform->height;
 		}
-		source.y = animationIndex * transform->height;
 
 		int camerax = isFixed ? 0 : Game::camera.x;
 		int cameray = isFixed ? 0 : Game::camera.y;

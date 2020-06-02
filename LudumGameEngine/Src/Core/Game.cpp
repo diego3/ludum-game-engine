@@ -29,6 +29,7 @@ extern "C" {
 #include "../Components/CameraShakeComponent.h"
 #include "../Components/BoxColliderComponent.h"
 #include "../Components/ProjectileComponent.h"
+#include "../Components/RotationFollowComponent.h"
 
 #ifdef _WIN32
 #pragma comment(lib, "Libs/SDL2_net-2.0.1/lib/x86/SDL2_net.lib")
@@ -237,14 +238,19 @@ void Game::LoadLevel(int levelNumber) {
 		sol::optional<sol::table> spriteExists = components["sprite"];
 		if (spriteExists != sol::nullopt) {
 			sol::table spriteTable = components["sprite"];
-			std::string id = spriteTable["assetId"];
+			std::string assetId = spriteTable["assetId"];
 			int numFrames = static_cast<int>(spriteTable["numFrames"]);
 			int animationSpeed = static_cast<int>(spriteTable["animationSpeed"]);
 			bool hasDirections = spriteTable["hasDirections"];
 			bool isFixed = spriteTable["isFixed"];
-			
-			entity.AddComponent<SpriteComponent>(id, numFrames, animationSpeed, 
-				hasDirections, isFixed);
+			bool isAnimated = spriteTable["animated"];
+			if (isAnimated) {
+				entity.AddComponent<SpriteComponent>(assetId, numFrames, animationSpeed,
+					hasDirections, isFixed);
+			}
+			else {
+				entity.AddComponent<SpriteComponent>(assetId);
+			}
 		}
 
 		//BoxColliderComponent
@@ -276,7 +282,16 @@ void Game::LoadLevel(int levelNumber) {
 			int height = projectileTable["height"];
 			int scale = projectileTable["scale"];
 			int duration = projectileTable["duration"];
-			entity.AddComponent<ProjectileComponent>(projectileAssetId, speed, width, height, scale, duration);
+			int pool = projectileTable["pool"];
+			entity.AddComponent<ProjectileComponent>(projectileAssetId, speed, width, height, scale, duration, pool);
+		}
+
+		// Rotation Component
+		sol::optional<sol::table> rotationExists = components["rotation"];
+		if (rotationExists != sol::nullopt) {
+			sol::table ratationTable = components["rotation"];
+			
+			entity.AddComponent<RotationFollowComponent>();
 		}
 
 		// MOVE THIS TO SCRIPT COMPONENT and attach it to the player entity
@@ -288,11 +303,11 @@ void Game::LoadLevel(int levelNumber) {
 		}
 		
 		//CameraShakeComponent
-		sol::optional<sol::table> cameraShakeExists = components["cameraShake"];
-		if (cameraShakeExists != sol::nullopt) {
-			sol::table shakeConfig = components["cameraShake"];
-			entity.AddComponent<CameraShakeComponent>(shakeConfig["algorithm"], shakeConfig["duration"]);
-		}
+		//sol::optional<sol::table> cameraShakeExists = components["cameraShake"];
+		//if (cameraShakeExists != sol::nullopt) {
+		//	sol::table shakeConfig = components["cameraShake"];
+		//	entity.AddComponent<CameraShakeComponent>(shakeConfig["algorithm"], shakeConfig["duration"]);
+		//}
 
 
 		//Inputs
@@ -401,7 +416,7 @@ void Game::CheckCollisions() {
 	CollisionType collision = entityManager->CheckCollisions();
 	switch (collision) {
 		case CollisionType::PLAYER_ENEMY: {
-			std::cout << "CollisionType::PLAYER_ENEMY " << std::endl;
+			std::cout << "CollisionType::PLAYER_ENEMY\n " << std::endl;
 		}
 		case CollisionType::PLAYER_PROJECTILE: {
 
@@ -413,7 +428,7 @@ void Game::CheckCollisions() {
 
 		}
 		case CollisionType::NONE: {
-			std::cout << "" << std::endl;
+			//std::cout << "" << std::endl;
 		}
 	}
 }

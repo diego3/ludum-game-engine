@@ -10,6 +10,7 @@
 #include "LuaScriptComponent.h"
 #include "../../Libs/glm/glm/ext/vector_float2.hpp"
 #include "ProjectileComponent.h"
+#include "CameraShakeComponent.h"
 
 class KeyboardControlComponent : public Component {
 public:
@@ -22,6 +23,7 @@ public:
 	SpriteComponent* sprite;
 	//LuaScriptComponent* luaScript;
 	ProjectileComponent* bullet;
+	CameraShakeComponent* camShake;
 
 	int speed = 150;
 
@@ -51,7 +53,7 @@ public:
 		//luaScript = owner->GetComponent<LuaScriptComponent>();
 		bullet = owner->GetComponent<ProjectileComponent>();
 
-
+		camShake = new CameraShakeComponent(1, 15);
 	}
 
 	void Update(float deltaTime) override {
@@ -81,7 +83,7 @@ public:
 
 				//Entity* projectile = Instantiate("projectile");
 
-				bullet->playing = true;
+				bullet->Play = true;
 			}
 		}
 		if (Game::event.type == SDL_KEYUP) {
@@ -99,11 +101,17 @@ public:
 				//transform->velocity -= glm::vec2(speed/10, 0);
 			}
 			if (keyCode.compare(this->shootKey) == 0) {
-
+				//bullet->Play = false;
 			}
 		}
+
+		camShake->Update(deltaTime);
 	}
 
+
+	void Destroy() {
+		delete camShake;
+	}
 
 	std::string GetSDLKeyStringCode(std::string val) {
 		if (keycodes.count(val) > 0) {

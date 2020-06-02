@@ -8,6 +8,7 @@ Level1 = {
 		[5] = {type="texture", id="explosion2", file="Assets/images/Explosion-1152x96.png"},
 		[6] = {type="texture", id="boundingBox", file="Assets/images/collision-texture.png"},
 		[7] = {type="texture", id="projectile1", file="Assets/images/bullet-enemy.png"},
+		[8] = {type="texture", id="turret2", file="Assets/ground_shaker/Weapons/turret_02_mk1.png"},
 	},
 	layers = {
 		TILE_LAYER = 0,
@@ -39,10 +40,6 @@ Level1 = {
 					rotate = 0
 				},
 				camera = {},
-				cameraShake = {
-					algorithm = 2,
-					duration = 15
-				},
 				collider = { 
 					tag = "PLAYER", 
 					boundingAssetId = "boundingBox", 
@@ -59,14 +56,15 @@ Level1 = {
 					hasDirections = true,
 					isFixed = false
 				},
-				projectile = {
+				--[[projectile = {
 					assetId="projectile1",
 					speed = 800,
 					width = 4,
 					height= 4,
 					scale = 3,
-					duration = 60*2 -- 2 frames
-				},
+					duration = 60, -- 2 frames
+					pool = 10
+				},--]]
 				input = {
 					keyboard = {
 						up = "up",
@@ -133,52 +131,42 @@ Level1 = {
 			}
 		},
 		[3] = {
-			name = "explosion3",
+			name = "turret1",
 			layer = 1, -- vegetation layer
-			playOnAwake = false,
 			components = {
 				transform = {
-					position ={ x = 800, y = 400},
+					position = {x = 800, y = 600},
 					velocity = {x = 0,y = 0},
-					width = 96,
-					height= 96,
-					scale = 10,
+					width = 128,
+					height= 128,
+					scale = 1,
 					rotate = 0
 				},
 				sprite = {
-					assetId = "explosion2",
-					animated = true,
-					numFrames = 12,
-					animationSpeed = 45,
-					hasDirections = false,
-					isFixed = false
+					assetId = "turret2",
+					animated = false
 				}
 			}
 		},
 		[4] = {
-			name = "explosion4",
+			name = "turret2",
 			layer = 1, -- vegetation layer
-			playOnAwake = false,
 			components = {
 				transform = {
-					position = { x = 1200, y = 600},
+					position = {x = 600, y = 600},
 					velocity = {x = 0,y = 0},
-					width = 96,
-					height= 96,
-					scale = 6,
+					width = 128,
+					height= 128,
+					scale = 1,
 					rotate = 0
 				},
 				sprite = {
-					assetId = "explosion2",
-					animated = true,
-					numFrames = 12,
-					animationSpeed = 90,
-					hasDirections = false,
-					isFixed = false
+					assetId = "turret2",
+					animated = false
 				}
 			}
 		},
-		--[[[5] = {
+		--[[[4] = {
 			name="projectile",
 			layer=4, -- PROJECTILE_LAYER
 			components = {

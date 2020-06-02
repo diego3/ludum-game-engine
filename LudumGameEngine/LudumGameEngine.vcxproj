@@ -197,6 +197,7 @@
     <ClInclude Include="Src\Components\TransformComponent.h" />
     <ClInclude Include="Src\Core\Animation.h" />
     <ClInclude Include="Src\Core\AssetManager.h" />
+    <ClInclude Include="Src\Core\CameraShake.h" />
     <ClInclude Include="Src\Core\Collision.h" />
     <ClInclude Include="Src\Core\Component.h" />
     <ClInclude Include="Src\Core\Constants.h" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Src\Core\Game.h" />
     <ClInclude Include="Src\Core\LuaManager.h" />
     <ClInclude Include="Src\Core\Map.h" />
+    <ClInclude Include="Src\Core\Projectile.h" />
     <ClInclude Include="Src\Core\TextureManager.h" />
     <ClInclude Include="Src\Decoupling\EventManager.h" />
     <ClInclude Include="Src\Editor\SpriteAnimationEditor.h" />
