@@ -9,6 +9,7 @@
 #include "Src/Editor/TileMapEditor.h"
 #include "Src/Networking/ServerTcpChat.h"
 #include "Src/Networking/ClientTcpChat.h"
+#include "Src/Editor/TestEditor.h"
 
 using namespace std;
 
@@ -58,6 +59,11 @@ void ChatClientApplication() {
 	delete client;
 }
 
+void TestApplication() {
+	editor2::TestEditor* teste = new editor2::TestEditor();
+	teste->Initialize();
+	delete teste;
+}
 
 int main(int argc, char* args[])
 {
@@ -65,8 +71,8 @@ int main(int argc, char* args[])
 	
 	//TileMapApplication();
 	//ChatClientApplication();
-	GameEngineApplication();
-	
+	//GameEngineApplication();
+	TestApplication();
 
 
 	return 0;

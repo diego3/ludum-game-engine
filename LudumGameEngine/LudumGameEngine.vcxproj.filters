@@ -70,6 +70,9 @@
     <ClCompile Include="Src\Core\Collision.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Core\InputManager.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />
@@ -96,6 +99,9 @@
     </None>
     <None Include="Src\OpenGL\vertexShader.vs">
       <Filter>Src\OpenGL</Filter>
+    </None>
+    <None Include="Src\Editor\AbstractEditor">
+      <Filter>Src\Editor</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +227,12 @@
     </ClInclude>
     <ClInclude Include="Src\Components\RotationFollowComponent.h">
       <Filter>Src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\InputManager.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Editor\TestEditor.h">
+      <Filter>Src\Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

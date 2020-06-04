@@ -19,6 +19,7 @@ extern "C" {
 #include "EntityManager.h"
 #include "AssetManager.h"
 //#include "LuaManager.h"
+#include "InputManager.h"
 #include "Map.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
@@ -47,6 +48,8 @@ EntityManager* Game::entityManager = new EntityManager();;
 SDL_Renderer* Game::renderer;
 AssetManager* Game::assetManager; // new AssetManager(&entityManager)
 SDL_Event Game::event;
+InputManager* Game::inputManager;
+
 //LuaManager* luaManager;
 SDL_Rect Game::camera = {0,0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
@@ -146,6 +149,7 @@ bool Game::Initialize()
 		return false;
 	}
 
+	Game::inputManager = new InputManager();
 	Game::assetManager = new AssetManager(entityManager);
 	
 	LoadLevel(loadLevel);
@@ -364,6 +368,8 @@ void Game::ProcessInput()
 			break;
 		}
 	}
+
+	inputManager->ProcessInput();
 }
 
 void Game::Render()
@@ -448,6 +454,7 @@ void Game::Destroy()
 
 	delete assetManager;
 	delete entityManager;
+	delete inputManager;
 	//delete luaManager;
 	SDL_Quit();
 }

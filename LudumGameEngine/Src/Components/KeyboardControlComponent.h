@@ -14,11 +14,11 @@
 
 class KeyboardControlComponent : public Component {
 public:
-	std::string upKey;
-	std::string downKey;
-	std::string leftKey;
-	std::string rightKey;
-	std::string shootKey;
+	//std::string upKey;
+	//std::string downKey;
+	///std::string leftKey;
+	//std::string rightKey;
+	//std::string shootKey;
 	TransformComponent* transform;
 	SpriteComponent* sprite;
 	//LuaScriptComponent* luaScript;
@@ -33,18 +33,12 @@ public:
 	
 	KeyboardControlComponent(std::string up, std::string down, std::string left,
 		std::string right, std::string shoot) {
-		keycodes.emplace("up", "1073741906");
-		keycodes.emplace("down", "1073741905");
-		keycodes.emplace("left", "1073741904");
-		keycodes.emplace("right", "1073741903");
-		keycodes.emplace("p", "112");
-		keycodes.emplace("space", "32");
-
-		this->upKey = GetSDLKeyStringCode(up);
-		this->downKey = GetSDLKeyStringCode(down);
-		this->leftKey = GetSDLKeyStringCode(left);
-		this->rightKey = GetSDLKeyStringCode(right);
-		this->shootKey = GetSDLKeyStringCode(shoot);
+		
+		//this->upKey = GetSDLKeyStringCode(up);
+		//this->downKey = GetSDLKeyStringCode(down);
+		//this->leftKey = GetSDLKeyStringCode(left);
+		//this->rightKey = GetSDLKeyStringCode(right);
+		//this->shootKey = GetSDLKeyStringCode(shoot);
 	}
 
 	void Initialize() override {
@@ -57,7 +51,30 @@ public:
 	}
 
 	void Update(float deltaTime) override {
-		if (Game::event.type == SDL_KEYDOWN) {
+		//return;
+
+		if (Game::inputManager->IsRight) {
+			transform->velocity += glm::vec2(speed, 0) * deltaTime;
+			sprite->Play("rightAnim");
+		}
+		if (Game::inputManager->IsLeft) {
+			transform->velocity += glm::vec2(-speed, 0) * deltaTime;
+			sprite->Play("leftAnim");
+		}
+		if (Game::inputManager->IsUp) {
+			transform->velocity += glm::vec2(0, -speed) * deltaTime;
+			sprite->Play("upAnim");
+		}
+		if (Game::inputManager->IsDown) {
+			transform->velocity += glm::vec2(0, speed) * deltaTime;
+			sprite->Play("downAnim");
+		}
+
+		camShake->Update(deltaTime);
+	}
+
+	void SDLEventHandler() {
+		/*if (Game::event.type == SDL_KEYDOWN) {
 			std::string keyCode = std::to_string(Game::event.key.keysym.sym);
 
 			if (keyCode.compare(this->upKey) == 0) {
@@ -103,21 +120,12 @@ public:
 			if (keyCode.compare(this->shootKey) == 0) {
 				//bullet->Play = false;
 			}
-		}
-
-		camShake->Update(deltaTime);
+		}*/
 	}
 
 
 	void Destroy() {
 		delete camShake;
-	}
-
-	std::string GetSDLKeyStringCode(std::string val) {
-		if (keycodes.count(val) > 0) {
-			return keycodes[val];
-		}
-		return std::to_string(static_cast<int>(val[0]));
 	}
 
 };

@@ -163,6 +163,7 @@
     <ClCompile Include="Src\Core\Entity.cpp" />
     <ClCompile Include="Src\Core\EntityManager.cpp" />
     <ClCompile Include="Src\Core\Game.cpp" />
+    <ClCompile Include="Src\Core\InputManager.cpp" />
     <ClCompile Include="Src\Core\LuaManager.cpp" />
     <ClCompile Include="Src\Core\Map.cpp" />
     <ClCompile Include="Src\Core\TextureManager.cpp" />
@@ -176,6 +177,7 @@
     <None Include="Scripts\Level1.lua" />
     <None Include="Scripts\playerControl.lua" />
     <None Include="Scripts\prototype.lua" />
+    <None Include="Src\Editor\AbstractEditor" />
     <None Include="Src\OpenGL\fragmentShader.fs" />
     <None Include="Src\OpenGL\vertexShader.vs" />
   </ItemGroup>
@@ -205,6 +207,7 @@
     <ClInclude Include="Src\Core\Entity.h" />
     <ClInclude Include="Src\Core\EntityManager.h" />
     <ClInclude Include="Src\Core\Game.h" />
+    <ClInclude Include="Src\Core\InputManager.h" />
     <ClInclude Include="Src\Core\LuaManager.h" />
     <ClInclude Include="Src\Core\Map.h" />
     <ClInclude Include="Src\Core\Projectile.h" />
@@ -212,6 +215,7 @@
     <ClInclude Include="Src\Decoupling\EventManager.h" />
     <ClInclude Include="Src\Editor\SpriteAnimationEditor.h" />
     <ClInclude Include="Src\Editor\SpriteEditor.h" />
+    <ClInclude Include="Src\Editor\TestEditor.h" />
     <ClInclude Include="Src\Editor\Tile.h" />
     <ClInclude Include="Src\Editor\TileGrid.h" />
     <ClInclude Include="Src\Editor\TileMapEditor.h" />

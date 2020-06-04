@@ -38,29 +38,26 @@ public:
 	// https://stackoverflow.com/questions/31064234/find-the-angle-between-two-vectors-from-an-arbitrary-origin
 	void Update(float deltaTime) override {
 		if (!target) return;
-		contador -= 1.0f;
-
-		//sprite->destination.x = glm::cos(glm::radians(contador)) * speed;
-		//sprite->destination.y = glm::sin(glm::radians(contador)) * speed;
-
-		//glm::vec2 posNorm = glm::normalize(transform->position);
-		//glm::vec2 tarNorm = glm::normalize(target->position);
+		contador += 1.0f;
+		//printf("contador %2.f\n", contador);
 		glm::vec2 direction = target->position - transform->position;
 		glm::vec2 dirNormal = glm::normalize(direction);
 		float angle = Angle(glm::vec2(0, 1), dirNormal);
 	
-		//float angle = glm::angle(target->position, transform->position);
-		//float angle = glm::orientedAngle(target->position, transform->position);
-		
-		std::cout << "angle = " << glm::degrees(angle) << std::endl;
-		//sprite->rotation = glm::degrees(angle);
+		//std::cout << "angle = " << glm::degrees(angle) << std::endl;
+		//sprite->rotation = contador;
+		float dot = glm::dot(target->position, transform->position);
+		printf("dot %2.f\n", dot);
+		glm::vec2 rotation = Rotate(glm::vec2(0, 1), glm::radians(contador));
+		//sprite->destination.x = (int)rotation.x;
+		//sprite->destination.y = (int)rotation.y;
+		//printf("%d %d\n", rotation.x, rotation.y);
 
-		glm::vec2 rotation = Rotate(glm::vec2(0, 1), angle);
-		sprite->source.x = (int)rotation.x;
-		sprite->source.y = (int)rotation.y;
+		//transform->position += rotation * 0.1f * deltaTime;
+		transform->position += rotation;// movimento circular
 
-		if (contador <= 0) {
-			contador = intervalo;
+		if (contador >= intervalo) {
+			contador = 0;
 		}
 	}
 

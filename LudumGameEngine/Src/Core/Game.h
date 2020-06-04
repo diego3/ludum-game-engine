@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include "AssetManager.h"
+#include "InputManager.h"
 
 class AssetManager;
 
@@ -20,6 +21,7 @@ public:
 	static SDL_Event event;
 	static EntityManager* entityManager;
 	static SDL_Rect camera;
+	static InputManager* inputManager;
 	
 	static bool showPlayerPositionDebug;
 	static bool showCollisionsDebug;
