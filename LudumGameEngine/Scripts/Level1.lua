@@ -20,7 +20,7 @@ Level1 = {
 	},
 	map = {
 		assetId = "tile-map",
-		file = "Assets/tilemaps/jungle.map",
+		file = "Assets/tilemaps/save-test.map",
 		scale = 2,
 		tileSize = 32,
 		mapSizeX = 25,

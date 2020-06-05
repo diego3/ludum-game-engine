@@ -336,28 +336,28 @@ namespace editor {
 								gridPositionX--;
 								rectSource.x -= spriteSize;
 							}
-							printf("x %d\n", gridPositionX);
+							//printf("x %d\n", gridPositionX);
 						}
 						if (event.key.keysym.sym == SDLK_RIGHT) {
 							if (gridPositionX < gridMaxX-1) {//until 9 (-1 becouse we start at 0 index)
 								gridPositionX++;
 								rectSource.x += spriteSize;
 							}
-							printf("x %d\n", gridPositionX);
+							//printf("x %d\n", gridPositionX);
 						}
 						if (event.key.keysym.sym == SDLK_UP) {
 							if (gridPositionY > 0) {
 								gridPositionY--;
 								rectSource.y -= spriteSize;
 							}
-							printf("y %d\n", gridPositionY);
+							//printf("y %d\n", gridPositionY);
 						}
 						if (event.key.keysym.sym == SDLK_DOWN) {
 							if (gridPositionY < (gridMaxY-1)) {
 								gridPositionY++;
 								rectSource.y += spriteSize;
 							}
-							printf("y %d\n", gridPositionY);
+							//printf("y %d\n", gridPositionY);
 						}
 						if (event.key.keysym.sym == SDLK_LCTRL && event.key.state == SDL_PRESSED) {
 							IsCRTLDown = true;

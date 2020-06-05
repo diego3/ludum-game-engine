@@ -50,6 +50,11 @@ namespace editor {
 			for (int i = 0; i < gridSizeY; i++) {
 				for (int j = 0; j < gridSizeX; j++) {
 					Tile* t = new Tile(0, 0, 400 + (j * rectSize), (i * rectSize));
+					
+					//TODO remove, just for tests (starts all blue)
+					t->IsSelected = true;
+					t->index = 0;
+
 					tiles.push_back(t);
 				}
 			}
@@ -59,15 +64,22 @@ namespace editor {
 
 		void Save(std::string filePath) {
 			std::string str = "";
+			std::string comma = "";
 			int x = 0;
 			for (Tile* tile : tiles) {
-				str += std::to_string(tile->index)+",";
-				if (x == gridSizeX) {
+				if (tile->index < 10) {
+					str += "0";
+				}
+				
+				str += std::to_string(tile->index);
+				
+				if (x != (gridSizeX-1)) {
+					str += ",";
+					x++;
+				}
+				else if (x == (gridSizeX-1)) {
 					str += "\n";
 					x = 0;
-				}
-				else {
-					x++;
 				}
 			}
 
@@ -78,10 +90,15 @@ namespace editor {
 		}
 
 		static std::vector<MapCoords*> Load(std::string filePath, int mapSizeX, int mapSizeY, int spriteSize, int scale) {
+			std::vector<MapCoords*> result;
+
 			std::fstream file;
 			file.open(filePath);
+			if (!file.is_open()) {
+				printf("Could not open file: %s\n", filePath);
+				return result;
+			}
 
-			std::vector<MapCoords*> result;
 			// rows
 			for (int y = 0; y < mapSizeY; y++) {
 				// columns
