@@ -69,10 +69,10 @@ int main(int argc, char* args[])
 {
 	std::cout << "[C++] Main..." << std::endl;
 	
-	//TileMapApplication();
+	TileMapApplication();
 	//ChatClientApplication();
 	//GameEngineApplication();
-	TestApplication();
+	//TestApplication();
 
 
 	return 0;

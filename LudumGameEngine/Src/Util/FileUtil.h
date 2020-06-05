@@ -20,4 +20,9 @@ public:
 		file.close();
 		return content;
 	}
+
+	static void WriteFile(std::string filePath, std::string content) {
+		std::ofstream out;
+
+	}
 };

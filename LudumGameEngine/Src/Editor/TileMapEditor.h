@@ -28,33 +28,107 @@ namespace editor {
 	const int FRAME_RATE = 1000 / FPS;
 	const unsigned int WINDOW_WIDTH = 1200;
 	const unsigned int WINDOW_HEIGHT = 600;
+	const char* saveMapFilePath = "Assets/tilemaps/save-test.map";
 	float lastFrame = 0.0f;
 	bool isRunning = true;
 	bool IS_MOUSE_PRESSED = false;
+	bool IsCRTLDown = false;
 
 	int mouseX = 0;
 	int mouseY = 0;
 	int mouseClickPointX = 0;
 	int mouseClickPointY = 0;
+
 	bool isLeft = false;
 	bool isRight = false;
 	bool isUp = false;
 	bool isDown = false;
+
 	int gridPosition = 0;
+
 
 	int timer = 60;
 
-	bool printedGridPositions = false;
+	class SpriteRectNav {
+		int curIndex;
+		int size;
+		SDL_Rect pos;
+		SDL_Renderer* renderer;
 
-	
-	class Text {
-	public:
-		SDL_Rect source;
-		SDL_Rect destination;
-
+		SpriteRectNav(SDL_Renderer* render, int index, int size) {
+			renderer = render;
+			curIndex = index;
+			this->size = size;
+		}
+		
+		void Render() {
+			SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+			SDL_RenderDrawRect(renderer, &pos);
+		}
 	};
 
 
+	class SpriteSheet {
+	public:
+		int index = 0;
+		SDL_Texture* texture;
+		SDL_Rect source;
+		SDL_Rect destination;
+		SDL_RendererFlip flip = SDL_FLIP_NONE;
+		SDL_Renderer* renderer;// *****
+
+		int width;
+		int height;
+		int tileSize;
+		int queryWidth;
+		int queryHeight;
+
+		bool loadTextureError = false;
+		std::string loadError;
+
+		SpriteSheet(SDL_Renderer* render, std::string textureFilePath, int width, int height, int tileSize) {
+			this->renderer = render;
+			this->width = width;
+			this->height = height;
+			this->tileSize = tileSize;
+			loadError = "";
+			texture = LoadTexture(textureFilePath);
+			if (texture) {
+				SDL_QueryTexture(texture, NULL, NULL, &queryWidth, &queryHeight);
+				printf("spritesheet {%d, %d}\n", queryWidth, queryHeight);
+				source = { 0,0, width, height };
+				destination = { 0,0, width,height };
+			}
+		}
+
+		~SpriteSheet() {
+			if (texture) {
+				SDL_DestroyTexture(texture);
+			}
+		}
+
+		void Render() {
+			if (!texture) return;
+			SDL_RenderCopyEx(renderer, texture, &source, &destination, 0.0f, NULL, flip);
+		}
+
+		SDL_Texture* LoadTexture(std::string fileName)
+		{
+			SDL_Surface* surface = IMG_Load(fileName.c_str());
+			if (!surface) {
+				printf("IMG_Load: %s\n", IMG_GetError());
+				loadError = IMG_GetError();
+				loadTextureError = true;
+				return NULL;
+			}
+			SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+			SDL_FreeSurface(surface);//*******
+			return texture;
+		}
+		
+	};
+
+	
 
 	class TileMapEditor {
 	public:
@@ -62,8 +136,6 @@ namespace editor {
 		SDL_Renderer* renderer;
 		SDL_Rect source;
 		SDL_Rect destination;
-		SDL_RendererFlip flip = SDL_FLIP_NONE;
-		SDL_Texture* texture;
 		int spriteSize = 32;
 		SDL_Rect rectSource;
 
@@ -76,12 +148,17 @@ namespace editor {
 		UITextLabel* tilesLabel;
 		UITextLabel* tilesQtd;
 		
+		SpriteSheet* sprite;
+
 		int elapsedSeconds = 0;
 
 		SDL_Joystick* joy;
 		SDL_GameController* controller;
 
 		~TileMapEditor() {
+			if (sprite) {
+				delete sprite;
+			}
 			if (grid) {
 				delete grid;
 			}
@@ -103,9 +180,7 @@ namespace editor {
 				SDL_GameControllerClose(controller);
 			}
 
-			if (texture) {
-				SDL_DestroyTexture(texture);
-			}
+			
 			if (renderer) {
 				SDL_DestroyRenderer(renderer);
 			}
@@ -173,16 +248,20 @@ namespace editor {
 
 			UIArea = { 0, 0, 400, 600 };
 
-			texture = LoadTexture("Assets/images/jungle.png");//320x96
-			int spriteW;
-			int spriteH;
-			SDL_QueryTexture(texture, NULL, NULL, &spriteW, &spriteH);
-			//printf("spritesheet {%d, %d}\n", spriteW, spriteH);
-			source = { 0,0, 320, 96 };
-			destination = { 0,0,320,96 };
-			rectSource = { source.x, source.y, spriteSize, spriteSize };
 
-			JoystickInitialization();
+			sprite = new SpriteSheet(renderer, "Assets/images/jungle.png", 320, 96, spriteSize);
+			//texture = LoadTexture("Assets/images/jungle.png");//320x96
+			//int spriteW;
+			//int spriteH;
+			//SDL_QueryTexture(texture, NULL, NULL, &spriteW, &spriteH);
+			//printf("spritesheet {%d, %d}\n", spriteW, spriteH);
+			//source = { 0,0, 320, 96 };
+			//destination = { 0,0,320,96 };
+			rectSource = {sprite->source.x, sprite->source.y, spriteSize, spriteSize };
+
+
+
+			//JoystickInitialization();
 
 			Looping();
 
@@ -248,14 +327,11 @@ namespace editor {
 		}
 
 		void Update(float deltaTime) {
-			if (isRight) { printf("isRight true\n"); }
-			if (isLeft) { printf("isLeft true\n"); }
-
-
+			
 			if (timer == 60) {
 				elapsedSeconds++;
 
-				text1->SetText(std::to_string(elapsedSeconds));
+				text1->SetVal(elapsedSeconds);
 			}
 
 			//std::cout << "grid " << gridPosition << std::endl;
@@ -283,7 +359,7 @@ namespace editor {
 			//SDL_RenderDrawLine(renderer, 350, 300, 350, 350);
 
 			// Tiles sprite sheet source
-			SDL_RenderCopyEx(renderer, texture, &source, &destination, 0.0f, NULL, flip);
+			sprite->Render();
 
 
 			grid->Render();
@@ -291,7 +367,7 @@ namespace editor {
 
 			// draw each tile
 			for (Tile tile : tiles) {
-				SDL_RenderCopyEx(renderer, texture, &tile.source, &tile.destination, 0.0f, NULL, flip);
+				SDL_RenderCopyEx(renderer, sprite->texture, &tile.source, &tile.destination, 0.0f, NULL, SDL_FLIP_NONE);
 			}
 
 			text1->Render();
@@ -327,36 +403,45 @@ namespace editor {
 						if (event.key.keysym.sym == SDLK_LEFT) {
 							gridPosition--;
 							rectSource.x -= spriteSize;
-							isLeft = true;
 						}
 						if (event.key.keysym.sym == SDLK_RIGHT) {
 							gridPosition++;
 							rectSource.x += spriteSize;
-							isRight = true;
 						}
 						if (event.key.keysym.sym == SDLK_UP) {
 							rectSource.y -= spriteSize;
-							isUp = true;
 						}
 						if (event.key.keysym.sym == SDLK_DOWN) {
 							rectSource.y += spriteSize;
-							isDown = true;
 						}
+						if (event.key.keysym.sym == SDLK_LCTRL && event.key.state == SDL_PRESSED) {
+							IsCRTLDown = true;
+						}
+						
+						if (event.key.keysym.sym == SDLK_s && IsCRTLDown) {
+							printf("Saving...");
+							SaveMap(saveMapFilePath);
+						}
+						
 					}
 					case SDL_KEYUP: {
 						if (event.key.keysym.sym == SDLK_LEFT) {
-							isLeft = false;
+							
 						}
 						if (event.key.keysym.sym == SDLK_RIGHT) {
-							isRight = false;
+							
 						}
 						if (event.key.keysym.sym == SDLK_UP) {
-							isUp = false;
+							
 						}
 						if (event.key.keysym.sym == SDLK_DOWN) {
-							isDown = false;
+							
+						}
+						if (event.key.keysym.sym == SDLK_LCTRL && event.key.state != SDL_PRESSED) {
+							IsCRTLDown = false;
 						}
 					}
+					
 					case SDL_MOUSEBUTTONDOWN:
 					{
 						if (event.button.button == SDL_BUTTON_LEFT
@@ -393,74 +478,78 @@ namespace editor {
 
 					case SDL_CONTROLLERBUTTONDOWN: {
 						if (event.cbutton.state == SDL_PRESSED) {
-							printf("*****BUTTON*****\n\n");
+							//printf("*****BUTTON*****\n\n");
 							switch (event.cbutton.button) {
 								case SDL_CONTROLLER_BUTTON_A: {
-									printf("SDL_CONTROLLER_BUTTON_A\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_A\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_B: {
-									printf("SDL_CONTROLLER_BUTTON_B\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_B\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_X: {
-									printf("SDL_CONTROLLER_BUTTON_X\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_X\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_Y: {
-									printf("SDL_CONTROLLER_BUTTON_Y\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_Y\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_BACK: {
-									printf("SDL_CONTROLLER_BUTTON_BACK\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_BACK\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_START: {
-									printf("SDL_CONTROLLER_BUTTON_START\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_START\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_GUIDE: {
-									printf("SDL_CONTROLLER_BUTTON_GUIDE\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_GUIDE\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_INVALID: {
-									printf("SDL_CONTROLLER_BUTTON_INVALID\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_INVALID\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: {
-									printf("SDL_CONTROLLER_BUTTON_LEFTSHOULDER\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_LEFTSHOULDER\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_LEFTSTICK: {
-									printf("SDL_CONTROLLER_BUTTON_LEFTSTICK\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_LEFTSTICK\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_MAX: {
-									printf("SDL_CONTROLLER_BUTTON_MAX\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_MAX\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: {
-									printf("SDL_CONTROLLER_BUTTON_RIGHTSHOULDER\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_RIGHTSHOULDER\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_RIGHTSTICK: {
-									printf("SDL_CONTROLLER_BUTTON_RIGHTSTICK\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_RIGHTSTICK\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_DPAD_DOWN: {
-									printf("SDL_CONTROLLER_BUTTON_DPAD_DOWN\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_DPAD_DOWN\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_DPAD_UP: {
-									printf("SDL_CONTROLLER_BUTTON_DPAD_UP\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_DPAD_UP\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_DPAD_LEFT: {
-									printf("SDL_CONTROLLER_BUTTON_DPAD_LEFT\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_DPAD_LEFT\n"); break;
 								}
 								case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: {
-									printf("SDL_CONTROLLER_BUTTON_DPAD_RIGHT\n"); break;
+									//printf("SDL_CONTROLLER_BUTTON_DPAD_RIGHT\n"); break;
 								}
 							}
-							printf("\n\n\n");
+							//printf("\n\n\n");
 						}
 					}
 					case SDL_CONTROLLERAXISMOTION: {
-						printf("*****AXIS*****\n\n");
-						std::cout << "caxis index: " << event.caxis.axis << std::endl;
-						std::cout << "caxis value: " << event.caxis.value << std::endl;
+						//printf("*****AXIS*****\n\n");
+						//std::cout << "caxis index: " << event.caxis.axis << std::endl;
+						//std::cout << "caxis value: " << event.caxis.value << std::endl;
 						if (event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX) {
-							std::cout << "AXIS_LEFTX" << std::endl;
+							//std::cout << "AXIS_LEFTX" << std::endl;
 						}
 					}
 				}
 				
 			}
+
+		}
+
+		void SaveMap(const char* filePathToSave) {
 
 		}
 
@@ -487,11 +576,6 @@ namespace editor {
 			tilesQtd->SetText(std::to_string(tiles.size()));
 		}
 
-		SDL_Texture* LoadTexture(std::string fileName)
-		{
-			SDL_Surface* surface = IMG_Load(fileName.c_str());
-			SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-			return texture;
-		}
+		
 	};
 }

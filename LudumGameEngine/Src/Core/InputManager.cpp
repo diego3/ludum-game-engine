@@ -64,7 +64,22 @@ std::string InputManager::GetSDLKeyStringCode(std::string val) {
 	return std::to_string(static_cast<int>(val[0]));
 }
 
-bool InputManager::IsKeyDown(int key) {
+bool InputManager::GetButtonDown(int button) {
+
+	return false;
+}
+
+bool InputManager::GetButtonUp(int button) {
+
+	return false;
+}
+
+bool InputManager::GetKeyDown(int button) {
+
+	return false;
+}
+
+bool InputManager::GetKeyUp(int button) {
 
 	return false;
 }

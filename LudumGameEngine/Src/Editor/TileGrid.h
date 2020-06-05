@@ -31,7 +31,7 @@ namespace editor {
 			
 			for (int i = 0; i < gridSizeY; i++) {
 				for (int j = 0; j < gridSizeX; j++) {
-					SDL_Rect p1 = { 400 + (j * rectSize), (i*rectSize), rectSize, rectSize };
+					SDL_Rect p1 = { 400 + (j * rectSize), (i*rectSize), rectSize, rectSize};
 					blocks.push_back(p1);
 				}
 			}
@@ -44,11 +44,10 @@ namespace editor {
 			for (SDL_Rect rect : blocks) {
 				SDL_bool inside = SDL_PointInRect(&point, &rect);
 				if (inside == SDL_TRUE) {
-					//printf("inside: {%d, %d}\n", rect.x, rect.y);
 					return rect;
 				}
 			}
-			//printf("ZERO\n");
+			
 			SDL_Rect zero = { 0,0,0,0 };
 			return zero;
 		}

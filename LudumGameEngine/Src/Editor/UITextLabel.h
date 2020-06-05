@@ -74,6 +74,10 @@ public:
 		this->text = val;
 	}
 
+	void SetVal(int val) {
+		SetText(std::to_string(val));
+	}
+
 	std::string GetText() {
 		return this->text;
 	}

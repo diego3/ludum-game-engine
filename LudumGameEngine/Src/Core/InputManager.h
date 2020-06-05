@@ -15,8 +15,11 @@ public:
 
 	InputManager();
 
-	bool IsKeyDown(int key);
 	void ProcessInput();
+	bool GetButtonDown(int id);
+	bool GetButtonUp(int id);
+	bool GetKeyDown(int id);
+	bool GetKeyUp(int id);
 
 	std::string GetSDLKeyStringCode(std::string val);
 private:
