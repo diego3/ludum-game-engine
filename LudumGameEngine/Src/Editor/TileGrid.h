@@ -8,6 +8,20 @@
 #include "../Util/FileUtil.h"
 
 namespace editor {
+	class MapCoords {
+	public:
+		int sx;
+		int sy;
+		int dx;
+		int dy;
+		MapCoords(int sourceX, int sourceY, int destX, int destY) {
+			sx = sourceX;
+			sy = sourceY;
+			dx = destX;
+			dy = destY;
+		}
+	};
+
 	class TileGrid {
 	private:
 		std::vector<Tile*> tiles;
@@ -61,7 +75,42 @@ namespace editor {
 			std::cout << str << std::endl;
 
 			FileUtil::WriteFile(filePath, str);
+		}
 
+		static std::vector<MapCoords*> Load(std::string filePath, int mapSizeX, int mapSizeY, int spriteSize, int scale) {
+			std::fstream file;
+			file.open(filePath);
+
+			std::vector<MapCoords*> result;
+			// rows
+			for (int y = 0; y < mapSizeY; y++) {
+				// columns
+				for (int x = 0; x < mapSizeX; x++) {
+					char ch;
+					file.get(ch);
+					//int chint = atoi(&ch);
+					//std::cout << "(" << chint;
+					int sourceY = atoi(&ch) * spriteSize;
+
+					file.get(ch);
+					//chint = atoi(&ch);
+					//std::cout << chint;
+					int sourceX = atoi(&ch) * spriteSize;
+
+					int dX = x * (scale * spriteSize);
+					int dY = y * (scale * spriteSize);
+					//std::cout << ") src[" << sourceX << ", " << sourceY << "]";
+					//std::cout << " pos[" << posX << ", " << posY << "]" << std::endl;
+
+					MapCoords* coord = new MapCoords(sourceX, sourceY, dX, dY);
+					result.push_back(coord);
+					file.ignore();
+				}
+			}
+
+			file.close();
+
+			return result;
 		}
 
 		Tile* GetTileAtPosition(SDL_Point point) {

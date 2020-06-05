@@ -16,7 +16,7 @@ public:
 	glm::vec2 position;
 	std::string assetTextureId;
 
-	TileMapComponent(int sourceX, int sourceY, int x, int y, int tileSize,
+	TileMapComponent(int sourceX, int sourceY, int dx, int dy, int tileSize,
 		int tileScale, std::string textId) {
 		
 		assetTextureId = textId;
@@ -30,13 +30,13 @@ public:
 		source.w = tileSize;
 		source.h = tileSize;
 
-		destination.x = x;
-		destination.y = y;
+		destination.x = dx;
+		destination.y = dy;
 		destination.w = tileSize * tileScale;
 		destination.h = tileSize * tileScale;
 
-		position.x = static_cast<float>(x);
-		position.y = static_cast<float>(y);
+		position.x = static_cast<float>(dx);
+		position.y = static_cast<float>(dy);
 	}
 	
 	~TileMapComponent() {

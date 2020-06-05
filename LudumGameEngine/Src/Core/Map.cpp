@@ -8,6 +8,7 @@
 #include "Entity.h"
 #include "EntityManager.h"
 #include "../Components/TileMapComponent.h"
+#include "../Editor/TileGrid.h"
 
 //extern EntityManager* entityManager;
 
@@ -24,36 +25,15 @@ Map::~Map()
 
 void Map::LoadMap(std::string filePath, int mapSizeX, int mapSizeY)
 {
-	std::fstream file;
-	file.open(filePath);
-	
-	// rows
-	for (int y = 0; y < mapSizeY; y++) {
-		// columns
-		for (int x = 0; x < mapSizeX; x++) {
-			char ch;
-			file.get(ch);
-			//int chint = atoi(&ch);
-			//std::cout << "(" << chint;
-			int sourceY = atoi(&ch) * tileSize;
-
-			file.get(ch);
-			//chint = atoi(&ch);
-			//std::cout << chint;
-			int sourceX = atoi(&ch) * tileSize;
-
-			int posX = x * (scale * tileSize);
-			int posY = y * (scale * tileSize);
-			//std::cout << ") src[" << sourceX << ", " << sourceY << "]";
-			//std::cout << " pos[" << posX << ", " << posY << "]" << std::endl;
-			
-			AddTile(sourceX, sourceY, posX, posY);
-
-			file.ignore();
-		}
+	std::vector<editor::MapCoords*> coords = editor::TileGrid::Load(filePath, mapSizeX, mapSizeY, tileSize, scale);
+	if (coords.size() == 0) {
+		printf("Tile Map File was not loaded\n");
+		return;
 	}
 
-	file.close();
+	for (editor::MapCoords* coord : coords) {
+		AddTile(coord->sx, coord->sy, coord->dx, coord->dy);
+	}
 }
 
 void Map::AddTile(int sourceX, int sourceY, int posX, int posY)
