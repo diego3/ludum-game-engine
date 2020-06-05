@@ -234,5 +234,8 @@
     <ClInclude Include="Src\Editor\TestEditor.h">
       <Filter>Src\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Editor\SpriteSheet.h">
+      <Filter>Src\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

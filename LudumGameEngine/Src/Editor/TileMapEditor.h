@@ -20,7 +20,7 @@
 #include "Tile.h"
 #include "TileGrid.h"
 #include "UITextLabel.h"
-
+#include "SpriteSheet.h"
 
 namespace editor {
 
@@ -67,68 +67,6 @@ namespace editor {
 		}
 	};
 
-
-	class SpriteSheet {
-	public:
-		int index = 0;
-		SDL_Texture* texture;
-		SDL_Rect source;
-		SDL_Rect destination;
-		SDL_RendererFlip flip = SDL_FLIP_NONE;
-		SDL_Renderer* renderer;// *****
-
-		int width;
-		int height;
-		int tileSize;
-		int queryWidth;
-		int queryHeight;
-
-		bool loadTextureError = false;
-		std::string loadError;
-
-		SpriteSheet(SDL_Renderer* render, std::string textureFilePath, int width, int height, int tileSize) {
-			this->renderer = render;
-			this->width = width;
-			this->height = height;
-			this->tileSize = tileSize;
-			loadError = "";
-			texture = LoadTexture(textureFilePath);
-			if (texture) {
-				SDL_QueryTexture(texture, NULL, NULL, &queryWidth, &queryHeight);
-				printf("spritesheet {%d, %d}\n", queryWidth, queryHeight);
-				source = { 0,0, width, height };
-				destination = { 0,0, width,height };
-			}
-		}
-
-		~SpriteSheet() {
-			if (texture) {
-				SDL_DestroyTexture(texture);
-			}
-		}
-
-		void Render() {
-			if (!texture) return;
-			SDL_RenderCopyEx(renderer, texture, &source, &destination, 0.0f, NULL, flip);
-		}
-
-		SDL_Texture* LoadTexture(std::string fileName)
-		{
-			SDL_Surface* surface = IMG_Load(fileName.c_str());
-			if (!surface) {
-				printf("IMG_Load: %s\n", IMG_GetError());
-				loadError = IMG_GetError();
-				loadTextureError = true;
-				return NULL;
-			}
-			SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-			SDL_FreeSurface(surface);//*******
-			return texture;
-		}
-		
-	};
-
-	
 
 	class TileMapEditor {
 	public:
@@ -248,16 +186,9 @@ namespace editor {
 
 			UIArea = { 0, 0, 400, 600 };
 
-
 			sprite = new SpriteSheet(renderer, "Assets/images/jungle.png", 320, 96, spriteSize);
-			//texture = LoadTexture("Assets/images/jungle.png");//320x96
-			//int spriteW;
-			//int spriteH;
-			//SDL_QueryTexture(texture, NULL, NULL, &spriteW, &spriteH);
-			//printf("spritesheet {%d, %d}\n", spriteW, spriteH);
-			//source = { 0,0, 320, 96 };
-			//destination = { 0,0,320,96 };
-			rectSource = {sprite->source.x, sprite->source.y, spriteSize, spriteSize };
+			
+			rectSource = {sprite->source.x, sprite->source.y, spriteSize, spriteSize};
 
 
 
@@ -422,7 +353,6 @@ namespace editor {
 							printf("Saving...");
 							SaveMap(saveMapFilePath);
 						}
-						
 					}
 					case SDL_KEYUP: {
 						if (event.key.keysym.sym == SDLK_LEFT) {
@@ -444,8 +374,7 @@ namespace editor {
 					
 					case SDL_MOUSEBUTTONDOWN:
 					{
-						if (event.button.button == SDL_BUTTON_LEFT
-							&& event.button.state == SDL_PRESSED) {
+						if (event.button.button == SDL_BUTTON_LEFT && event.button.state == SDL_PRESSED) {
 							IS_MOUSE_PRESSED = true;
 
 							mouseClickPointX = event.button.x;
@@ -459,9 +388,7 @@ namespace editor {
 					}
 					case SDL_MOUSEBUTTONUP:
 					{
-						if (event.button.button == SDL_BUTTON_LEFT
-							&& event.button.state == SDL_RELEASED) {
-							//std::cout << "button UP" << std::endl;
+						if (event.button.button == SDL_BUTTON_LEFT && event.button.state == SDL_RELEASED) {
 							IS_MOUSE_PRESSED = false;
 						}
 					}

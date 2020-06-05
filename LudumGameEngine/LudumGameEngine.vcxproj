@@ -215,6 +215,7 @@
     <ClInclude Include="Src\Decoupling\EventManager.h" />
     <ClInclude Include="Src\Editor\SpriteAnimationEditor.h" />
     <ClInclude Include="Src\Editor\SpriteEditor.h" />
+    <ClInclude Include="Src\Editor\SpriteSheet.h" />
     <ClInclude Include="Src\Editor\TestEditor.h" />
     <ClInclude Include="Src\Editor\Tile.h" />
     <ClInclude Include="Src\Editor\TileGrid.h" />
