@@ -44,7 +44,10 @@ namespace editor {
 	bool isUp = false;
 	bool isDown = false;
 
-	int gridPosition = 0;
+	int gridPositionX = 0;
+	int gridPositionY = 0;
+	int gridMaxX = 0;
+	int gridMaxY = 0;
 
 
 	int timer = 60;
@@ -155,7 +158,7 @@ namespace editor {
 			}
 
 			
-
+			// TODO  Panel UI Component to group this text labels
 			SDL_Color textColor = { 255, 0, 0, 255 };
 			SDL_Rect textPosition = { 10, 200, 20, 100 };
 			text1 = new UITextLabel(renderer, "Assets/fonts/higher-jump.regular.ttf",
@@ -183,6 +186,9 @@ namespace editor {
 			UIArea = { 0, 0, 400, 600 };
 
 			sprite = new SpriteSheet(renderer, "Assets/images/jungle.png", 320, 96, spriteSize);
+			gridMaxX = sprite->width / spriteSize;
+			gridMaxY = sprite->height / spriteSize;
+			printf("maxes: {%d, %d}\n", gridMaxX, gridMaxY);
 
 			grid = new TileGrid(renderer, sprite, 800, 600, spriteSize);
 			if (!grid->Initialize()) {
@@ -270,7 +276,6 @@ namespace editor {
 			//printf("source {x:%d, y:%d}", source.x, source.y);
 		}
 
-
 		void Render() {
 			SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
 			SDL_RenderClear(renderer);
@@ -327,18 +332,32 @@ namespace editor {
 							break;
 						}
 						if (event.key.keysym.sym == SDLK_LEFT) {
-							gridPosition--;
-							rectSource.x -= spriteSize;
+							if (gridPositionX > 0) {
+								gridPositionX--;
+								rectSource.x -= spriteSize;
+							}
+							printf("x %d\n", gridPositionX);
 						}
 						if (event.key.keysym.sym == SDLK_RIGHT) {
-							gridPosition++;
-							rectSource.x += spriteSize;
+							if (gridPositionX < gridMaxX-1) {//until 9 (-1 becouse we start at 0 index)
+								gridPositionX++;
+								rectSource.x += spriteSize;
+							}
+							printf("x %d\n", gridPositionX);
 						}
 						if (event.key.keysym.sym == SDLK_UP) {
-							rectSource.y -= spriteSize;
+							if (gridPositionY > 0) {
+								gridPositionY--;
+								rectSource.y -= spriteSize;
+							}
+							printf("y %d\n", gridPositionY);
 						}
 						if (event.key.keysym.sym == SDLK_DOWN) {
-							rectSource.y += spriteSize;
+							if (gridPositionY < (gridMaxY-1)) {
+								gridPositionY++;
+								rectSource.y += spriteSize;
+							}
+							printf("y %d\n", gridPositionY);
 						}
 						if (event.key.keysym.sym == SDLK_LCTRL && event.key.state == SDL_PRESSED) {
 							IsCRTLDown = true;
@@ -346,7 +365,7 @@ namespace editor {
 						
 						if (event.key.keysym.sym == SDLK_s && IsCRTLDown) {
 							printf("Saving...");
-							SaveMap(saveMapFilePath);
+							grid->Save(saveMapFilePath);
 						}
 					}
 					case SDL_KEYUP: {
@@ -471,10 +490,6 @@ namespace editor {
 
 		}
 
-		void SaveMap(const char* filePathToSave) {
-
-		}
-
 		void AddTile(int x, int y) {
 			SDL_Rect mousePos = { x , y , spriteSize, spriteSize };
 			bool intersect = Collision::CheckRectangleCollision(mousePos, UIArea);
@@ -486,7 +501,7 @@ namespace editor {
 			int tileX = x - (spriteSize / 2);
 			int tileY = y - (spriteSize / 2);
 			SDL_Point clicked = {x, y};
-			Tile* tile = grid->GetBlockPosition(clicked);
+			Tile* tile = grid->GetTileAtPosition(clicked);
 			if (!tile) {
 				return;
 			}
@@ -497,9 +512,14 @@ namespace editor {
 
 			tile->IsSelected = true;
 
-			//Tile tile(rectSource.x, rectSource.y, tileX, tileY);
 			tile->source.x = rectSource.x;
 			tile->source.y = rectSource.y;
+
+			int calculatedIndex = gridPositionX + ((gridPositionY * gridMaxX));
+
+			//printf("{%d, %d} = %d\n", gridPositionX, gridPositionY, calc);
+
+			tile->index = calculatedIndex;
 
 			tilesQtd->SetVal(usedBlocks);
 		}

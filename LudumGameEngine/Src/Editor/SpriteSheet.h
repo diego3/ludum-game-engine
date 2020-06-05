@@ -12,7 +12,6 @@ public:
 	SDL_Texture* texture;
 	SDL_Rect source;
 	SDL_Rect destination;
-	SDL_RendererFlip flip = SDL_FLIP_NONE;
 	SDL_Renderer* renderer;// *****
 
 	int width;
@@ -47,7 +46,7 @@ public:
 
 	void Render() {
 		if (!texture) return;
-		SDL_RenderCopyEx(renderer, texture, &source, &destination, 0.0f, NULL, flip);
+		SDL_RenderCopyEx(renderer, texture, &source, &destination, 0.0f, NULL, SDL_FLIP_NONE);
 	}
 
 	SDL_Texture* LoadTexture(std::string fileName)

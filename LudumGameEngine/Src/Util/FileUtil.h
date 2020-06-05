@@ -23,6 +23,8 @@ public:
 
 	static void WriteFile(std::string filePath, std::string content) {
 		std::ofstream out;
-
+		out.open(filePath);
+		out << content;
+		out.close();
 	}
 };

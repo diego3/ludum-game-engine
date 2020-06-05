@@ -5,6 +5,7 @@
 
 #include "Tile.h"
 #include "SpriteSheet.h"
+#include "../Util/FileUtil.h"
 
 namespace editor {
 	class TileGrid {
@@ -34,7 +35,6 @@ namespace editor {
 			
 			for (int i = 0; i < gridSizeY; i++) {
 				for (int j = 0; j < gridSizeX; j++) {
-					//SDL_Rect p1 = { 400 + (j * rectSize), (i*rectSize), rectSize, rectSize};
 					Tile* t = new Tile(0, 0, 400 + (j * rectSize), (i * rectSize));
 					tiles.push_back(t);
 				}
@@ -43,8 +43,28 @@ namespace editor {
 			return true;
 		}
 
+		void Save(std::string filePath) {
+			std::string str = "";
+			int x = 0;
+			for (Tile* tile : tiles) {
+				str += std::to_string(tile->index)+",";
+				if (x == gridSizeX) {
+					str += "\n";
+					x = 0;
+				}
+				else {
+					x++;
+				}
+			}
 
-		Tile* GetBlockPosition(SDL_Point point) {
+			std::cout << "map:" << std::endl;
+			std::cout << str << std::endl;
+
+			FileUtil::WriteFile(filePath, str);
+
+		}
+
+		Tile* GetTileAtPosition(SDL_Point point) {
 			for (Tile* tile : tiles) {
 				SDL_bool inside = SDL_PointInRect(&point, &tile->destination);
 				if (inside == SDL_TRUE) {
