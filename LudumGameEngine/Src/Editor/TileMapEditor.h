@@ -80,7 +80,7 @@ namespace editor {
 		SDL_Rect UIArea;
 		TileGrid* grid;
 
-		std::vector<Tile> tiles;
+		int usedBlocks = 0;
 
 		UITextLabel* text1;
 		UITextLabel* tilesLabel;
@@ -154,11 +154,7 @@ namespace editor {
 				return;
 			}
 
-			grid = new TileGrid(renderer, 800, 600, spriteSize);
-			if (!grid->Initialize()) {
-				printf("Tile grid initialize fails\n");
-				return;
-			}
+			
 
 			SDL_Color textColor = { 255, 0, 0, 255 };
 			SDL_Rect textPosition = { 10, 200, 20, 100 };
@@ -187,7 +183,12 @@ namespace editor {
 			UIArea = { 0, 0, 400, 600 };
 
 			sprite = new SpriteSheet(renderer, "Assets/images/jungle.png", 320, 96, spriteSize);
-			
+
+			grid = new TileGrid(renderer, sprite, 800, 600, spriteSize);
+			if (!grid->Initialize()) {
+				printf("Tile grid initialize fails\n");
+				return;
+			}
 			rectSource = {sprite->source.x, sprite->source.y, spriteSize, spriteSize};
 
 
@@ -291,15 +292,9 @@ namespace editor {
 
 			// Tiles sprite sheet source
 			sprite->Render();
-
-
+			// draw the grid with the selected tiles
 			grid->Render();
 
-
-			// draw each tile
-			for (Tile tile : tiles) {
-				SDL_RenderCopyEx(renderer, sprite->texture, &tile.source, &tile.destination, 0.0f, NULL, SDL_FLIP_NONE);
-			}
 
 			text1->Render();
 			tilesLabel->Render();
@@ -491,16 +486,22 @@ namespace editor {
 			int tileX = x - (spriteSize / 2);
 			int tileY = y - (spriteSize / 2);
 			SDL_Point clicked = {x, y};
-			SDL_Rect block = grid->GetBlockPosition(clicked);
-			if (block.w > 0 && block.h > 0) {
-				tileX = block.x;
-				tileY = block.y;
+			Tile* tile = grid->GetBlockPosition(clicked);
+			if (!tile) {
+				return;
 			}
-			Tile tile(rectSource.x, rectSource.y, tileX, tileY);
 
-			tiles.push_back(tile);
+			if (!tile->IsSelected) {
+				++usedBlocks;
+			}
 
-			tilesQtd->SetText(std::to_string(tiles.size()));
+			tile->IsSelected = true;
+
+			//Tile tile(rectSource.x, rectSource.y, tileX, tileY);
+			tile->source.x = rectSource.x;
+			tile->source.y = rectSource.y;
+
+			tilesQtd->SetVal(usedBlocks);
 		}
 
 		

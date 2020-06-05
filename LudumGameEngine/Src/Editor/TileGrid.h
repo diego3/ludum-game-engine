@@ -4,11 +4,12 @@
 #include <SDL.h>
 
 #include "Tile.h"
+#include "SpriteSheet.h"
 
 namespace editor {
 	class TileGrid {
 	private:
-		std::vector<SDL_Rect> blocks;
+		std::vector<Tile*> tiles;
 		int width;
 		int height;
 		int rectSize;
@@ -17,9 +18,11 @@ namespace editor {
 		int gridSizeY;
 
 		SDL_Renderer* renderer;
+		SpriteSheet* sprite;
 	public:
-		TileGrid(SDL_Renderer* render, int sizeX, int sizeY, int rectSize) {
+		TileGrid(SDL_Renderer* render, SpriteSheet* sprite, int sizeX, int sizeY, int rectSize) {
 			this->renderer = render;
+			this->sprite = sprite;
 			this->width = sizeX;
 			this->height = sizeY;
 			this->rectSize = rectSize;
@@ -31,8 +34,9 @@ namespace editor {
 			
 			for (int i = 0; i < gridSizeY; i++) {
 				for (int j = 0; j < gridSizeX; j++) {
-					SDL_Rect p1 = { 400 + (j * rectSize), (i*rectSize), rectSize, rectSize};
-					blocks.push_back(p1);
+					//SDL_Rect p1 = { 400 + (j * rectSize), (i*rectSize), rectSize, rectSize};
+					Tile* t = new Tile(0, 0, 400 + (j * rectSize), (i * rectSize));
+					tiles.push_back(t);
 				}
 			}
 
@@ -40,16 +44,15 @@ namespace editor {
 		}
 
 
-		SDL_Rect GetBlockPosition(SDL_Point point) {
-			for (SDL_Rect rect : blocks) {
-				SDL_bool inside = SDL_PointInRect(&point, &rect);
+		Tile* GetBlockPosition(SDL_Point point) {
+			for (Tile* tile : tiles) {
+				SDL_bool inside = SDL_PointInRect(&point, &tile->destination);
 				if (inside == SDL_TRUE) {
-					return rect;
+					return tile;
 				}
 			}
 			
-			SDL_Rect zero = { 0,0,0,0 };
-			return zero;
+			return NULL;
 		}
 
 		void Render() {
@@ -57,6 +60,13 @@ namespace editor {
 			for (int i = 0; i < gridSizeX; i++) {
 				SDL_RenderDrawLine(renderer, 400, i * rectSize, width + 400, i * rectSize);
 				SDL_RenderDrawLine(renderer, 400 + (i * rectSize), 0, 400 + (i * rectSize), height);
+			}
+
+			// draw each tile
+			for (Tile* tile : tiles) {
+				if (tile->IsSelected) {
+					SDL_RenderCopyEx(renderer, sprite->texture, &tile->source, &tile->destination, 0.0f, NULL, SDL_FLIP_NONE);
+				}
 			}
 		}
 	
