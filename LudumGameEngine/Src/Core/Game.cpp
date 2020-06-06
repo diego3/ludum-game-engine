@@ -63,7 +63,7 @@ Game::Game()
 {
 	this->isRunning = false;
 	this->window = NULL;
-	this->tickLastFrame = 0.0f;
+	this->tickLastFrame = 0;
 }
 
 bool Game::IsRunning() const 
@@ -404,7 +404,7 @@ void Game::Update()
 		SDL_Delay(timeToWait);
 	}
 
-	float deltaTime = (SDL_GetTicks() - tickLastFrame) / 1000.0f;
+	float deltaTime = (float)(SDL_GetTicks() - tickLastFrame) / 1000.0f;
 	if (gameLoopDebug) {
 		std::cout << "deltaTime = " << deltaTime << std::endl;
 	}

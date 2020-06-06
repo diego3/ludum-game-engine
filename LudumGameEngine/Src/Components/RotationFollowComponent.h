@@ -50,7 +50,7 @@ public:
 		//std::cout << "angle = " << glm::degrees(angle) << std::endl;
 		//sprite->rotation = contador;
 		float dot = glm::dot(target->position, transform->position);
-		printf("dot %2.f\n", dot);
+		//printf("dot %2.f\n", dot);
 		glm::vec2 rotation = Rotate(glm::vec2(0, 1), glm::radians(contador));
 		//sprite->destination.x = (int)rotation.x;
 		//sprite->destination.y = (int)rotation.y;

@@ -11,7 +11,7 @@ protected:
 	bool isRunning;
 	SDL_Window* window;
 
-	float tickLastFrame;
+	int tickLastFrame;
 public:
 	Game();
 	~Game();
