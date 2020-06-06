@@ -159,6 +159,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Src\Core\Animation.cpp" />
     <ClCompile Include="Src\Core\AssetManager.cpp" />
+    <ClCompile Include="Src\Core\AudioManager.cpp" />
     <ClCompile Include="Src\Core\Collision.cpp" />
     <ClCompile Include="Src\Core\Entity.cpp" />
     <ClCompile Include="Src\Core\EntityManager.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Src\Components\TransformComponent.h" />
     <ClInclude Include="Src\Core\Animation.h" />
     <ClInclude Include="Src\Core\AssetManager.h" />
+    <ClInclude Include="Src\Core\AudioManager.h" />
     <ClInclude Include="Src\Core\CameraShake.h" />
     <ClInclude Include="Src\Core\Collision.h" />
     <ClInclude Include="Src\Core\Component.h" />
@@ -213,6 +215,7 @@
     <ClInclude Include="Src\Core\Projectile.h" />
     <ClInclude Include="Src\Core\TextureManager.h" />
     <ClInclude Include="Src\Decoupling\EventManager.h" />
+    <ClInclude Include="Src\Editor\AudioMixerEditor.h" />
     <ClInclude Include="Src\Editor\SpriteAnimationEditor.h" />
     <ClInclude Include="Src\Editor\SpriteEditor.h" />
     <ClInclude Include="Src\Editor\SpriteSheet.h" />

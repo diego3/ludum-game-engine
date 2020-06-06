@@ -73,6 +73,9 @@
     <ClCompile Include="Src\Core\InputManager.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Core\AudioManager.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />
@@ -236,6 +239,12 @@
     </ClInclude>
     <ClInclude Include="Src\Editor\SpriteSheet.h">
       <Filter>Src\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Editor\AudioMixerEditor.h">
+      <Filter>Src\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\AudioManager.h">
+      <Filter>Src\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

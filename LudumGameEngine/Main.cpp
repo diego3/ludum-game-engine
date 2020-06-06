@@ -10,6 +10,7 @@
 #include "Src/Networking/ServerTcpChat.h"
 #include "Src/Networking/ClientTcpChat.h"
 #include "Src/Editor/TestEditor.h"
+#include "Src/Editor/AudioMixerEditor.h"
 
 using namespace std;
 
@@ -65,14 +66,20 @@ void TestApplication() {
 	delete teste;
 }
 
+void AudioMixerApplication() {
+	audio::AudioMixerEditor* mixerTesting = new audio::AudioMixerEditor();
+	mixerTesting->Initialize();
+	delete mixerTesting;
+}
+
 int main(int argc, char* args[])
 {
 	std::cout << "[C++] Main..." << std::endl;
 	
 	//TileMapApplication();
 	//ChatClientApplication();
-	GameEngineApplication();
-	//TestApplication();
+	//GameEngineApplication();
+	AudioMixerApplication();
 
 
 	return 0;

@@ -15,11 +15,12 @@
 #include <SDL.h>
 #include <vector>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include "../../Libs/glm/glm/vec2.hpp"
 #include "../../Libs/glm/glm/ext.hpp"
+#include "../Core/AudioManager.h"
 
-
-namespace editor2 {
+namespace audio {
 
 	const int FPS = 60;
 	const int FRAME_RATE = 1000 / FPS;
@@ -34,19 +35,31 @@ namespace editor2 {
 
 	int timer = 60;
 
-	class TestEditor {
+	std::string acousticThemePath = "Assets/sounds/acoustic-theme.ogg";
+
+	//https://soundprogramming.net/programming/tutorial-using-sdl2-and-sdl_mixer-to-play-samples/
+	class AudioMixerEditor {
 	public:
 		SDL_Window* window;
 		SDL_Renderer* renderer;
-		
+		Mix_Chunk* chunk;
+		AudioManager* audioManager;
 
-		TestEditor() {
+		AudioMixerEditor() {
 			renderer = NULL;
 			window = NULL;
-			
+			chunk = NULL;
+			audioManager = NULL;
 		}
 
-		~TestEditor() {
+		~AudioMixerEditor() {
+			if (audioManager) {
+				delete audioManager;
+			}
+
+			if (chunk) {
+				Mix_FreeChunk(chunk);
+			}
 			
 			if (renderer) {
 				SDL_DestroyRenderer(renderer);
@@ -60,7 +73,7 @@ namespace editor2 {
 				return;
 			}
 			window = SDL_CreateWindow(
-				"Test Editor",
+				"Audio Mixer Editor",
 				SDL_WINDOWPOS_CENTERED,
 				SDL_WINDOWPOS_CENTERED,
 				WINDOW_WIDTH,
@@ -75,6 +88,16 @@ namespace editor2 {
 			renderer = SDL_CreateRenderer(window, -1, 0);
 			if (renderer == NULL) {
 				std::cout << "SDL Renderer error: " << SDL_GetError() << std::endl;
+				return;
+			}
+
+			audioManager = new AudioManager();
+			if (!audioManager->Initialize()) {
+				return;
+			}
+
+			chunk = AudioManager::LoadAudio(acousticThemePath.c_str());
+			if (!chunk) {
 				return;
 			}
 
@@ -102,12 +125,18 @@ namespace editor2 {
 		}
 
 		void Update(float deltaTime) {
-			
+
 
 			if (timer == 60) {
-				
+
 			}
 
+		}
+
+		void Play() {
+			printf("play audio\n");
+
+			audioManager->PlayOnce(chunk);
 		}
 
 
@@ -115,12 +144,12 @@ namespace editor2 {
 			SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
 			SDL_RenderClear(renderer);
 
-			
+
 			// separator line between UI area and grid area
 			SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
 			SDL_RenderDrawLine(renderer, 400, 0, 400, WINDOW_HEIGHT);
 
-		
+
 			SDL_RenderPresent(renderer);
 		}
 
@@ -140,17 +169,20 @@ namespace editor2 {
 						break;
 					}
 					if (event.key.keysym.sym == SDLK_LEFT) {
-						
+
 
 					}
 					if (event.key.keysym.sym == SDLK_RIGHT) {
-						
+
 					}
 					if (event.key.keysym.sym == SDLK_UP) {
-						
+
 					}
 					if (event.key.keysym.sym == SDLK_DOWN) {
-						
+
+					}
+					if (event.key.keysym.sym == SDLK_p) {
+						Play();
 					}
 				}
 				case SDL_KEYUP: {
