@@ -5,5 +5,5 @@
 class Collision {
 public:
 
-	static bool CheckRectangleCollision(static SDL_Rect& a, static SDL_Rect& b);
+	static bool CheckRectangleCollision(SDL_Rect& a, SDL_Rect& b);
 };

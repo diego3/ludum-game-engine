@@ -75,21 +75,21 @@ namespace opengl {
 			std::string fShader = ReadFile("Src/OpenGL/fragmentShader.fs");
 
 
-			lastFrame = SDL_GetTicks();
+			lastFrame = (float)SDL_GetTicks();
 			while (isRunning) {
-				float elapsed = SDL_GetTicks() - lastFrame;
+				float elapsed = (float)SDL_GetTicks() - lastFrame;
 				if (elapsed < FRAME_RATE) {
-					SDL_Delay(FRAME_RATE - elapsed);
+					SDL_Delay(FRAME_RATE - (int)elapsed);
 				}
 
-				float deltaTime = (SDL_GetTicks() - lastFrame) / 1000.0f;
+				float deltaTime = ((float)SDL_GetTicks() - lastFrame) / 1000.0f;
 				std::cout << "deltaTime: " << deltaTime << std::endl;
 
 				ProcessInputs();
 				Update(deltaTime);
 				Render(deltaTime);
 
-				lastFrame = SDL_GetTicks();
+				lastFrame = (float)SDL_GetTicks();
 			}
 
 

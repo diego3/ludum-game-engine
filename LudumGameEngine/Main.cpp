@@ -69,9 +69,9 @@ int main(int argc, char* args[])
 {
 	std::cout << "[C++] Main..." << std::endl;
 	
-	TileMapApplication();
+	//TileMapApplication();
 	//ChatClientApplication();
-	//GameEngineApplication();
+	GameEngineApplication();
 	//TestApplication();
 
 

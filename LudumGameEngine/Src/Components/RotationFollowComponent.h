@@ -24,6 +24,9 @@ public:
 	RotationFollowComponent() {
 		angleRad = glm::radians(0.0f);
 		x = 0;
+		transform = NULL;
+		target = NULL;
+		sprite = NULL;
 	}
 
 	void Initialize() override {

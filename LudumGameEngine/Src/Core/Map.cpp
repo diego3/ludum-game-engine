@@ -38,7 +38,7 @@ void Map::LoadMap(std::string filePath, int mapSizeX, int mapSizeY)
 
 void Map::AddTile(int sourceX, int sourceY, int posX, int posY)
 {
-	Entity& newEntity = Game::entityManager->AddEntity("Tile", TILE_LAYER);
+	Entity& newEntity = Game::entityManager->AddEntity("Tile", LayerType::TILE_LAYER);
 	newEntity.AddComponent<TileMapComponent>(
 		sourceX, sourceY, 
 		posX, posY, 

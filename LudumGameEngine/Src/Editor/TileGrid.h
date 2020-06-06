@@ -95,7 +95,7 @@ namespace editor {
 			std::fstream file;
 			file.open(filePath);
 			if (!file.is_open()) {
-				printf("Could not open file: %s\n", filePath);
+				printf("Could not open file: %s\n", filePath.c_str());
 				return result;
 			}
 

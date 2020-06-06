@@ -62,6 +62,7 @@ namespace editor {
 			renderer = render;
 			curIndex = index;
 			this->size = size;
+			pos = {0,0,0,0};
 		}
 		
 		void Render() {
@@ -128,6 +129,23 @@ namespace editor {
 			SDL_DestroyWindow(window);
 		}
 
+		TileMapEditor() {
+			window = NULL;
+			renderer = NULL;
+			grid = NULL;
+			sprite = NULL;
+			source = { 0, 0, 0, 0 };
+			destination = { 0, 0, 0, 0 };
+			UIArea = { 0, 0, 400, 600 };
+			rectSource = { 0, 0, 0, 0 };
+			controller = NULL;
+			joy = NULL;
+			text1 = NULL;
+			tilesLabel = NULL;
+			tilesQtd = NULL;
+
+		}
+
 		void Initialize() {
 			if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 				std::cout << "SDL init fails: " << SDL_GetError() << std::endl;
@@ -183,7 +201,7 @@ namespace editor {
 			}
 			tilesQtd->SetText("0");
 
-			UIArea = { 0, 0, 400, 600 };
+			
 
 			sprite = new SpriteSheet(renderer, "Assets/images/jungle.png", 320, 96, spriteSize);
 			gridMaxX = sprite->width / spriteSize;
@@ -243,21 +261,21 @@ namespace editor {
 		}
 
 		void Looping() {
-			lastFrame = SDL_GetTicks();
+			lastFrame = (float)SDL_GetTicks();
 			while (isRunning) {
-				float elapsed = SDL_GetTicks() - lastFrame;
+				float elapsed = (float)SDL_GetTicks() - lastFrame;
 				if (elapsed < FRAME_RATE) {
-					SDL_Delay(FRAME_RATE - elapsed);
+					SDL_Delay(FRAME_RATE - (int)elapsed);
 				}
 
-				float deltaTime = (SDL_GetTicks() - lastFrame) / 1000.0f;
+				float deltaTime = ((float)SDL_GetTicks() - lastFrame) / 1000.0f;
 				//std::cout << "deltaTime: " << deltaTime << std::endl;
 
 				ProcessInputs();
 				Update(deltaTime);
 				Render();
 
-				lastFrame = SDL_GetTicks();
+				lastFrame = (float)SDL_GetTicks();
 
 				timer--;
 				if (timer <= 0) timer = 60;

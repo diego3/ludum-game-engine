@@ -14,7 +14,7 @@ enum class CollisionType {
 	NEXT_LEVEL
 };
 
-enum LayerType {
+enum class LayerType {
 	TILE_LAYER = 0,
 	VEGETATION_LAYER = 1,
 	ENEMY_LAYER = 2,

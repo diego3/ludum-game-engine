@@ -85,8 +85,8 @@ public:
 			float shakeFreqY2 = 20;  float shakeSizeX = 15;
 			float shakeSizeY = 10;  float shakeSizeY2 = 5;
 			float t = SDL_GetTicks();
-			int xAdjustment = sin(t * shakeRateX) * shakeSizeX;
-			int yAdjustment = sin(t * shakeRateY) * shakeSizeY + cos(t * shakeFreqY2) * shakeSizeY2;
+			int xAdjustment = (int)sin(t * shakeRateX) * shakeSizeX;
+			int yAdjustment = (int)sin(t * shakeRateY) * shakeSizeY + cos(t * shakeFreqY2) * shakeSizeY2;
 			Game::camera.x += xAdjustment;
 			Game::camera.y += yAdjustment;
 			cameraShakingUpdatesLeft--;

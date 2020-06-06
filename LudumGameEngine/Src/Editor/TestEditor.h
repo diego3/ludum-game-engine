@@ -26,7 +26,7 @@ namespace editor2 {
 	const int FRAME_RATE = 1000 / FPS;
 	const unsigned int WINDOW_WIDTH = 1200;
 	const unsigned int WINDOW_HEIGHT = 600;
-	float lastFrame = 0.0f;
+	int lastFrame = 0;
 	bool isRunning = true;
 	bool IS_MOUSE_PRESSED = false;
 
@@ -45,12 +45,21 @@ namespace editor2 {
 		SDL_Renderer* renderer;
 		SDL_Rect source;
 		SDL_Rect destination;
-		SDL_RendererFlip flip = SDL_FLIP_NONE;
 		SDL_Texture* texture;
 		int spriteSize = 64;
 		SDL_Rect rectSource;
 
 		SDL_Rect UIArea;
+
+		TestEditor() {
+			UIArea = {0,0,0,0};
+			renderer = NULL;
+			window = NULL;
+			texture = NULL;
+			rectSource = {0,0,0,0};
+			source = {0,0,0,0};
+			destination = {0,0,0,0};
+		}
 
 		~TestEditor() {
 			
@@ -95,13 +104,13 @@ namespace editor2 {
 
 			lastFrame = SDL_GetTicks();
 			while (isRunning) {
-				float elapsed = SDL_GetTicks() - lastFrame;
+				int elapsed = SDL_GetTicks() - lastFrame;
 				if (elapsed < FRAME_RATE) {
 					SDL_Delay(FRAME_RATE - elapsed);
 				}
 
-				float deltaTime = (SDL_GetTicks() - lastFrame) / 1000.0f;
-				//std::cout << "deltaTime: " << deltaTime << std::endl;
+				float deltaTime = (float)(SDL_GetTicks() - lastFrame) / 1000.0f;
+				std::cout << "deltaTime: " << deltaTime << std::endl;
 
 				ProcessInputs();
 				Update(deltaTime);

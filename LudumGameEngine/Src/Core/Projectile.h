@@ -3,7 +3,7 @@
 #include <ctime>
 #include <string>
 #include <SDL.h>
-#include "../../glm/glm/glm.hpp";
+#include "../../glm/glm/glm.hpp"
 #include "../../glm/glm/ext.hpp"
 #include "../Components/TransformComponent.h"
 
@@ -57,7 +57,7 @@ public:
 		//direction = glm::vec2(transform->position.x, transform->position.y);
 		position = glm::vec2(10, (rand() % (400) + (200)));
 
-		speed = (rand() % (800) + (400));
+		speed = (float)(rand() % (800) + (400));
 
 		source = { 0,0, this->width, this->height };
 		destination = { (int)position.x, (int)position.y, this->width * this->scale, this->height * this->scale };
@@ -87,7 +87,7 @@ public:
 		destination = {(int)position.x, (int)position.y, this->width * this->scale, this->height * this->scale };
 		playing = false;
 		timer = duration;
-		speed = (rand() % (800) + (400));
+		speed = (float)(rand() % (800) + (400));
 	}
 
 	void Render()  {

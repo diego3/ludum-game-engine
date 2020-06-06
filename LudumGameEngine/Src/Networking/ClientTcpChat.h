@@ -22,7 +22,7 @@ namespace network {
 			SDLNet_Quit();
 		}
 
-		bool Connect(static const char* host, int port) {
+		bool Connect(const char* host, int port) {
 			int sdlInit = SDL_Init(SDL_INIT_EVERYTHING);
 			if (sdlInit != 0) {
 				std::cout << "SDL init fails: " << SDL_GetError() << std::endl;
