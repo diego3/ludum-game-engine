@@ -36,6 +36,8 @@ namespace audio {
 	int timer = 60;
 
 	std::string acousticThemePath = "Assets/sounds/acoustic-theme.ogg";
+	std::string gun1Path = "Assets/sounds/Shooting An MP5-SoundBible.com.mp3";
+	std::string gun2Path = "Assets/sounds/Machine_Gun4.mp3";
 
 	//https://soundprogramming.net/programming/tutorial-using-sdl2-and-sdl_mixer-to-play-samples/
 	class AudioMixerEditor {
@@ -96,7 +98,7 @@ namespace audio {
 				return;
 			}
 
-			chunk = AudioManager::LoadAudio(acousticThemePath.c_str());
+			chunk = AudioManager::LoadAudio(gun1Path.c_str());
 			if (!chunk) {
 				return;
 			}
@@ -132,13 +134,6 @@ namespace audio {
 			}
 
 		}
-
-		void Play() {
-			printf("play audio\n");
-
-			audioManager->PlayOnce(chunk);
-		}
-
 
 		void Render() {
 			SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
@@ -182,7 +177,8 @@ namespace audio {
 
 					}
 					if (event.key.keysym.sym == SDLK_p) {
-						Play();
+						printf("play audio\n");
+						audioManager->PlayOnce(chunk);
 					}
 				}
 				case SDL_KEYUP: {

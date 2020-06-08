@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 #include <fstream>
 
+// SDL_GL_GetDrawableSize.
 namespace opengl {
 
 	const int FPS = 60;
