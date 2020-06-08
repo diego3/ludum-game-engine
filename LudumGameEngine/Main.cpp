@@ -79,8 +79,8 @@ int main(int argc, char* args[])
 	//TileMapApplication();
 	//ChatClientApplication();
 	//GameEngineApplication();
-	AudioMixerApplication();
-
+	//AudioMixerApplication();
+	OpenGLApplication();
 
 	return 0;
 }

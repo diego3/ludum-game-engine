@@ -1,10 +1,17 @@
 #pragma once
 
+//force to use the dedicated graphics card
+//extern "C" {
+//	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+//}
+
 #include <stdio.h>
 #include <iostream>
 #include <SDL.h>
 #include <GL/glew.h>
 #include <fstream>
+#include "../Util/FileUtil.h"
+#include "Exercice.h"
 
 // SDL_GL_GetDrawableSize.
 namespace opengl {
@@ -19,6 +26,23 @@ namespace opengl {
 	class Instalation {
 	public:
 		SDL_Window* window;
+		Exercice* shader;
+
+		Instalation() {
+			window = NULL;
+			shader = NULL;
+		}
+
+		~Instalation() {
+			if (shader) {
+				delete shader;
+			}
+
+			if (window) {
+				SDL_DestroyWindow(window);
+			}
+			SDL_Quit();
+		}
 
 		bool create() {
 
@@ -66,16 +90,24 @@ namespace opengl {
 				return false;
 			}
 
+			int w;
+			int h;
+			SDL_GL_GetDrawableSize(window, &w, &h);
+			printf("drawable size w:%d, h:%d\n", w, h);
+
 			/* This makes our buffer swap syncronized with the monitor's vertical refresh */
 			SDL_GL_SetSwapInterval(1);
 
 			glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
+			// ********* APPLICATION CODE ***************
+			std::string vShader = FileUtil::ReadFile("Src/OpenGL/vertexShader.vs");
+			std::string fShader = FileUtil::ReadFile("Src/OpenGL/fragmentShader.fs");
 
-			std::string vShader = ReadFile("Src/OpenGL/vertexShader.vs");
-			std::string fShader = ReadFile("Src/OpenGL/fragmentShader.fs");
+			shader = new Exercice(vShader.c_str(), fShader.c_str());
+			shader->Initialize();
 
-
+			
 			lastFrame = (float)SDL_GetTicks();
 			while (isRunning) {
 				float elapsed = (float)SDL_GetTicks() - lastFrame;
@@ -84,7 +116,7 @@ namespace opengl {
 				}
 
 				float deltaTime = ((float)SDL_GetTicks() - lastFrame) / 1000.0f;
-				std::cout << "deltaTime: " << deltaTime << std::endl;
+				//std::cout << "deltaTime: " << deltaTime << std::endl;
 
 				ProcessInputs();
 				Update(deltaTime);
@@ -94,7 +126,7 @@ namespace opengl {
 			}
 
 
-
+			SDL_GL_DeleteContext(openGLContext);
 			return true;
 		}
 
@@ -124,29 +156,16 @@ namespace opengl {
 		}
 
 		void Render(float deltaTime) {
-			// rendering tasks go here....
-
-			glClearColor(1.f, 0.f, 0.f, 1.f);
+			glClearColor(0.f, 0.f, 0.f, 1.f);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+
+			// rendering tasks go here....
+			shader->Render();
+
+
 			SDL_GL_SwapWindow(window);
-		}
 
-		std::string ReadFile(std::string filePath) {
-			std::string content;
-			std::string line;
-			std::ifstream file(filePath);
-			if (file.is_open()) {
-				while (getline(file, line)) {
-					content.append(line + "\n");
-				}
-			}
-			file.close();
-			return content;
-		}
-
-		~Instalation() {
-
-			SDL_Quit();
 		}
 	};
 

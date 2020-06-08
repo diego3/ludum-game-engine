@@ -246,5 +246,8 @@
     <ClInclude Include="Src\Core\AudioManager.h">
       <Filter>Src\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Src\OpenGL\Exercice.h">
+      <Filter>Src\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

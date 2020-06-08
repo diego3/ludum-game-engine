@@ -230,6 +230,7 @@
     <ClInclude Include="Src\Networking\ClientTcpChat.h" />
     <ClInclude Include="Src\Networking\NetworkManager.h" />
     <ClInclude Include="Src\Networking\ServerTcpChat.h" />
+    <ClInclude Include="Src\OpenGL\Exercice.h" />
     <ClInclude Include="Src\OpenGL\Instalation.h" />
     <ClInclude Include="Src\Util\FileUtil.h" />
   </ItemGroup>
