@@ -97,14 +97,14 @@
     <None Include="Scripts\prototype.lua">
       <Filter>Scripts</Filter>
     </None>
-    <None Include="Src\OpenGL\fragmentShader.fs">
-      <Filter>Src\OpenGL</Filter>
-    </None>
-    <None Include="Src\OpenGL\vertexShader.vs">
-      <Filter>Src\OpenGL</Filter>
-    </None>
     <None Include="Src\Editor\AbstractEditor">
       <Filter>Src\Editor</Filter>
+    </None>
+    <None Include="Src\OpenGL\fragmentShader.frag">
+      <Filter>Src\OpenGL</Filter>
+    </None>
+    <None Include="Src\OpenGL\vertexShader.vert">
+      <Filter>Src\OpenGL</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

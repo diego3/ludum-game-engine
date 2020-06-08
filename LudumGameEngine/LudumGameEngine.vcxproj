@@ -179,8 +179,8 @@
     <None Include="Scripts\playerControl.lua" />
     <None Include="Scripts\prototype.lua" />
     <None Include="Src\Editor\AbstractEditor" />
-    <None Include="Src\OpenGL\fragmentShader.fs" />
-    <None Include="Src\OpenGL\vertexShader.vs" />
+    <None Include="Src\OpenGL\fragmentShader.frag" />
+    <None Include="Src\OpenGL\vertexShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />

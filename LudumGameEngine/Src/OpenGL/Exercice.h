@@ -82,7 +82,8 @@ public:
 		GLint result = 0;
 		GLchar eLog[1024] = { 0 };
 
-		glGetProgramiv(theShader, GL_COMPILE_STATUS, &result);
+		//glGetProgramiv(theShader, GL_COMPILE_STATUS, &result);
+		glGetShaderiv(theShader, GL_COMPILE_STATUS, &result);
 		if (!result) {
 			glGetProgramInfoLog(theShader, sizeof(eLog), NULL, eLog);
 			const char* shaderName = (shaderType == GL_VERTEX_SHADER) ? "VERTEX SHADER" : "FRAGMENT SHADER";
