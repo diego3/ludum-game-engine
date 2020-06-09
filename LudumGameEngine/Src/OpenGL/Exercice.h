@@ -14,14 +14,19 @@
 class Exercice {
 public:
 
+	const float toRadians = 3.14159265f / 100.0f;
+
 	GLuint VAO, VBO, shader, uniformModel;
 	const char* vertexSource;
 	const char* fragmentSource;
 
 	bool direction = true;
 	float triOffset = 0.0f;
-	float triMaxOffset = 0.7f;
+	float triMaxOffset = 0.6f;
 	float triIncrement = 1.0f;
+
+	float rotControl = 0.0f;
+	float rotMaxDegree = 360.f;
 
 	// for debug only
 	bool printShaderSource = false;
@@ -42,6 +47,11 @@ public:
 
 	void Update(float deltaTime) {
 		//glm::mat4 model(1.0f);
+		rotControl += 1.0f;
+		if (rotControl >= rotMaxDegree) {
+			rotControl = 0.0f;
+		}
+
 
 		if (direction) {
 			triOffset += triIncrement * deltaTime;
@@ -53,14 +63,17 @@ public:
 		if (abs(triOffset) >= triMaxOffset) {
 			direction = !direction;
 		}
+
+		
 	}
 
 	void Render() {
 		glUseProgram(shader);
 
 		glm::mat4 model(1.0f);
-		model = glm::translate(model, glm::vec3(triOffset, triOffset, 0.0f));
-
+		
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f , 0.0f));
+		model = glm::rotate(model, glm::radians(rotControl), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
