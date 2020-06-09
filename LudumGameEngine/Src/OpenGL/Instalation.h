@@ -101,6 +101,9 @@ namespace opengl {
 			glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 			// 4.6 \0/
 			std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+			int nrAttributes;
+			glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+			std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
 
 			// ********* APPLICATION CODE ***************
 			std::string vShader = FileUtil::ReadFile("Src/OpenGL/vertexShader.vert");

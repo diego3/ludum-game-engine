@@ -146,8 +146,6 @@ public:
 			return;
 		}
 
-		//std::cout << "vertexSource:\n" << vertexSource << " ------ " << std::endl;
-		//std::cout << "fragmentSource:\n" << fragmentSource << " ------ " << std::endl;
 		AddShader(shader, vertexSource, GL_VERTEX_SHADER);
 		AddShader(shader, fragmentSource, GL_FRAGMENT_SHADER);
 
