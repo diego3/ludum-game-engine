@@ -2,23 +2,37 @@
 
 #include <iostream>
 #include <string>
+#include <stdio.h>
+#include <stdlib.h>
+#include <cmath>
 #include <SDL.h>
 #include <GL/glew.h>
 #include "../../Libs/glm/glm/glm.hpp"
+#include "../../Libs/glm/glm/gtc/matrix_transform.hpp"
+#include "../../Libs/glm/glm/gtc/type_ptr.hpp"
 
 class Exercice {
 public:
 
-	GLuint VAO, VBO, shader;
+	GLuint VAO, VBO, shader, uniformModel;
 	const char* vertexSource;
 	const char* fragmentSource;
+
+	bool direction = true;
+	float triOffset = 0.0f;
+	float triMaxOffset = 0.7f;
+	float triIncrement = 1.0f;
+
+	// for debug only
+	bool printShaderSource = false;
 
 	Exercice(const char* vertex, const char* fragment) {
 		vertexSource = vertex;
 		fragmentSource = fragment;
-		//VAO = 0;
-		//VBO = 0;
-		//shader = 0;
+		VAO = 0;
+		VBO = 0;
+		shader = 0;
+		uniformModel = 0;
 	}
 	
 	void Initialize() {
@@ -27,19 +41,34 @@ public:
 	}
 
 	void Update(float deltaTime) {
+		//glm::mat4 model(1.0f);
 
+		if (direction) {
+			triOffset += triIncrement * deltaTime;
+		}
+		else {
+			triOffset -= triIncrement * deltaTime;
+		}
+
+		if (abs(triOffset) >= triMaxOffset) {
+			direction = !direction;
+		}
 	}
 
 	void Render() {
-
 		glUseProgram(shader);
+
+		glm::mat4 model(1.0f);
+		model = glm::translate(model, glm::vec3(triOffset, triOffset, 0.0f));
+
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
 		glBindVertexArray(VAO);
 
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glBindVertexArray(0);
-
 		glUseProgram(0);
 	}
 
@@ -68,7 +97,9 @@ public:
 
 	void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType) {
 		GLuint theShader = glCreateShader(shaderType);
-		std::cout << "shaderCode:\n" << shaderCode << " ------ " << std::endl;
+		if (printShaderSource) {
+			std::cout << "shaderCode:\n" << shaderCode << " ------ " << std::endl;
+		}
 
 		const GLchar* theCode[1];
 		theCode[0] = shaderCode;
@@ -130,5 +161,6 @@ public:
 			return;
 		}
 
+		uniformModel = glGetUniformLocation(shader, "model");
 	}
 };

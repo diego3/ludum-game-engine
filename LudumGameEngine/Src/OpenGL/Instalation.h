@@ -45,9 +45,6 @@ namespace opengl {
 		}
 
 		bool create() {
-
-			
-
 			if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 				std::cout << "SDL init fails: " << SDL_GetError() << std::endl;
 				return false;
@@ -137,7 +134,7 @@ namespace opengl {
 		}
 
 		void Update(float deltaTime) {
-
+			shader->Update(deltaTime);
 		}
 
 		void ProcessInputs() {
