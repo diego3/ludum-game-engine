@@ -93,6 +93,7 @@ namespace opengl {
 			int h;
 			SDL_GL_GetDrawableSize(window, &w, &h);
 			printf("drawable size w:%d, h:%d\n", w, h);
+			GLfloat aspectRatio = (GLfloat)w / (GLfloat)h;
 
 			/* This makes our buffer swap syncronized with the monitor's vertical refresh */
 			SDL_GL_SetSwapInterval(1);
@@ -113,7 +114,7 @@ namespace opengl {
 			std::string vShader = FileUtil::ReadFile("Src/OpenGL/vertexShader.vert");
 			std::string fShader = FileUtil::ReadFile("Src/OpenGL/fragmentShader.frag");
 
-			shader = new Exercice(vShader.c_str(), fShader.c_str());
+			shader = new Exercice(vShader.c_str(), fShader.c_str(), aspectRatio);
 			shader->Initialize();
 
 			lastFrame = SDL_GetTicks();

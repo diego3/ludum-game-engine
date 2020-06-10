@@ -16,9 +16,13 @@ public:
 
 	const float toRadians = 3.14159265f / 180.0f;
 
-	GLuint VAO, VBO, IBO, shader, uniformModel;
+	GLuint VAO, VBO, IBO, shader, 
+		uniformModel, 
+		uniformProjection;
+
 	const char* vertexSource;
 	const char* fragmentSource;
+	GLfloat aspectRatio;
 
 	bool direction = true;
 	float triOffset = 0.0f;
@@ -31,7 +35,9 @@ public:
 	// for debug only
 	bool printShaderSource = false;
 
-	Exercice(const char* vertex, const char* fragment) {
+	glm::mat4 projection;
+
+	Exercice(const char* vertex, const char* fragment, GLfloat aspect) {
 		vertexSource = vertex;
 		fragmentSource = fragment;
 		VAO = 0;
@@ -39,11 +45,15 @@ public:
 		shader = 0;
 		uniformModel = 0;
 		IBO = 0;
+		aspectRatio = aspect;
+		projection = glm::mat4(1.0f);
 	}
 	
 	void Initialize() {
 		CreateTriangle();
 		CompileShaders();
+
+		projection = glm::perspective(45.0f, aspectRatio, 0.1f, 100.0f);
 	}
 
 	void Update(float deltaTime) {
@@ -73,11 +83,12 @@ public:
 
 		glm::mat4 model(1.0f);
 		
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f , 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, triOffset , -2.5f));
 		model = glm::rotate(model, glm::radians(rotControl), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
@@ -192,5 +203,6 @@ public:
 		}
 
 		uniformModel = glGetUniformLocation(shader, "model");
+		uniformProjection = glGetUniformLocation(shader, "projection");
 	}
 };
