@@ -74,8 +74,6 @@ public:
 		if (abs(triOffset) >= triMaxOffset) {
 			direction = !direction;
 		}
-
-		
 	}
 
 	void Render() {
@@ -186,7 +184,6 @@ public:
 
 		glLinkProgram(shader);
 		glGetProgramiv(shader, GL_LINK_STATUS, &result);
-
 		if (!result) {
 			glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
 			printf("Error linking program: %s\n", eLog);
@@ -195,7 +192,6 @@ public:
 
 		glValidateProgram(shader);
 		glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
-
 		if (!result) {
 			glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
 			printf("Error validating program: %s\n", eLog);
