@@ -80,7 +80,6 @@ namespace opengl {
 				return false;
 			}
 
-
 			glewExperimental = GL_TRUE;
 			GLenum error = glewInit();
 			if (error != GLEW_OK) {
@@ -98,7 +97,12 @@ namespace opengl {
 			/* This makes our buffer swap syncronized with the monitor's vertical refresh */
 			SDL_GL_SetSwapInterval(1);
 
+			// this is getting a black screen, why?
+			glEnable(GL_DEPTH_TEST);
+
 			glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+
 			// 4.6 \0/
 			std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 			int nrAttributes;
@@ -111,8 +115,6 @@ namespace opengl {
 
 			shader = new Exercice(vShader.c_str(), fShader.c_str());
 			shader->Initialize();
-
-			
 
 			lastFrame = SDL_GetTicks();
 			while (isRunning) {
@@ -163,7 +165,7 @@ namespace opengl {
 
 		void Render() {
 			glClearColor(0.f, 0.f, 0.f, 1.f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 			// rendering tasks go here....

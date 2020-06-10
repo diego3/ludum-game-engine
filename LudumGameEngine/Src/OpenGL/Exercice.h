@@ -14,9 +14,9 @@
 class Exercice {
 public:
 
-	const float toRadians = 3.14159265f / 100.0f;
+	const float toRadians = 3.14159265f / 180.0f;
 
-	GLuint VAO, VBO, shader, uniformModel;
+	GLuint VAO, VBO, IBO, shader, uniformModel;
 	const char* vertexSource;
 	const char* fragmentSource;
 
@@ -38,6 +38,7 @@ public:
 		VBO = 0;
 		shader = 0;
 		uniformModel = 0;
+		IBO = 0;
 	}
 	
 	void Initialize() {
@@ -73,28 +74,43 @@ public:
 		glm::mat4 model(1.0f);
 		
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f , 0.0f));
-		model = glm::rotate(model, glm::radians(rotControl), glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.0f));
+		model = glm::rotate(model, glm::radians(rotControl), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
 		glBindVertexArray(VAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 		glUseProgram(0);
 	}
 
 	void CreateTriangle() {
+		unsigned int indices[] = {
+			0, 3, 1,
+			1, 3, 2,
+			2, 3, 0,
+			0, 1, 2
+		};
+
 		GLfloat vertices[] = {
 			-1.0f, -1.0f, 0.0f,
+			0.0f, -1.0f, 1.0f,
 			1.0f,  -1.0f, 0.0f,
 			0.0f, 1.0f, 0.0f
 		};
 
 		glGenVertexArrays(1, &VAO);//what data a vertex has
 		glBindVertexArray(VAO);
+
+		glGenBuffers(1, &IBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 
 		glGenBuffers(1, &VBO);// defines the data itself
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -105,6 +121,8 @@ public:
 		glEnableVertexAttribArray(0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		// IBO always AFTER VAO
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 
 	}
