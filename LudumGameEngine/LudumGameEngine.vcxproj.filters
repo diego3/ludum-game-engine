@@ -76,6 +76,15 @@
     <ClCompile Include="Src\Core\AudioManager.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Graphics\Mesh.cpp">
+      <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\Shader.cpp">
+      <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Decoupling\EventManager.cpp">
+      <Filter>Src\Decoupling</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icon.ico" />
@@ -248,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="Src\OpenGL\Exercice.h">
       <Filter>Src\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Editor\EventQueueExperiment.h">
+      <Filter>Src\Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

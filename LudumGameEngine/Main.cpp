@@ -11,6 +11,7 @@
 #include "Src/Networking/ClientTcpChat.h"
 #include "Src/Editor/TestEditor.h"
 #include "Src/Editor/AudioMixerEditor.h"
+#include "Src/Editor/EventQueueExperiment.h"
 
 using namespace std;
 
@@ -72,6 +73,12 @@ void AudioMixerApplication() {
 	delete mixerTesting;
 }
 
+void EventManagerApplication() {
+	experiment::EventQueueExperiment* app = new experiment::EventQueueExperiment();
+	app->Initialize();
+	delete app;
+}
+
 int main(int argc, char* args[])
 {
 	std::cout << "[C++] Main..." << std::endl;
@@ -80,7 +87,8 @@ int main(int argc, char* args[])
 	//ChatClientApplication();
 	//GameEngineApplication();
 	//AudioMixerApplication();
-	OpenGLApplication();
+	//OpenGLApplication();
+	EventManagerApplication();
 
 	return 0;
 }

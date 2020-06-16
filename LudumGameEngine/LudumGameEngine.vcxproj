@@ -168,8 +168,11 @@
     <ClCompile Include="Src\Core\LuaManager.cpp" />
     <ClCompile Include="Src\Core\Map.cpp" />
     <ClCompile Include="Src\Core\TextureManager.cpp" />
+    <ClCompile Include="Src\Decoupling\EventManager.cpp" />
     <ClCompile Include="Src\Examples\LuaYoutubeVideo.cpp" />
     <ClCompile Include="Src\Examples\SDLSimpleWindow.cpp" />
+    <ClCompile Include="Src\Graphics\Mesh.cpp" />
+    <ClCompile Include="Src\Graphics\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -216,6 +219,7 @@
     <ClInclude Include="Src\Core\TextureManager.h" />
     <ClInclude Include="Src\Decoupling\EventManager.h" />
     <ClInclude Include="Src\Editor\AudioMixerEditor.h" />
+    <ClInclude Include="Src\Editor\EventQueueExperiment.h" />
     <ClInclude Include="Src\Editor\SpriteAnimationEditor.h" />
     <ClInclude Include="Src\Editor\SpriteEditor.h" />
     <ClInclude Include="Src\Editor\SpriteSheet.h" />
