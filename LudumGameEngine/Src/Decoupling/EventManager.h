@@ -21,7 +21,17 @@ enum class EventType {
 	GAME_OVER,
 	COLLISION_ENTER,
 	PLAYER_MOVE_LEFT,
-	PLAYER_MOVE_RIGHT
+	PLAYER_MOVE_RIGHT,
+	PLAYER_MOVE
+};
+
+class IEventData {
+public:
+	IEventData(EventType type, const char* name);
+
+	const char* name;
+	EventType type;
+	EventType GetType();
 };
 
 
@@ -30,16 +40,16 @@ public:
 
 	static EventManager* Get();
 
-	bool AddListener(EventType evt, std::function<void()> function);
+	bool AddListener(EventType evt, std::function<void(IEventData)> function);
 
-	bool RemoveListener(EventType evt, std::function<void()> function);
+	bool RemoveListener(EventType evt, std::function<void(IEventData)> function);
 
-	bool QueueEvent(EventType evt);
+	bool QueueEvent(IEventData evt);
 
 	void Update(float deltaTime);
 
 private:
-	typedef std::list<std::function<void()>> EventListenerList;
+	typedef std::list<std::function<void(IEventData)>> EventListenerList;
 
 	int timer = 60;
 
@@ -51,7 +61,7 @@ private:
 
 	EventListenerList listeners;
 	std::map<EventType, EventListenerList> listenersMap;
-	std::list<EventType> eventQueue;
+	std::list<IEventData> eventQueue;
 
 	int currentQueue = 0;
 };

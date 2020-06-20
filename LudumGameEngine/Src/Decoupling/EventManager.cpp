@@ -15,7 +15,7 @@ EventManager* EventManager::Get() {
 	return instance;
 }
 
-bool EventManager::AddListener(EventType evt, std::function<void()> function) {
+bool EventManager::AddListener(EventType evt, std::function<void(IEventData)> function) {
 	listeners.push_back(function);
 
 	std::map<EventType, EventListenerList>::iterator it = listenersMap.find(evt);
@@ -32,12 +32,12 @@ bool EventManager::AddListener(EventType evt, std::function<void()> function) {
 	return true;
 }
 
-bool EventManager::RemoveListener(EventType evt, std::function<void()> function) {
+bool EventManager::RemoveListener(EventType evt, std::function<void(IEventData)> function) {
 	
 	return false;
 }
 
-bool EventManager::QueueEvent(EventType evt) {
+bool EventManager::QueueEvent(IEventData evt) {
 	eventQueue.push_back(evt);
 	return true;
 }
@@ -47,20 +47,36 @@ void EventManager::Update(float deltaTime) {
 	timer--;
 	if (timer <= 0) {
 		timer = 60;
+	}
 
-		while (!eventQueue.empty()) {
-			EventType evt = eventQueue.front();
-			eventQueue.pop_front();
+	while (!eventQueue.empty()) {
+		IEventData eventData = eventQueue.front();
+		eventQueue.pop_front();
 
-			printf("event %d\n", evt);
-			std::map<EventType, EventListenerList>::iterator it = listenersMap.find(evt);
-			if (it != listenersMap.end()) {
-				EventListenerList lista = listenersMap[evt];
-				for (std::function<void()> fn : lista) {
-					fn();
-				}
+		EventType evt = eventData.GetType();
+		printf("[EventType::%d]\n", evt);
+		std::map<EventType, EventListenerList>::iterator it = listenersMap.find(evt);
+		if (it != listenersMap.end()) {
+			EventListenerList lista = listenersMap[evt];
+			for (std::function<void(IEventData)> fn : lista) {
+				fn(eventData);
 			}
 		}
 	}
 }
 
+
+
+
+
+
+IEventData::IEventData(EventType type, const char* name)
+{
+	this->type = type;
+	this->name = name;
+}
+
+EventType IEventData::GetType()
+{
+	return this->type;
+}

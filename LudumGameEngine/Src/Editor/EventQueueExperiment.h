@@ -18,6 +18,7 @@
 #include "../../Libs/glm/glm/vec2.hpp"
 #include "../../Libs/glm/glm/ext.hpp"
 #include "../Decoupling/EventManager.h"
+#include <memory>
 
 namespace experiment {
 
@@ -32,15 +33,31 @@ namespace experiment {
 	int mouseX = 0;
 	int mouseY = 0;
 
-	int timer = 60;
+	
 
 	class Player {
 	public:
-		void MoveLeft() {
-			printf("player move left\n");
+		void MoveLeft(IEventData evtData) {
+			printf("player move left, %s\n", evtData.name);
 		}
-		void MoveRight() {
-			printf("player move right\n");
+		void MoveRight(IEventData evtData) {
+			printf("player move right, %s\n", evtData.name);
+		}
+
+		void OnCollisionEnter(IEventData evtData) {
+			EventCollision evt = dynamic_cast<EventCollision>(evtData);
+			
+			std::cout << "OnCollisionEnter" << &evt.other << std::endl;
+		}
+	};
+
+	class EventCollision : public IEventData {
+	public:
+		Player other;
+		EventCollision(EventType type, const char* name, Player object)
+			: IEventData(type, name)
+		{
+			other = object;
 		}
 	};
 
@@ -84,8 +101,9 @@ namespace experiment {
 
 			player = new Player();
 
-			EventManager::Get()->AddListener(EventType::PLAYER_MOVE_LEFT, std::bind(&Player::MoveLeft, player));
-			EventManager::Get()->AddListener(EventType::PLAYER_MOVE_RIGHT, std::bind(&Player::MoveRight, player));
+			EventManager::Get()->AddListener(EventType::PLAYER_MOVE_LEFT, std::bind(&Player::MoveLeft, player, std::placeholders::_1));
+			EventManager::Get()->AddListener(EventType::PLAYER_MOVE_RIGHT, std::bind(&Player::MoveRight, player, std::placeholders::_1));
+			EventManager::Get()->AddListener(EventType::COLLISION_ENTER, std::bind(&Player::OnCollisionEnter, player, std::placeholders::_1));
 
 			lastFrame = SDL_GetTicks();
 			while (isRunning) {
@@ -102,9 +120,6 @@ namespace experiment {
 				Render();
 
 				lastFrame = SDL_GetTicks();
-
-				timer--;
-				if (timer <= 0) timer = 60;
 			}
 
 			delete player;
@@ -114,9 +129,7 @@ namespace experiment {
 		void Update(float deltaTime) {
 			EventManager::Get()->Update(deltaTime);
 
-			if (timer == 60) {
-
-			}
+			
 		}
 
 
@@ -149,16 +162,18 @@ namespace experiment {
 						break;
 					}
 					if (event.key.keysym.sym == SDLK_LEFT) {
-
-						EventManager::Get()->QueueEvent(EventType::PLAYER_MOVE_LEFT);
+						IEventData eventData(EventType::PLAYER_MOVE_LEFT, "x = -1");
+						EventManager::Get()->QueueEvent(eventData);
 						
 					}
 					if (event.key.keysym.sym == SDLK_RIGHT) {
-						EventManager::Get()->QueueEvent(EventType::PLAYER_MOVE_RIGHT);
+						IEventData eventData(EventType::PLAYER_MOVE_RIGHT, "x = +1");
+						EventManager::Get()->QueueEvent(eventData);
 
 					}
 					if (event.key.keysym.sym == SDLK_UP) {
-
+						EventCollision colEventData(EventType::COLLISION_ENTER, "collision Enter with player", *player);
+						EventManager::Get()->QueueEvent(colEventData);
 					}
 					if (event.key.keysym.sym == SDLK_DOWN) {
 
