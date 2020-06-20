@@ -1,16 +1,5 @@
 #pragma once
 
-//extern "C" {
-//#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lua.h"
-//#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lauxlib.h"
-//#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/lualib.h"
-//}
-//#include "../../Libs/lua-5.3.5_Win32_dllw6_lib/include/sol.hpp"
-#ifdef _WIN32
-//#pragma comment(lib, "Libs/lua-5.3.5_Win32_dllw6_lib/liblua53.a")
-#endif // WIN
-
-
 #include <iostream>
 #include <SDL.h>
 #include <vector>
@@ -19,6 +8,22 @@
 #include "../../Libs/glm/glm/ext.hpp"
 #include "../Decoupling/EventManager.h"
 #include <memory>
+
+class Player {
+public:
+	void MoveLeft(std::shared_ptr<IEventData> evtData) {
+		printf("player move left, %s\n", evtData->name);
+	}
+	void MoveRight(std::shared_ptr<IEventData> evtData) {
+		printf("player move right, %s\n", evtData->name);
+	}
+
+	void OnCollisionEnter(std::shared_ptr<IEventData> evtData) {
+		std::shared_ptr<EventCollision> evt = std::static_pointer_cast<EventCollision>(evtData);
+
+		printf("OnCollisionEnter: %s\n", evt->GetName());
+	}
+};
 
 namespace experiment {
 
@@ -32,34 +37,6 @@ namespace experiment {
 
 	int mouseX = 0;
 	int mouseY = 0;
-
-	
-
-	class Player {
-	public:
-		void MoveLeft(IEventData evtData) {
-			printf("player move left, %s\n", evtData.name);
-		}
-		void MoveRight(IEventData evtData) {
-			printf("player move right, %s\n", evtData.name);
-		}
-
-		void OnCollisionEnter(IEventData evtData) {
-			EventCollision evt = dynamic_cast<EventCollision>(evtData);
-			
-			std::cout << "OnCollisionEnter" << &evt.other << std::endl;
-		}
-	};
-
-	class EventCollision : public IEventData {
-	public:
-		Player other;
-		EventCollision(EventType type, const char* name, Player object)
-			: IEventData(type, name)
-		{
-			other = object;
-		}
-	};
 
 	class EventQueueExperiment {
 	public:
@@ -132,7 +109,6 @@ namespace experiment {
 			
 		}
 
-
 		void Render() {
 			SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
 			SDL_RenderClear(renderer);
@@ -162,17 +138,20 @@ namespace experiment {
 						break;
 					}
 					if (event.key.keysym.sym == SDLK_LEFT) {
-						IEventData eventData(EventType::PLAYER_MOVE_LEFT, "x = -1");
+						//IEventData eventData(EventType::PLAYER_MOVE_LEFT, "x = -1");
+						std::shared_ptr<IEventData> eventData = std::make_shared<IEventData>(EventType::PLAYER_MOVE_LEFT, "x = -1");
 						EventManager::Get()->QueueEvent(eventData);
 						
 					}
 					if (event.key.keysym.sym == SDLK_RIGHT) {
-						IEventData eventData(EventType::PLAYER_MOVE_RIGHT, "x = +1");
+						//IEventData eventData(EventType::PLAYER_MOVE_RIGHT, "x = +1");
+						std::shared_ptr<IEventData> eventData = std::make_shared<IEventData>(EventType::PLAYER_MOVE_RIGHT, "x = +1");
 						EventManager::Get()->QueueEvent(eventData);
 
 					}
 					if (event.key.keysym.sym == SDLK_UP) {
-						EventCollision colEventData(EventType::COLLISION_ENTER, "collision Enter with player", *player);
+						//EventCollision colEventData(EventType::COLLISION_ENTER, "collision Enter with player", *player);
+						std::shared_ptr<EventCollision> colEventData = std::make_shared<EventCollision>(EventType::COLLISION_ENTER, "collision Enter with player");
 						EventManager::Get()->QueueEvent(colEventData);
 					}
 					if (event.key.keysym.sym == SDLK_DOWN) {

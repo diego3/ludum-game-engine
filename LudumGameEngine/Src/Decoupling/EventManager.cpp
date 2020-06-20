@@ -15,13 +15,13 @@ EventManager* EventManager::Get() {
 	return instance;
 }
 
-bool EventManager::AddListener(EventType evt, std::function<void(IEventData)> function) {
+bool EventManager::AddListener(EventType evt, std::function<void(std::shared_ptr<IEventData>)> function) {
 	listeners.push_back(function);
 
 	std::map<EventType, EventListenerList>::iterator it = listenersMap.find(evt);
 	if (it != listenersMap.end()) {
-		EventListenerList lista = listenersMap[evt];
-		lista.push_back(function);
+		EventListenerList list = listenersMap[evt];
+		list.push_back(function);
 	}
 	else {
 		EventListenerList newList = EventListenerList{};
@@ -32,12 +32,16 @@ bool EventManager::AddListener(EventType evt, std::function<void(IEventData)> fu
 	return true;
 }
 
-bool EventManager::RemoveListener(EventType evt, std::function<void(IEventData)> function) {
-	
+bool EventManager::RemoveListener(EventType evt, std::function<void(std::shared_ptr<IEventData>)> function) {
+	std::map<EventType, EventListenerList>::iterator it = listenersMap.find(evt);
+	if (it != listenersMap.end()) {
+		listenersMap.erase(evt);
+		return true;
+	}
 	return false;
 }
 
-bool EventManager::QueueEvent(IEventData evt) {
+bool EventManager::QueueEvent(const std::shared_ptr<IEventData>& evt) {
 	eventQueue.push_back(evt);
 	return true;
 }
@@ -50,15 +54,15 @@ void EventManager::Update(float deltaTime) {
 	}
 
 	while (!eventQueue.empty()) {
-		IEventData eventData = eventQueue.front();
+		std::shared_ptr<IEventData> eventData = eventQueue.front();
 		eventQueue.pop_front();
 
-		EventType evt = eventData.GetType();
-		printf("[EventType::%d]\n", evt);
+		EventType evt = eventData->GetType();
+		//printf("[EventType::%d]\n", evt);
 		std::map<EventType, EventListenerList>::iterator it = listenersMap.find(evt);
 		if (it != listenersMap.end()) {
-			EventListenerList lista = listenersMap[evt];
-			for (std::function<void(IEventData)> fn : lista) {
+			EventListenerList list = listenersMap[evt];
+			for (std::function<void(std::shared_ptr<IEventData>)> fn : list) {
 				fn(eventData);
 			}
 		}
@@ -72,6 +76,7 @@ void EventManager::Update(float deltaTime) {
 
 IEventData::IEventData(EventType type, const char* name)
 {
+	printf("IEventData constructor\n");
 	this->type = type;
 	this->name = name;
 }
